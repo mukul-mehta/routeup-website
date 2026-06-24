@@ -1,0 +1,14 @@
+---
+title: Conflict resolution
+description: What happens when two clients try to claim the same route or two processes try to serve the same name.
+---
+
+> TODO: write the conflict-resolution rules.
+
+Outline:
+
+- Local: foreground CLI owns claims; agent releases them on CLI exit.
+- Server: tokens claim host suffixes; first-come within the public namespace.
+- 409 semantics and grace windows (none for public namespace).
+
+Source: `docs/ARCHITECTURE.md` conflict resolution.

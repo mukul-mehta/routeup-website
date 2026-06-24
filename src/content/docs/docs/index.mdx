@@ -1,0 +1,19 @@
+---
+title: routeup docs
+description: Stable HTTPS routes for local services. Public when you need them.
+---
+
+routeup gives local services stable HTTPS names and can expose those same routes publicly when needed.
+
+Local use is the default: run `routeup setup` once, then serve a local app at a trusted `https://<name>.localhost` URL without DNS, accounts, or network access. Public exposure is available through a configured routeup server when an outside service needs to reach your machine.
+
+## Where to start
+
+- New here? Start with [Install](/docs/getting-started/install) and [Your first route](/docs/getting-started/first-route).
+- Want to understand the model? Read [Concepts › Routes](/docs/concepts/routes).
+- Looking for a specific command? Jump to the [CLI Reference](/docs/cli-reference/routeup).
+- Running your own server? See [Self-Hosting](/docs/self-hosting/running-the-server).
+
+## Current status
+
+Local HTTPS, packaging, self-update, public server tokens, and the request tunnel are implemented. Streaming/WebSockets/SSE, path-scoped proxying, process running, request logs, and inspect/replay are still future work.

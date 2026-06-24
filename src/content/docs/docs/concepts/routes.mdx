@@ -1,0 +1,50 @@
+---
+title: Routes
+description: The core primitive in routeup is the route — a dotted name that maps to a stable HTTPS hostname.
+---
+
+A route is the stable name routeup gives a local service. Locally, routeup maps it to `https://<route>.localhost`.
+
+## Valid names
+
+Valid route names are DNS-style labels joined with dots:
+
+```txt
+myapp
+api.myapp
+docs.myapp
+```
+
+Invalid examples:
+
+```txt
+.myapp
+myapp.
+api..myapp
+my_app
+myapp.localhost
+myapp.routeup.dev
+```
+
+Route names are lowercased. Each label may contain ASCII letters, digits, and hyphens, but not leading or trailing hyphens.
+
+## Local hostnames
+
+routeup appends `.localhost` for local use:
+
+```txt
+myapp      -> https://myapp.localhost
+api.myapp  -> https://api.myapp.localhost
+```
+
+The `.localhost` suffix is not part of the route name.
+
+## Name resolution
+
+`routeup serve` resolves the name in this order:
+
+1. Positional argument, such as `routeup serve myapp`.
+2. `ROUTEUP_NAME`.
+3. `name` from `routeup.json` or the `package.json` `routeup` block.
+
+If you pass a bare positional name while config has a project name, routeup appends the project name as a suffix. A dotted positional name is used literally.

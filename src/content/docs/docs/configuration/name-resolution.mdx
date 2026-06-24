@@ -1,0 +1,15 @@
+---
+title: Name resolution
+description: How routeup converts a CLI argument into a route name.
+---
+
+> TODO: write the precedence and resolution rules.
+
+Outline:
+
+- Argument-with-dot → literal route.
+- Bare argument + project in scope → `<arg>.<project>`.
+- Bare argument + no project → used as-is.
+- Flag > env > config > inference.
+
+Source: `PLAN.md` Product Shape (name resolution rule).

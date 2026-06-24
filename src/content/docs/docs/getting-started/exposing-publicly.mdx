@@ -1,0 +1,49 @@
+---
+title: Exposing publicly
+description: Make a local route reachable from the internet for webhooks, OAuth, and mobile testing.
+---
+
+Public exposure sends requests through a routeup server and back to your local agent over an outbound tunnel. Your app still listens only on a local port.
+
+## Requirements
+
+You need a public server URL. If the server requires persistent names, you also need a token from the server operator.
+
+You can save both during setup:
+
+```bash
+routeup setup --server https://routeup.dev --token sk_routeup_xxx
+```
+
+Or pass them per command:
+
+```bash
+routeup expose myapp --port 8080 --server https://routeup.dev --token sk_routeup_xxx
+```
+
+## Expose a local port
+
+```bash
+routeup expose myapp --port 8080
+```
+
+The command prints the local route, the public URL granted by the server, and the local target port. It holds the tunnel open until you press `Ctrl-C`.
+
+```txt
+route: myapp
+local: https://myapp.localhost
+public: https://myapp.you.routeup.dev
+target: http://localhost:8080
+
+press Ctrl-C to stop
+```
+
+## Name rules
+
+Local route names may be dotted, such as `api.myapp`. Public route names are one label under the namespace granted by the server, so use `myapp` or `api-myapp` for public exposure.
+
+For a server with a token-less public namespace enabled, `--random` asks the server to assign a name:
+
+```bash
+routeup expose --random --port 8080 --server https://routeup.dev
+```

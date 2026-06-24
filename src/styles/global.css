@@ -1,0 +1,343 @@
+/*
+ * Starlight overrides — paper-and-mono, restrained.
+ *
+ * Draws palette + flavor from /Users/mukul-mehta/Personal/DESIGN.md but tones
+ * the system down for a docs site: no Press Start 2P (the pixel font is baked
+ * into the favicon only), no heavy pixel shadows on every surface, no
+ * window-title-band motif. The goal is a calm, readable cream-paper docs page
+ * that clearly belongs to the same project as the landing — not a game manual.
+ *
+ * We override targeted Starlight CSS variables rather than replacing rules, so
+ * Starlight updates keep working.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --ru-bg:        #e8e2d0;
+  --ru-bg-elev:   #faf6e8;
+  --ru-bg-soft:   #ddd5be;
+  --ru-fg:        #1c160c;
+  --ru-fg-dim:    #3b3221;
+  --ru-fg-faint:  #756a52;
+  --ru-border:    #2a2418;
+  --ru-rule:      rgba(42, 36, 24, 0.18);
+  --ru-accent:    #0e9999;
+  --ru-accent-fg: #097373;
+  --ru-dg:        #b8860b;
+  --ru-dn:        #b91c1c;
+
+  --ru-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --sl-font:      var(--ru-mono);
+  --sl-font-mono: var(--ru-mono);
+}
+
+/* Single light theme — paper has no dark variant. */
+:root,
+:root[data-theme='light'],
+:root[data-theme='dark'] {
+  --sl-color-accent-low:   #c5e8e8;
+  --sl-color-accent:       var(--ru-accent);
+  --sl-color-accent-high:  var(--ru-accent-fg);
+
+  --sl-color-white:  var(--ru-fg);
+  --sl-color-gray-1: var(--ru-fg);
+  --sl-color-gray-2: var(--ru-fg-dim);
+  --sl-color-gray-3: var(--ru-fg-faint);
+  --sl-color-gray-4: #8a7f64;
+  --sl-color-gray-5: var(--ru-bg-soft);
+  --sl-color-gray-6: var(--ru-bg);
+  --sl-color-gray-7: var(--ru-bg-elev);
+  --sl-color-black:  var(--ru-fg);
+
+  --sl-color-bg:             var(--ru-bg);
+  --sl-color-bg-nav:         var(--ru-bg);
+  --sl-color-bg-sidebar:     var(--ru-bg);
+  --sl-color-bg-inline-code: var(--ru-bg-elev);
+  --sl-color-bg-accent:      var(--ru-accent);
+
+  --sl-color-text:        var(--ru-fg-dim);
+  --sl-color-text-accent: var(--ru-accent-fg);
+  --sl-color-text-invert: var(--ru-bg-elev);
+
+  --sl-color-hairline:       var(--ru-rule);
+  --sl-color-hairline-light: var(--ru-rule);
+  --sl-color-hairline-shade: var(--ru-rule);
+
+  --sl-shadow-md: 3px 3px 0 0 var(--ru-border);
+
+  color-scheme: light;
+}
+
+/* ───────────────────────────────── Base ───────────────────────────────── */
+
+body {
+  font-family: var(--ru-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  background: var(--ru-bg);
+  color: var(--ru-fg-dim);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--ru-accent); color: var(--ru-bg-elev); }
+:focus-visible { outline: 2px solid var(--ru-accent); outline-offset: 2px; }
+
+/* Square corners on the elements that ship rounded — calm, not aggressive. */
+.sl-markdown-content :is(pre, blockquote, table, .starlight-aside),
+site-search button[data-open-modal],
+site-search button[data-open-modal] kbd,
+.pagination-links a {
+  border-radius: 0;
+}
+
+/* ───────────────────────────────── Type ───────────────────────────────── */
+
+.sl-markdown-content h1 {
+  font-size: clamp(1.7rem, 3.4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--ru-fg);
+  margin-bottom: 0.8em;
+}
+.sl-markdown-content h2 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--ru-fg);
+  margin-top: 2em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--ru-rule);
+}
+.sl-markdown-content :is(h3, h4) {
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--ru-fg);
+}
+
+.sl-markdown-content :is(p, li) { line-height: 1.65; }
+
+/* ──────────────────────────────── Inline code ─────────────────────────── */
+
+.sl-markdown-content :not(pre) > code {
+  font-family: var(--ru-mono);
+  font-size: 0.88em;
+  font-weight: 600;
+  padding: 0.06em 0.34em;
+  background: var(--ru-bg-elev);
+  color: var(--ru-fg);
+  border: 1px solid var(--ru-rule);
+}
+
+/* ──────────────────────────────── Code blocks ─────────────────────────── */
+
+.sl-markdown-content pre,
+.expressive-code .frame {
+  border: 2px solid var(--ru-border) !important;
+  box-shadow: 3px 3px 0 0 var(--ru-border);
+}
+
+/* ──────────────────────────────── Links ───────────────────────────────── */
+
+.sl-markdown-content a:not(.sl-link-button) {
+  color: var(--ru-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--ru-accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: color 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sl-markdown-content a:not(.sl-link-button):hover { color: var(--ru-accent-fg); }
+
+/* ──────────────────────────────── Blockquote ──────────────────────────── */
+
+.sl-markdown-content blockquote {
+  border: 1px solid var(--ru-rule);
+  border-left: 3px solid var(--ru-accent);
+  background: var(--ru-bg-elev);
+  padding: 0.9em 1.2em;
+  color: var(--ru-fg-dim);
+  font-style: normal;
+}
+
+/* ──────────────────────────────── Asides ──────────────────────────────── */
+
+.starlight-aside {
+  border: 1px solid var(--ru-rule) !important;
+  border-left: 3px solid var(--ru-accent) !important;
+  background: var(--ru-bg-elev) !important;
+  padding: 0.9em 1.2em !important;
+}
+.starlight-aside--caution { border-left-color: var(--ru-dg) !important; }
+.starlight-aside--danger  { border-left-color: var(--ru-dn) !important; }
+.starlight-aside__title {
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8rem !important;
+  color: var(--ru-fg) !important;
+}
+
+/* ──────────────────────────────── Tables ──────────────────────────────── */
+
+.sl-markdown-content table {
+  border: 1px solid var(--ru-border);
+  font-size: 0.9rem;
+}
+.sl-markdown-content thead th {
+  background: var(--ru-bg);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  border-bottom: 2px solid var(--ru-border);
+}
+.sl-markdown-content :is(td, tbody th) { border-bottom: 1px solid var(--ru-rule); }
+
+/* ──────────────────────────────── Header ──────────────────────────────── */
+
+.header {
+  background: var(--ru-bg) !important;
+  border-bottom: 1px solid var(--ru-border) !important;
+  backdrop-filter: none !important;
+}
+.site-title {
+  font-weight: 700 !important;
+  letter-spacing: -0.005em !important;
+  color: var(--ru-fg) !important;
+  gap: 0.55rem;
+}
+.site-title img {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+}
+
+/* Search button — square, subtle */
+site-search button[data-open-modal] {
+  background: var(--ru-bg-elev) !important;
+  border: 1.5px solid var(--ru-border) !important;
+  color: var(--ru-fg-faint) !important;
+  font-family: var(--ru-mono) !important;
+  font-weight: 600;
+}
+site-search button[data-open-modal] kbd {
+  background: var(--ru-bg) !important;
+  border: 1px solid var(--ru-rule) !important;
+  font-family: var(--ru-mono) !important;
+  font-weight: 700;
+  color: var(--ru-fg-dim) !important;
+}
+
+/* ──────────────────────────────── Sidebar ─────────────────────────────── */
+
+.sidebar-content { background: var(--ru-bg) !important; }
+
+.sidebar-content :is(summary, .group-label) {
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem !important;
+  color: var(--ru-fg-faint) !important;
+}
+.sidebar-content a {
+  font-family: var(--ru-mono) !important;
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: var(--ru-fg-dim) !important;
+  border-inline-start: 1.5px solid transparent;
+  transition: color 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sidebar-content a:hover {
+  color: var(--ru-accent-fg) !important;
+  background: var(--ru-bg-elev) !important;
+}
+.sidebar-content a[aria-current='page'] {
+  color: var(--ru-accent-fg) !important;
+  background: var(--ru-bg-elev) !important;
+  font-weight: 700 !important;
+  border-inline-start: 3px solid var(--ru-accent) !important;
+}
+
+/* ─────────────────────────────── On this page ─────────────────────────── */
+
+starlight-toc nav a {
+  font-family: var(--ru-mono) !important;
+  font-size: 0.82rem;
+  color: var(--ru-fg-faint) !important;
+  border-inline-start: 1.5px solid transparent;
+}
+starlight-toc nav a:hover { color: var(--ru-fg-dim) !important; }
+starlight-toc nav a[aria-current='true'] {
+  color: var(--ru-accent-fg) !important;
+  font-weight: 700 !important;
+  border-inline-start: 3px solid var(--ru-accent) !important;
+}
+starlight-toc :is(h2, summary) {
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem !important;
+  color: var(--ru-fg-faint) !important;
+}
+
+/* ──────────────────────────────── Pagination ──────────────────────────── */
+
+.pagination-links a {
+  border: 1.5px solid var(--ru-border) !important;
+  background: var(--ru-bg-elev);
+  font-family: var(--ru-mono);
+  font-weight: 600;
+  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pagination-links a:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 0 var(--ru-border);
+  background: var(--ru-bg-soft);
+}
+
+/* ──────────────────────────────── Edit link ───────────────────────────── */
+
+a[href*='edit/main'] { font-family: var(--ru-mono); font-weight: 600; }
+
+/* Mobile "On this page" TOC (shown below ~1100px). Starlight backs the toggle
+ * with --sl-color-black, which we mapped to espresso ink → dark-on-dark.
+ * Re-skin it to a paper surface. */
+mobile-starlight-toc .toggle {
+  background: var(--ru-bg-elev) !important;
+  color: var(--ru-fg-dim) !important;
+  border: 1.5px solid var(--ru-border) !important;
+  font-family: var(--ru-mono) !important;
+  font-weight: 600;
+  border-radius: 0 !important;
+}
+mobile-starlight-toc .toggle:hover { border-color: var(--ru-accent) !important; }
+mobile-starlight-toc .dropdown {
+  background: var(--ru-bg-elev) !important;
+  border: 1.5px solid var(--ru-border) !important;
+  border-radius: 0 !important;
+}
+mobile-starlight-toc a {
+  font-family: var(--ru-mono) !important;
+  color: var(--ru-fg-dim) !important;
+}
+mobile-starlight-toc a[aria-current='true'] {
+  color: var(--ru-accent-fg) !important;
+  font-weight: 700;
+}
+
+/* Single theme — hide the switcher. */
+starlight-theme-select { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

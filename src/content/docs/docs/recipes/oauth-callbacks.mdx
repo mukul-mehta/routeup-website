@@ -1,0 +1,12 @@
+---
+title: OAuth callbacks
+description: Use a stable public URL as the redirect URI for OAuth integrations.
+---
+
+> TODO: write the OAuth-callback recipe.
+
+Outline:
+
+- The problem: providers require a single, registered redirect URI.
+- The fix: register `https://myapp.you.routeup.dev/oauth/callback` once and forget it.
+- Local-only variant: `https://myapp.localhost/oauth/callback` for providers that allow it.

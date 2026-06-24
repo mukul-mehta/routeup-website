@@ -1,0 +1,21 @@
+allowBuilds:
+  esbuild: true
+  sharp: true
+
+# pnpm 11+ reads settings from this file (not from the `pnpm` field in
+# package.json, which is now silently ignored).
+#
+# Single-package repo: no `packages:` field needed; the project root is the
+# implicit workspace.
+
+# Approve native build scripts for these dependencies. Without this, pnpm
+# leaves the builds "ignored" and runDepsStatusCheck errors on every
+# `pnpm <script>` invocation.
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+
+# Skip the pre-script deps verification — it can fail with cached "ignored
+# builds" state and stop `pnpm dev` from starting even after the builds are
+# approved. We trust the lockfile.
+verifyDepsBeforeRun: false

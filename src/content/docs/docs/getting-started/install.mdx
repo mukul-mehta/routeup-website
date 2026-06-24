@@ -1,0 +1,54 @@
+---
+title: Install
+description: Install the routeup CLI on macOS or Linux.
+---
+
+routeup ships as a single Go binary for macOS and Linux on arm64 and amd64.
+
+## Homebrew
+
+```bash
+brew install mukul-mehta/tap/routeup
+```
+
+Upgrade later with:
+
+```bash
+brew upgrade routeup
+```
+
+## curl installer
+
+```bash
+curl -fsSL https://get.routeup.dev | sh
+```
+
+The installer downloads the latest GitHub release for your OS and architecture, verifies `checksums.txt`, and installs `routeup` into `/usr/local/bin` when writable or `~/.local/bin` otherwise. Override the destination with `ROUTEUP_INSTALL_DIR`.
+
+## Manual release
+
+Download the latest macOS or Linux archive from GitHub:
+
+```txt
+https://github.com/mukul-mehta/routeup/releases/latest
+```
+
+On macOS, the binary is unsigned. Homebrew and the curl installer run it normally. If you manually download the binary and macOS quarantines it, clear the quarantine bit:
+
+```bash
+xattr -d com.apple.quarantine ./routeup
+```
+
+## Next step
+
+Run setup once:
+
+```bash
+routeup setup
+```
+
+Then serve your first local HTTPS route:
+
+```bash
+routeup serve myapp --port 8080
+```

@@ -1,0 +1,26 @@
+---
+title: Local agent
+description: The background process that owns local routing, TLS termination, and the route registry.
+---
+
+The local agent receives HTTPS requests for your `*.localhost` routes and forwards them to local app ports.
+
+You usually do not run it directly. `routeup setup` starts it, and `routeup serve` starts it on demand if it is not already running.
+
+## What it does
+
+- Terminates local HTTPS using certificates signed by the routeup local CA.
+- Keeps the active route registry.
+- Reverse-proxies requests by `Host` header to the configured local port.
+- Owns public tunnel clients for `routeup expose` and `routeup serve --expose`.
+
+## Debug commands
+
+```bash
+routeup agent status
+routeup agent start
+routeup agent stop
+routeup agent restart
+```
+
+These are mainly useful after an upgrade or while debugging setup issues.

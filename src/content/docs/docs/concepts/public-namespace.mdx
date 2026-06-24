@@ -1,0 +1,30 @@
+---
+title: Public namespace
+description: A subdomain where anyone can claim ephemeral public URLs without a token.
+---
+
+A public namespace lets a server operator allow token-less, session-scoped public routes under one reserved label.
+
+For example, a server for `example.com` could enable the namespace `try`, producing hosts like:
+
+```txt
+https://random.try.example.com
+```
+
+## Client usage
+
+Ask the server to assign a name:
+
+```bash
+routeup expose --random --port 8080 --server https://edge.example.com
+```
+
+Or request a specific single-label name if the server allows it:
+
+```bash
+routeup expose demo --port 8080 --server https://edge.example.com
+```
+
+## Operator behavior
+
+The public namespace is disabled by default on self-hosted servers. Enable it with `--public-namespace` when running `routeup server`.

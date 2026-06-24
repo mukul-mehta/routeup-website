@@ -1,0 +1,46 @@
+---
+title: Your first route
+description: Run routeup setup once, then serve a local service at a stable HTTPS URL.
+---
+
+This is the local-only routeup flow. It does not need an account, token, public server, or network access.
+
+## 1. Run setup once
+
+```bash
+routeup setup
+```
+
+Setup creates a local certificate authority, adds it to your OS trust store, lets routeup answer on port 443, and starts the background agent. You may be asked for Touch ID or your password once.
+
+## 2. Start any local app
+
+For example, run an app on port `8080`.
+
+## 3. Serve it through routeup
+
+```bash
+routeup serve myapp --port 8080
+```
+
+Open:
+
+```txt
+https://myapp.localhost
+```
+
+The route stays stable even if you later move the app to another local port.
+
+## Useful checks
+
+List active routes:
+
+```bash
+routeup routes
+```
+
+Check setup, trust, port binding, and agent health:
+
+```bash
+routeup doctor
+```

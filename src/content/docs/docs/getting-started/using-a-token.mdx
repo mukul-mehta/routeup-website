@@ -1,0 +1,35 @@
+---
+title: Using a token
+description: Get persistent, named public URLs by configuring a server token.
+---
+
+Tokens are minted by the public-server operator and authorize which public names you can claim.
+
+## Save a server and token
+
+```bash
+routeup setup --server https://routeup.dev --token sk_routeup_xxx
+```
+
+After that, `routeup expose` and `routeup serve --expose` can use the saved values.
+
+## Use environment variables instead
+
+```bash
+export ROUTEUP_SERVER=https://routeup.dev
+export ROUTEUP_TOKEN=sk_routeup_xxx
+```
+
+## Expose with the token
+
+```bash
+routeup expose myapp --port 8080
+```
+
+If the token allows `*.you.routeup.dev`, the server can grant:
+
+```txt
+https://myapp.you.routeup.dev
+```
+
+The token secret is not recoverable from the server after it is created. Store it in your password manager or secret store.

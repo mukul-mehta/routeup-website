@@ -1,0 +1,28 @@
+---
+title: Public server
+description: The component that receives external traffic and forwards it through a tunnel to your local agent.
+---
+
+The public server receives internet traffic for a public DNS suffix and forwards each request through an outbound tunnel to a local routeup agent.
+
+It is self-hostable and included in the same `routeup` binary as the CLI and local agent.
+
+## What it handles
+
+- Token-scoped public route claims.
+- Optional token-less public namespace.
+- SQLite persistence for tokens and active claims.
+- Reserved subdomain enforcement.
+- HTTPS termination.
+- WebSocket + yamux tunnel transport back to the local agent.
+
+## TLS
+
+The server always serves HTTPS. In `acme` mode it obtains wildcard certificates through Let's Encrypt using Cloudflare DNS-01 and `CLOUDFLARE_API_TOKEN`. In `cert` mode the operator provides a certificate and key.
+
+## Client usage
+
+```bash
+routeup setup --server https://edge.example.com --token sk_routeup_xxx
+routeup expose myapp --port 8080
+```

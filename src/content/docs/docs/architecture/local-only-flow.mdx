@@ -1,0 +1,14 @@
+---
+title: Local-only request flow
+description: How a browser request to https://myapp.localhost reaches your local service.
+---
+
+> TODO: write the local-only request flow with a diagram.
+
+Outline:
+
+- Browser resolves `*.localhost` to 127.0.0.1 (no DNS plumbing).
+- Local agent terminates TLS using a cert issued by the local CA.
+- Reverse proxy by Host → registered local port.
+
+Source: `docs/ARCHITECTURE.md`.

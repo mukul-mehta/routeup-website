@@ -1,0 +1,12 @@
+---
+title: Agent and browser testing
+description: Point Playwright, Puppeteer, or an LLM agent at a stable HTTPS origin.
+---
+
+> TODO: write the agent / browser-testing recipe.
+
+Outline:
+
+- Why an HTTPS origin matters (modern web APIs, secure cookies, service workers).
+- Use `https://myapp.localhost` for in-process tests.
+- Use `https://myapp.you.routeup.dev` when the test runner is off-host (CI, cloud browser).

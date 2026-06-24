@@ -1,0 +1,17 @@
+---
+title: CLI ↔ agent IPC
+description: How the routeup CLI talks to the background agent over a per-user Unix socket.
+---
+
+> TODO: write the IPC reference.
+
+Outline:
+
+- Transport: Unix domain socket per user.
+- Path: `~/.routeup/agent.sock` (or `$XDG_RUNTIME_DIR/routeup/agent.sock` on Linux).
+- Permissions: directory 0700, socket 0600.
+- Wire format: JSON over HTTP/1.1.
+- Auth: filesystem permissions only.
+- Versioning: `/v1/` URL prefix.
+
+Source: `PLAN.md` Local Agent (CLI-to-agent IPC).

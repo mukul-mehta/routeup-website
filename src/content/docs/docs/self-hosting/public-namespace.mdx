@@ -1,0 +1,15 @@
+---
+title: Enabling the public namespace
+description: Turn on token-less ephemeral claims under one designated subdomain.
+---
+
+> TODO: write the public-namespace operator guide.
+
+Outline:
+
+- Off by default on self-hosted servers.
+- Server config: `public_namespace: try` (or whatever subdomain you pick).
+- Implications: session-only, no grace window, no persistence, first-come-first-served.
+- Empty value disables the feature.
+
+Source: `PLAN.md` Public namespace.

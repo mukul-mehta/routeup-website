@@ -1,0 +1,15 @@
+---
+title: Public exposure request flow
+description: How a public request reaches a local service through the routeup tunnel.
+---
+
+> TODO: write the public flow with a diagram.
+
+Outline:
+
+- Public DNS → routeup server.
+- Server TLS termination (wildcard cert).
+- WebSocket + yamux tunnel to the local agent.
+- Local agent → local service.
+
+Source: `docs/ARCHITECTURE.md`; `docs/MILESTONES.md` Phase 6.
