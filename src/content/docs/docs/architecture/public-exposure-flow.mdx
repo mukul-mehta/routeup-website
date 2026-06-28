@@ -3,13 +3,45 @@ title: Public exposure request flow
 description: How a public request reaches a local service through the routeup tunnel.
 ---
 
-> TODO: write the public flow with a diagram.
+When a route is exposed, public requests arrive at the routeup server and travel
+back down an outbound tunnel to your local agent. Your service never opens a port
+to the internet.
 
-Outline:
+## The path
 
-- Public DNS → routeup server.
-- Server TLS termination (wildcard cert).
-- WebSocket + yamux tunnel to the local agent.
-- Local agent → local service.
+```txt
+external browser / webhook provider
+  -> https://myapp.routeup.dev
+  -> public DNS -> routeup server
+  -> token / claim lookup
+  -> tunnel stream (WebSocket + yamux)
+  -> local agent
+  -> 127.0.0.1:8080  (your service)
+  -> response returns over the same path
+```
 
-Source: `docs/ARCHITECTURE.md`; `docs/MILESTONES.md` Phase 6.
+## Step by step
+
+1. **DNS.** The wildcard `*.routeup.dev` points at the server, so every public
+   host resolves there.
+2. **Server TLS.** The server terminates HTTPS with a wildcard certificate for
+   the namespace base (`*.<base>`). `.dev` is HSTS-preloaded, so the public side
+   is HTTPS-only by design.
+3. **Claim lookup.** The server maps the host to an active claim and its tunnel,
+   rejecting unknown or unauthorized hosts.
+4. **Tunnel.** Each public HTTP request becomes one yamux stream inside the
+   client's outbound WebSocket connection on 443. The connection is **outbound**
+   from your machine, so it survives NAT and most corporate, hotel, and mobile
+   networks.
+5. **Local delivery.** The local agent receives the stream and reverse-proxies it
+   to the local target, exactly as in the [local flow](/docs/architecture/local-only-flow).
+
+## Why a tunnel
+
+The outbound connection means your service never needs an inbound port, a public
+IP, or a firewall change. Cancellation and timeouts propagate end-to-end, and the
+client reconnects with backoff if the connection drops.
+
+See [Public server](/docs/concepts/public-server) and the
+[tunnel transport](/docs/concepts/public-server#what-it-handles) for the
+components involved.

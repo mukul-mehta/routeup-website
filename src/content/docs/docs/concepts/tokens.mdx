@@ -14,9 +14,9 @@ Token secrets use the `sk_routeup_` prefix and are shown once when created. The 
 An allow pattern grants exactly one public label under a suffix:
 
 ```txt
-*.you.routeup.dev
+*.routeup.dev
 ```
 
-That matches `myapp.you.routeup.dev`. It does not match `you.routeup.dev` or `api.myapp.you.routeup.dev`.
+That matches `myapp.routeup.dev`. It does not match `routeup.dev` or `api.myapp.routeup.dev`.
 
 This is why public route names are single labels. Use `api-myapp` instead of `api.myapp` for a public route.

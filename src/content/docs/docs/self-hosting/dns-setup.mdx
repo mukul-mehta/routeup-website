@@ -3,12 +3,42 @@ title: DNS setup
 description: Configure DNS for a self-hosted routeup server.
 ---
 
-> TODO: write DNS setup for self-hosters.
+A routeup server needs two records: the apex of your suffix and a wildcard, both
+pointing at the server. The wildcard is what lets every public route resolve
+without per-route DNS.
 
-Outline:
+## Records
 
-- `routeup.dev A <server-ip>` (or your suffix).
-- `*.routeup.dev A <server-ip>` (wildcard for tunnels).
-- Provider-specific notes for the ACME DNS-01 challenge.
+For a suffix of `tunnel.example.com` on a server at `203.0.113.10`:
 
-Source: `PLAN.md` Public Server (DNS).
+```txt
+tunnel.example.com.     A     203.0.113.10
+*.tunnel.example.com.   A     203.0.113.10
+```
+
+Add `AAAA` records too if the server has IPv6. The wildcard covers every public
+host, `myapp.tunnel.example.com`, `<label>.<namespace>.tunnel.example.com`, and
+so on.
+
+## DNS for the ACME challenge
+
+In the default `acme` TLS mode, the server proves domain control with the
+**DNS-01** challenge, which writes temporary `TXT` records under
+`_acme-challenge`. That requires API access to your DNS provider, routeup uses
+Cloudflare by default (`CLOUDFLARE_API_TOKEN` with `Zone.DNS:Edit` on the zone).
+
+So the DNS provider serves two roles:
+
+1. Hosts the `A`/`AAAA` records above.
+2. Lets the server publish challenge `TXT` records for certificate issuance.
+
+See [TLS](/docs/self-hosting/tls) for the certificate side.
+
+## Verify
+
+```bash
+dig +short tunnel.example.com
+dig +short anything.tunnel.example.com
+```
+
+Both should return the server IP before you start the server.

@@ -7,7 +7,7 @@ Public exposure sends requests through a routeup server and back to your local a
 
 ## Requirements
 
-You need a public server URL. If the server requires persistent names, you also need a token from the server operator.
+You need a public server URL. For a named, persistent URL such as `https://myapp.routeup.dev`, you also need a token from the server operator. Without a token, public exposure only works if the server enables a token-less public namespace.
 
 You can save both during setup:
 
@@ -18,13 +18,13 @@ routeup setup --server https://routeup.dev --token sk_routeup_xxx
 Or pass them per command:
 
 ```bash
-routeup expose myapp --port 8080 --server https://routeup.dev --token sk_routeup_xxx
+routeup serve myapp --port 8080 --server https://routeup.dev --token sk_routeup_xxx --public
 ```
 
 ## Expose a local port
 
 ```bash
-routeup expose myapp --port 8080
+routeup serve myapp --port 8080 --public
 ```
 
 The command prints the local route, the public URL granted by the server, and the local target port. It holds the tunnel open until you press `Ctrl-C`.
@@ -32,7 +32,7 @@ The command prints the local route, the public URL granted by the server, and th
 ```txt
 route: myapp
 local: https://myapp.localhost
-public: https://myapp.you.routeup.dev
+public: https://myapp.routeup.dev
 target: http://localhost:8080
 
 press Ctrl-C to stop
@@ -42,8 +42,45 @@ press Ctrl-C to stop
 
 Local route names may be dotted, such as `api.myapp`. Public route names are one label under the namespace granted by the server, so use `myapp` or `api-myapp` for public exposure.
 
-For a server with a token-less public namespace enabled, `--random` asks the server to assign a name:
+Do not include `https://` or the public suffix in the route name. Pass `myapp`, not `myapp.routeup.dev`.
+
+## Token-less random names
+
+For a server with a token-less public namespace enabled, `--random` asks the server to assign a session-only name:
 
 ```bash
-routeup expose --random --port 8080 --server https://routeup.dev
+routeup serve --random --port 8080 --server https://routeup.dev --public
 ```
+
+On the hosted server, random token-less names are under `try.routeup.dev`:
+
+```txt
+route: lively-otter-4f2
+local: https://lively-otter-4f2.localhost
+public: https://lively-otter-4f2.try.routeup.dev
+target: http://localhost:8080
+
+press Ctrl-C to stop
+```
+
+## Limit public paths
+
+By default, public exposure forwards every path on the route. To expose only a webhook prefix, set `expose.paths` in project config:
+
+```json
+{
+  "name": "myapp",
+  "port": 8080,
+  "expose": {
+    "paths": ["/api/webhooks/*"]
+  }
+}
+```
+
+Then run:
+
+```bash
+routeup serve myapp --public
+```
+
+Requests to `https://myapp.routeup.dev/api/webhooks/...` are public; other paths stay local-only.

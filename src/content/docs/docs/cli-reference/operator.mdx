@@ -3,14 +3,49 @@ title: Operator commands
 description: Server-side commands for running a routeup deployment and minting tokens.
 ---
 
-> TODO: document the operator-only commands.
+These commands run the public server and manage its tokens. They are hidden from
+the default `routeup --help` because normal users never need them. Everything
+here is for the operator of a deployment, see [Self-hosting](/docs/self-hosting/running-the-server)
+for the full guide.
 
-Outline:
+## Run the server
 
-- `routeup server --domain <d>` — run the public server.
-- `routeup token create <name> --allow <pattern>`.
-- `routeup token list`.
-- `routeup token revoke <token-id>`.
-- These are hidden from `routeup --help` by default.
+```bash
+routeup server --domain routeup.dev
+```
 
-Source: `PLAN.md` Operator-only commands; Tokens.
+Key flags:
+
+```txt
+--domain <suffix>          public suffix the server serves (e.g. routeup.dev)
+--public-namespace <label> enable a token-less namespace (e.g. try)
+--tls-mode <acme|cert>     acme (default) auto-issues wildcards; cert uses your own
+```
+
+In `acme` mode the server obtains and renews wildcard certificates through Let's
+Encrypt using the Cloudflare DNS-01 challenge (`CLOUDFLARE_API_TOKEN`). In `cert`
+mode you provide a certificate and key. See [TLS](/docs/self-hosting/tls).
+
+## Manage tokens
+
+Tokens authorize persistent, scoped public claims. Mint them out-of-band and hand
+the secret to the client privately.
+
+```bash
+routeup token create mukul --allow "*.routeup.dev"
+routeup token create alice --allow "*.alice.routeup.dev"
+routeup token list
+routeup token revoke <token-id>
+```
+
+The allow pattern is the only authority, the server rejects any claim whose host
+falls outside it. Tiers fall out of the pattern shape:
+
+```txt
+*.routeup.dev          # whole suffix (admin / co-maintainer)
+*.alice.routeup.dev    # a personal namespace
+*.team-x.routeup.dev   # a shared team namespace
+```
+
+Token secrets use the `sk_routeup_` prefix, are shown once at creation, and are
+stored only as a SHA-256 hash. See [Minting tokens](/docs/self-hosting/minting-tokens).

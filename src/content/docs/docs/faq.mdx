@@ -3,13 +3,62 @@ title: FAQ
 description: Common questions about routeup.
 ---
 
-> TODO: populate with real questions once users start asking them.
+## Why `.localhost` instead of `.test` or `/etc/hosts` entries?
 
-Seed questions:
+`.localhost` is reserved by RFC 6761, and browsers and resolvers short-circuit
+`*.localhost` to `127.0.0.1` automatically. That means no DNS records, no
+`/etc/hosts` editing, and no `dnsmasq`; any `*.localhost` name works.
+`.test` would require local DNS plumbing, and hosts-file entries have to be
+maintained by hand per name.
 
-- Why `.localhost` instead of `.test` or `/etc/hosts` entries?
-- Why HTTPS for local development?
-- Does routeup phone home? (No — zero telemetry.)
-- Can I use a custom domain instead of `routeup.dev`?
-- Windows support? (Not in v1.)
-- What happens to my exposed routes when my laptop sleeps?
+## Why HTTPS for local development?
+
+Because production is HTTPS. Secure cookies, `SameSite=None`, service workers,
+and SDKs that reject plain-`http` origins all behave differently over HTTPS, so
+testing on `http://localhost:3000` hides problems until deploy. routeup serves
+real, trusted HTTPS locally so those behaviors show up while you develop.
+
+## Does routeup phone home?
+
+No. routeup has zero telemetry, nothing is collected or sent anywhere. Local use
+needs no account and no network at all. The only outbound traffic is the tunnel
+you explicitly open with `--public`, and only to the server you point it at.
+
+## Can I use a custom domain instead of `routeup.dev`?
+
+Yes. The server's public suffix is configurable, run your own
+[server](/docs/self-hosting/running-the-server) with `--domain your.domain` and
+your own DNS and TLS. The hosted `routeup.dev` is just one deployment of the same
+binary.
+
+## Do I need a token or an account?
+
+Not for local use. `routeup setup` plus `routeup serve` gives you
+`https://<name>.localhost` with no server contact. A token is only needed for
+**persistent, named** public routes. A server with a public namespace enabled can
+also hand out token-less, ephemeral public URLs.
+
+## What's the difference between `serve --public` and `expose`?
+
+They do the same thing. `routeup serve --public` serves a local route and exposes
+it in one command, that is the form used throughout these docs.
+[`routeup expose`](/docs/cli-reference/expose) is the same public behavior when
+you want the command name to say exactly what it does.
+
+## Why are public names a single label?
+
+A publicly-trusted wildcard certificate (`*.<base>`) covers exactly one label, so
+a public host is one label under a namespace base. Locally any depth works
+(`api.myapp.localhost`); for public exposure use `api-myapp` rather than
+`api.myapp`. See [Routes](/docs/concepts/routes).
+
+## What happens to exposed routes when my laptop sleeps?
+
+The outbound tunnel drops. The server holds the claim for a 30-second grace
+window, and the client reconnects with backoff when the machine wakes, if it
+resumes within the window, the same name is kept. Public-namespace claims have no
+grace window and are released immediately.
+
+## Which operating systems are supported?
+
+macOS and Linux (arm64 and amd64) for v1. Windows is not supported yet.

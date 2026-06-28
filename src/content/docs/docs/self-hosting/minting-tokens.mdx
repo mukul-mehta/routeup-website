@@ -3,13 +3,44 @@ title: Minting tokens
 description: Create, list, and revoke tokens for clients of your self-hosted server.
 ---
 
-> TODO: write the token-minting workflow.
+Tokens authorize persistent, scoped public claims. As the operator you mint them
+and hand the secret to each client out-of-band, there is no hosted signup flow.
 
-Outline:
+## Create
 
-- `routeup token create <name> --allow <pattern>`.
-- Allow-pattern tiers (whole-suffix vs per-user namespace vs team namespace).
-- Out-of-band distribution — no hosted signup flow in v1.
-- Revocation semantics.
+```bash
+routeup token create mukul --allow "*.routeup.dev"
+routeup token create alice --allow "*.alice.routeup.dev"
+```
 
-Source: `PLAN.md` Tokens.
+The secret (`sk_routeup_…`) is printed **once**. The server stores only a
+SHA-256 hash of it, so it cannot be shown again. Send it to the client privately
+and have them save it in a password manager or run
+`routeup setup --token …`.
+
+## Allow patterns and tiers
+
+The allow pattern is the only authority, the server rejects any claim whose host
+falls outside it. The tier follows from the pattern shape:
+
+```txt
+*.routeup.dev          # whole suffix, admin / co-maintainer
+*.alice.routeup.dev    # a personal namespace
+*.team-x.routeup.dev   # a shared team namespace
+```
+
+A `*` matches exactly one label, mirroring the wildcard certificate. So
+`*.alice.routeup.dev` grants `myapp.alice.routeup.dev` but not
+`alice.routeup.dev` itself or a deeper `api.myapp.alice.routeup.dev`. Granting a
+namespace also reserves its label at the root tier, so a `*.routeup.dev` token
+cannot grab it back.
+
+## List and revoke
+
+```bash
+routeup token list
+routeup token revoke <token-id>
+```
+
+Revoking a token immediately stops it from making new claims. Distribute
+replacements the same out-of-band way.

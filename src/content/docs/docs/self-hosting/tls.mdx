@@ -1,14 +1,48 @@
 ---
 title: TLS
-description: Wildcard certificates via ACME DNS-01 for the public server.
+description: Wildcard certificates for the public server via ACME DNS-01, or your own cert.
 ---
 
-> TODO: write the TLS setup.
+The public server always serves HTTPS, there is no plaintext mode. You have two
+ways to provide certificates.
 
-Outline:
+## acme mode (default)
 
-- Why DNS-01 (wildcard support, no port-80 dependency).
-- DNS provider API token configuration.
-- Renewal cadence and failure modes.
+The server obtains and renews wildcard certificates automatically through Let's
+Encrypt, using the **ACME DNS-01** challenge driven by
+[certmagic](https://github.com/caddyserver/certmagic) with the Cloudflare DNS
+provider.
 
-Source: `PLAN.md` TLS; `docs/OPEN-QUESTIONS.md` OQ-014, OQ-015.
+```bash
+export CLOUDFLARE_API_TOKEN=<token-with-Zone.DNS:Edit>
+routeup server --domain tunnel.example.com --tls-mode acme
+```
+
+Why DNS-01 rather than HTTP-01:
+
+- It can issue **wildcards** (`*.tunnel.example.com`), which is exactly the shape
+  routeup needs, one certificate per namespace base covers every label under it.
+- It does not depend on inbound port 80.
+
+The server obtains `*.<domain>` (and the public-namespace wildcard) at startup,
+and obtains `*.<namespace>.<domain>` lazily on the first claim into a token
+namespace. certmagic handles issuance, renewal, storage, and locking.
+
+## cert mode
+
+Provide your own certificate and key, for example a Cloudflare origin
+certificate, or a self-signed cert for local server development:
+
+```bash
+routeup server --domain tunnel.example.com --tls-mode cert \
+  --cert /path/fullchain.pem --key /path/key.pem
+```
+
+In this mode renewal is your responsibility.
+
+## Failure modes
+
+- **Bad or missing DNS API token**: issuance fails; the server cannot get a
+  certificate. Check `CLOUDFLARE_API_TOKEN` scope.
+- **Rate limits**: per-namespace wildcards (rather than per-host certs) keep the
+  certificate count low and Let's Encrypt rate limits comfortable.

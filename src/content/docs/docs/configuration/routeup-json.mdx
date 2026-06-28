@@ -1,14 +1,80 @@
 ---
 title: routeup.json
-description: Standalone config file for non-JavaScript projects.
+description: The standalone config file for any project.
 ---
 
-> TODO: write the routeup.json reference.
+`routeup.json` lives in your project directory and gives routeup a default name
+and port, so you can run `routeup serve` with no arguments. It works for any
+language, use it whenever your project is not a Node project (for Node, you can
+embed the same settings in [`package.json`](/docs/configuration/package-json-embed)).
 
-Outline:
+## Minimal config
 
-- Schema: `name` + `port` (minimal).
-- Future fields (path-limited expose, etc.).
-- Discovery rule: current working directory only, no walk-up in v1.
+```json
+{
+  "name": "myapp",
+  "port": 8080
+}
+```
 
-Source: `PLAN.md` Config section.
+With this present, these are equivalent:
+
+```bash
+routeup serve
+routeup serve myapp --port 8080
+```
+
+## Fields
+
+```txt
+name    the project / route name used for bare-name resolution (required)
+port    the local port to proxy to
+script  the npm/script name to run in script-runner mode (see the bare `routeup` command)
+routes  optional path-to-target map for one-origin frontend + API setups
+expose  optional public exposure settings, including paths
+```
+
+The `name` field doubles as the project name: a bare argument like
+`routeup serve api` resolves to `api.myapp`, while a dotted argument is used
+literally. See [Name resolution](/docs/configuration/name-resolution).
+
+## Path routing
+
+Use `routes` when one hostname should proxy different path prefixes to different local ports:
+
+```json
+{
+  "name": "myapp",
+  "routes": {
+    "/": { "port": 5173 },
+    "/api": { "port": 9080 }
+  }
+}
+```
+
+This keeps the browser on one origin, for example `https://myapp.localhost/api/users`, while routeup sends `/api/*` to the API port.
+
+## Path-limited exposure
+
+By default, `--public` exposes every path on the route. Limit public exposure with `expose.paths`:
+
+```json
+{
+  "name": "myapp",
+  "port": 8080,
+  "expose": {
+    "paths": ["/api/webhooks/*"]
+  }
+}
+```
+
+The route still works locally at every path, but only matching paths are reachable through the public URL.
+
+## Discovery
+
+routeup looks for config in the **current working directory only**: there is no
+walk-up to parent directories. If both `routeup.json` and a `package.json`
+`routeup` block exist in the same directory, `routeup.json` wins.
+
+Per-language manifests beyond `package.json` (such as `pyproject.toml` or
+`Cargo.toml`) are not read; non-JS projects use `routeup.json` directly.

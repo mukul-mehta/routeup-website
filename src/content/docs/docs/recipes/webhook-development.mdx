@@ -3,11 +3,69 @@ title: Webhook development
 description: Receive real webhook deliveries from GitHub, Stripe, Slack, and others on your dev machine.
 ---
 
-> TODO: write the webhook-development recipe.
+Webhook providers need a public HTTPS URL to deliver to. routeup gives your local
+service one, so you can develop against real deliveries instead of mocking them.
 
-Outline:
+## 1. Expose your local API
 
-- Expose your local API at `https://myapp.you.routeup.dev`.
-- Point the webhook provider at it.
-- `routeup logs api.myapp --public --follow` to watch deliveries.
-- Note: body capture and replay come later (Phase 11).
+Run your API (say on port `8080`) and expose it:
+
+```bash
+routeup serve myapp --port 8080 --public
+```
+
+routeup prints the local URL, public URL, and target:
+
+```txt
+route: myapp
+local: https://myapp.localhost
+public: https://myapp.routeup.dev
+target: http://localhost:8080
+
+press Ctrl-C to stop
+```
+
+## 2. Point the provider at it
+
+Register the public URL as the webhook endpoint in the provider's dashboard:
+
+```txt
+GitHub:  Settings → Webhooks → Payload URL
+Stripe:  Developers → Webhooks → Add endpoint
+Slack:   Your App → Event Subscriptions → Request URL
+```
+
+Use the full path your handler listens on, e.g.
+`https://myapp.routeup.dev/api/webhooks/github`.
+
+## 3. Watch deliveries
+
+Tail public traffic as it arrives:
+
+```bash
+routeup logs myapp --public --follow
+```
+
+```txt
+12:41:03 public myapp POST /api/webhooks/github 200 38ms req_abc123
+```
+
+Because the route name is stable, the endpoint you registered keeps working
+across restarts, you do not have to update the provider each time you start your
+dev server.
+
+## Scoping exposure
+
+If you only want the webhook path reachable and the rest of the app private, you
+can limit public exposure to a path prefix (for example `/api/webhooks/*`) so the
+rest of the service stays local-only:
+
+```json
+{
+  "name": "myapp",
+  "port": 8080,
+  "expose": {
+    "paths": ["/api/webhooks/*"]
+  }
+}
+```

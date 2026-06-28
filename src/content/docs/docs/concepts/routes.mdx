@@ -1,6 +1,6 @@
 ---
 title: Routes
-description: The core primitive in routeup is the route — a dotted name that maps to a stable HTTPS hostname.
+description: The core primitive in routeup is the route, a dotted name that maps to a stable HTTPS hostname.
 ---
 
 A route is the stable name routeup gives a local service. Locally, routeup maps it to `https://<route>.localhost`.
@@ -38,6 +38,17 @@ api.myapp  -> https://api.myapp.localhost
 ```
 
 The `.localhost` suffix is not part of the route name.
+
+## Public hostnames
+
+Public route names must be a single label under the namespace granted by the server:
+
+```txt
+myapp     -> https://myapp.routeup.dev
+api-myapp -> https://api-myapp.routeup.dev
+```
+
+A dotted route such as `api.myapp` is valid locally, but it is not valid for public exposure because public wildcard certificates only cover one label. Use `api-myapp` or a token namespace such as `myapp.team.routeup.dev` instead.
 
 ## Name resolution
 

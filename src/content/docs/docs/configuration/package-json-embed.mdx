@@ -1,14 +1,54 @@
 ---
 title: package.json embed
-description: Configure routeup inside an existing package.json under the `routeup` key.
+description: Configure routeup inside an existing package.json under the routeup key.
 ---
 
-> TODO: write the package.json embed reference.
+Node projects can keep routeup config in `package.json` instead of a separate
+file, under a top-level `routeup` key. The settings are identical to
+[`routeup.json`](/docs/configuration/routeup-json), this just saves a file and
+keeps project config in one place.
 
-Outline:
+## Example
 
-- Schema: same shape as `routeup.json` under `package.json` `routeup` key.
-- Precedence: `routeup.json` wins if both exist in the same directory.
-- Why this exists: zero-friction adoption for JS projects.
+```json
+{
+  "name": "myapp-web",
+  "scripts": {
+    "dev": "routeup",
+    "dev:app": "vite"
+  },
+  "routeup": {
+    "name": "myapp",
+    "script": "dev:app"
+  }
+}
+```
 
-Source: `PLAN.md` Config section.
+Here `npm run dev` launches `routeup`, which runs your real dev server
+(`dev:app`) behind `https://myapp.localhost` and injects `PORT`, `HOST`,
+`ROUTEUP_LOCAL_URL`, and `ROUTEUP_URL`. In local-only runs, `ROUTEUP_URL` is the local URL; when public exposure is enabled, it becomes the public URL. See the bare
+[`routeup`](/docs/cli-reference/routeup) command for the script-runner flow.
+
+## The routeup block
+
+```txt
+name    route / project name (separate from the package's own name)
+port    local port to proxy to
+script  the package script to run in script-runner mode
+routes  optional path-to-target map for one-origin frontend + API setups
+expose  optional public exposure settings, including paths
+```
+
+The `routeup.name` is independent of the package's `name` field, the package can
+be `myapp-web` while the route is `myapp`.
+
+## Precedence
+
+If a directory has both a `routeup.json` and a `package.json` `routeup` block,
+`routeup.json` wins. Config is discovered in the current working directory only.
+
+## Why embed
+
+For a JS project you already have a `package.json`. Adding a `routeup` block (and
+pointing a `dev` script at `routeup`) is the lowest-friction way to give the
+project a stable route that travels with the repo.

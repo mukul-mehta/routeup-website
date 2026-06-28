@@ -1,14 +1,37 @@
 ---
 title: Local-only request flow
-description: How a browser request to https://myapp.localhost reaches your local service.
+description: How a request to https://myapp.localhost reaches your local service.
 ---
 
-> TODO: write the local-only request flow with a diagram.
+The local flow never leaves your machine. It needs no server, no token, and no
+network, `routeup setup` alone enables it.
 
-Outline:
+## The path
 
-- Browser resolves `*.localhost` to 127.0.0.1 (no DNS plumbing).
-- Local agent terminates TLS using a cert issued by the local CA.
-- Reverse proxy by Host → registered local port.
+```txt
+browser
+  -> https://api.myapp.localhost
+  -> local agent (terminates TLS, looks up the route)
+  -> 127.0.0.1:8080  (your service)
+  -> response back through the agent
+```
 
-Source: `docs/ARCHITECTURE.md`.
+## Step by step
+
+1. **Resolution.** `.localhost` is reserved by RFC 6761, so browsers and
+   resolvers short-circuit `*.localhost` to `127.0.0.1` with no DNS lookup and no
+   `/etc/hosts` editing.
+2. **TLS.** The request arrives at the local agent on port 443. The agent
+   terminates TLS using a certificate signed by the routeup local CA, which
+   `setup` added to your trust store, so the browser shows no warning.
+3. **Routing.** The agent matches the request's `Host` against its in-memory
+   route registry to find the target port.
+4. **Proxy.** It reverse-proxies to the local target (e.g. `127.0.0.1:8080`) and
+   streams the response back.
+
+Because the registry is keyed by host, a dotted route like `api.myapp` works at
+any depth locally, the local CA mints a per-SNI leaf for the exact name.
+
+See [Local agent](/docs/concepts/local-agent) for the component, and
+[Public exposure flow](/docs/architecture/public-exposure-flow) for what changes
+when a route is exposed.

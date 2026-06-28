@@ -1,14 +1,65 @@
 ---
 title: routeup
-description: The bare routeup command runs in Portless-style script-runner mode.
+description: The bare routeup command runs your dev script and gives it a stable route.
 ---
 
-> TODO: document the bare command — config-driven script runner.
+Run `routeup` with no subcommand inside a project directory and it works as a
+script runner: it starts your dev server as a child process, gives it a stable
+route, and injects the route's URLs into the environment. This is the
+Portless-style mode.
 
-Outline:
+```bash
+routeup
+```
 
-- Run with no args inside a directory that has `routeup.json` or a `package.json` `routeup` block.
-- Infers local vs local+expose from config.
-- Injects `PORT`, `HOST`, `ROUTEUP_URL`, `ROUTEUP_LOCAL_URL` into the child process.
+## What it does
 
-Source: `PLAN.md` User Experience; `docs/MILESTONES.md` Phase 9.
+1. Loads config from `routeup.json` or the `package.json` `routeup` block in the
+   current directory.
+2. Picks a free local port for your app.
+3. Starts the configured script as a child process with routeup's environment
+   variables set.
+4. Registers the route with the local agent so `https://<name>.localhost`
+   resolves while the child runs.
+5. Tears the route down and exits with the child's exit code when the process
+   stops or you press `Ctrl-C`.
+
+## Environment passed to the child
+
+```txt
+PORT=<assigned-port>
+HOST=127.0.0.1
+ROUTEUP_LOCAL_URL=https://myapp.localhost
+ROUTEUP_URL=https://myapp.localhost
+```
+
+Your app should bind the port from `PORT` instead of a hard-coded one. `ROUTEUP_LOCAL_URL` is always the local HTTPS URL. `ROUTEUP_URL` is the URL your app should advertise: it is local for local-only runs and becomes the public URL when the route is exposed.
+
+With public exposure enabled, the environment changes to:
+
+```txt
+ROUTEUP_LOCAL_URL=https://myapp.localhost
+ROUTEUP_URL=https://myapp.routeup.dev
+```
+
+## Config
+
+```json
+{
+  "scripts": {
+    "dev": "routeup",
+    "dev:app": "vite"
+  },
+  "routeup": {
+    "name": "myapp",
+    "script": "dev:app"
+  }
+}
+```
+
+With this in place, `npm run dev` starts `routeup`, which in turn runs your real
+dev server (`dev:app`) behind `https://myapp.localhost`.
+
+See [Configuration](/docs/configuration/routeup-json) for the full field
+reference, and [serve](/docs/cli-reference/serve) when you want to register a
+route for an app you start yourself.

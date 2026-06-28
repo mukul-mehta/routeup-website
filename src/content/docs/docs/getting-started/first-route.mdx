@@ -15,12 +15,28 @@ Setup creates a local certificate authority, adds it to your OS trust store, let
 
 ## 2. Start any local app
 
-For example, run an app on port `8080`.
+Use whatever you already run in development. If you just want something to test against, start a throwaway static server on port `8080`:
+
+```bash
+python3 -m http.server 8080
+```
+
+Your real dev server works the same way, Vite, Next, Rails, a Go service, anything that listens on a local port.
 
 ## 3. Serve it through routeup
 
 ```bash
 routeup serve myapp --port 8080
+```
+
+routeup prints the route it claimed and the target it is proxying to:
+
+```txt
+route: myapp
+local: https://myapp.localhost
+target: http://localhost:8080
+
+press Ctrl-C to stop
 ```
 
 Open:

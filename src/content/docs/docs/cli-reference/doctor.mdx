@@ -1,14 +1,43 @@
 ---
 title: routeup doctor
-description: Diagnose local setup state — CA trust, certificates, agent reachability, port 443 handling.
+description: Diagnose local setup, CA trust, certificates, port 443, and agent health.
 ---
 
-> TODO: document `routeup doctor` checks.
+`routeup doctor` checks that the pieces [setup](/docs/cli-reference/setup)
+installed are still healthy. Run it whenever a local route does not load as
+expected.
 
-Outline:
+```bash
+routeup doctor
+```
 
-- Checks for each setup invariant.
-- Exit codes and how to interpret them.
-- Common failure modes and fixes.
+## What it checks
 
-Source: `docs/MILESTONES.md` Phase 4.
+- **Local CA**: the certificate authority exists under `~/.routeup`.
+- **OS trust**: that CA is present in the system trust store.
+- **Port 443**: routeup can answer on 443 (the macOS forwarder is installed, or
+  the Linux `cap_net_bind_service` capability is set on the binary).
+- **Agent**: the background agent is running and reachable over its local
+  socket.
+
+Each check prints `ok` or a specific failure with the command that fixes it.
+
+## Common failures
+
+- **Lost Linux capability after an upgrade**: a package upgrade replaces the
+  binary inode, dropping the `setcap` capability. `doctor` detects this with
+  `getcap`; re-run `routeup setup` to reapply it.
+- **CA not trusted**: the trust store was reset or the CA was removed. Re-run
+  `routeup setup`.
+- **Agent unreachable**: restart it with `routeup agent restart`, or run
+  `routeup setup` if autostart was removed.
+
+## Non-browser clients
+
+Browsers, Safari, and `curl` use the system trust store automatically. Some
+runtimes ship their own CA bundle, point them at the routeup CA:
+
+```bash
+export NODE_EXTRA_CA_CERTS=~/.routeup/ca.crt   # Node.js
+export REQUESTS_CA_BUNDLE=~/.routeup/ca.crt     # Python (requests / urllib3)
+```

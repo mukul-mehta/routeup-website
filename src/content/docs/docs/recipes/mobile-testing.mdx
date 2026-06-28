@@ -1,13 +1,44 @@
 ---
 title: Mobile testing
-description: Test your dev build on a real iPhone or Android device against a real HTTPS hostname.
+description: Test your dev build on a real iPhone or Android device over real HTTPS.
 ---
 
-> TODO: write the mobile-testing recipe.
+`localhost` only exists on the machine it runs on, so a phone cannot reach your
+dev server through it. Expose the route and the device gets a real HTTPS URL.
 
-Outline:
+## Expose the dev server
 
-- Why localhost doesn't work on a phone.
-- Expose the dev server publicly.
-- Open `https://myapp.you.routeup.dev` on the device.
-- Note that `.localhost` is not reachable from off-host devices — public is required for mobile.
+```bash
+routeup serve myapp --port 3000 --public
+```
+
+```txt
+route: myapp
+local: https://myapp.localhost
+public: https://myapp.routeup.dev
+target: http://localhost:3000
+
+press Ctrl-C to stop
+```
+
+## Open it on the device
+
+Type the public URL into Safari or Chrome on the phone, no profiles, no
+self-signed certificate warnings, because the public side uses a publicly-trusted
+certificate.
+
+Because it is a real HTTPS origin, things that only work over HTTPS, service
+workers, `getUserMedia`, secure cookies, the clipboard API, behave the same as
+production.
+
+## Why not local for this
+
+A `*.localhost` route is the zero-network path, but it resolves to `127.0.0.1` on
+each machine, it is unreachable from a separate device. Mobile testing needs the
+public route. (Same-LAN shortcuts like mDNS are a possible future addition, but
+today off-host devices go through the public server.)
+
+## Tip: keep the URL stable
+
+Register or bookmark the public URL once. The route name is stable across
+restarts, so the link keeps working session to session.

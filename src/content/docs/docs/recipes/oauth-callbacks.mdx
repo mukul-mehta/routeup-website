@@ -1,12 +1,46 @@
 ---
 title: OAuth callbacks
-description: Use a stable public URL as the redirect URI for OAuth integrations.
+description: Use a stable URL as the redirect URI for OAuth integrations.
 ---
 
-> TODO: write the OAuth-callback recipe.
+OAuth providers want a single, pre-registered redirect URI. A changing
+`localhost:<port>` is awkward to register and breaks when the port moves.
+routeup gives you a stable URL to register once.
 
-Outline:
+## Local-only providers
 
-- The problem: providers require a single, registered redirect URI.
-- The fix: register `https://myapp.you.routeup.dev/oauth/callback` once and forget it.
-- Local-only variant: `https://myapp.localhost/oauth/callback` for providers that allow it.
+Many providers accept an HTTPS `localhost` redirect. For those, a local route is
+enough, no server or token needed:
+
+```bash
+routeup serve myapp --port 3000
+```
+
+Register:
+
+```txt
+https://myapp.localhost/oauth/callback
+```
+
+Because routeup serves real HTTPS on `*.localhost`, secure cookies and
+`https`-only SDKs behave exactly as they will in production.
+
+## Providers that require a public URL
+
+Some providers reject `localhost` or need to reach you directly. Expose the route
+and register the public URL:
+
+```bash
+routeup serve myapp --port 3000 --public
+```
+
+```txt
+https://myapp.routeup.dev/oauth/callback
+```
+
+## Why the stable name matters
+
+The redirect URI is registered once in the provider's dashboard. Since the route
+name does not change between runs, you register it a single time and never touch
+it again, even as the underlying dev port changes. See
+[Routes](/docs/concepts/routes).

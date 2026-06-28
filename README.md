@@ -1,4 +1,4 @@
-# routeup-web
+# routeup-website
 
 Marketing site and docs for [routeup](https://github.com/mukul-mehta/routeup).
 
@@ -6,11 +6,11 @@ Built with [Astro](https://astro.build) + [Starlight](https://starlight.astro.bu
 
 Lives at `routeup.dev`:
 
-- `/` — marketing landing (custom Astro page)
-- `/docs/*` — docs (Starlight)
-- `/app/*` — future dashboard (token CRUD + route list, when it ships)
-- `/llms.txt` — short LLM index
-- `/llms-full.txt` — every docs page concatenated
+- `/`: marketing landing (custom Astro page)
+- `/docs/*`: docs (Starlight)
+- `/app/*`: future dashboard (token CRUD + route list, when it ships)
+- `/llms.txt`: short LLM index
+- `/llms-full.txt`: every docs page concatenated
 
 The routeup Go binary is at `../routeup`. This repo is intentionally separate so JS tooling never touches the Go workflow.
 
@@ -24,22 +24,23 @@ pnpm preview         # preview the production build
 pnpm check           # astro type/diagnostic check
 ```
 
-Pagefind search (Cmd/Ctrl+K on docs pages) is wired by Starlight automatically. The `cmdk`-based custom palette in `src/components/CommandPalette.tsx` is a stub for future global actions.
+Pagefind search (Cmd/Ctrl+K on docs pages) is wired by Starlight automatically. Per-page Markdown actions are injected by `public/docs-markdown-actions.js`.
 
 ## Repo layout
 
 ```txt
-routeup-web/
-├── astro.config.mjs              # Starlight + React integrations, sidebar
+routeup-website/
+├── astro.config.mjs              # Starlight + sitemap integrations, sidebar
 ├── package.json
 ├── tsconfig.json
 ├── public/
-│   └── favicon.svg
+│   ├── CNAME
+│   ├── favicon.svg
+│   ├── og.png
+│   └── robots.txt
 └── src/
     ├── assets/
-    │   └── logo.svg              # placeholder mark
-    ├── components/
-    │   └── CommandPalette.tsx    # stub Cmd-K palette (not yet wired to Starlight)
+    │   └── logo.svg
     ├── content.config.ts         # Starlight docs collection
     ├── content/
     │   └── docs/
@@ -83,26 +84,26 @@ When the dashboard ships:
 
 1. Switch Astro to SSR or hybrid mode (`output: 'server'` / `'hybrid'`) and add an adapter (Cloudflare / Node / Vercel).
 2. Add an auth integration (Better-Auth, Clerk, etc.).
-3. Build pages under `src/pages/app/*` — likely React islands mounted on Astro pages.
+3. Build pages under `src/pages/app/*`, likely React islands mounted on Astro pages.
 4. Add middleware in `src/middleware.ts` to gate `/app/*`.
 
 This stays a single project; the marketing and docs routes can remain statically prerendered while `/app/*` renders on demand.
 
 ## Deployment
 
-Designed for Cloudflare Pages but works on Vercel / Netlify / any static host.
+Designed for GitHub Pages via `.github/workflows/deploy.yml`.
 
 The site uses Astro's default static output. When the dashboard is added, switch to a hybrid output and pick an adapter.
 
-DNS plan when launching:
+DNS plan:
 
-- `routeup.dev` → website (this app)
-- `*.routeup.dev` → routeup public server (the Go binary, on a different machine)
+- `routeup.dev` -> website (this app)
+- `*.routeup.dev` -> routeup public server (the Go binary, on a different machine)
 - `routeup.dev` and `routeup.dev/docs` are served by this site; the wildcard catches everything else for user tunnels.
 
 ## Launch gating
 
-This site stays unpublished until the routeup binary reaches **milestone M9** (process runner). By then, `routeup serve`, `routeup expose`, tokens, public tunnels, streaming, path proxy, and Portless-style script-runner mode are all real. The docs can use real working examples instead of speculation.
+Before launch, verify the Homebrew tap, curl installer, GitHub Pages settings, apex DNS, and wildcard public-server DNS.
 
 Milestones tracked in `../routeup/docs/MILESTONES.md`.
 
@@ -110,13 +111,8 @@ Milestones tracked in `../routeup/docs/MILESTONES.md`.
 
 Not built yet, deliberately deferred:
 
-- Wire `CommandPalette.tsx` into the Starlight layout (override `Search.astro` or mount globally via a layout slot).
-- Per-page "Copy as Markdown" / "View as `.md`" buttons.
-- Comparison table component (vs ngrok / Portless / localtunnel).
-- Real logo + brand color tokens in `src/styles/global.css`.
-- OG image generation (Astro has `@astrojs/og` or a custom endpoint).
-- Sitemap (`@astrojs/sitemap`).
-- Analytics — none planned; routeup is zero-telemetry by design and the site should match.
+- Hosted account signup or token self-service.
+- Analytics: none planned; routeup is zero-telemetry by design and the site should match.
 
 ## License
 

@@ -1,9 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="64" height="64" shape-rendering="crispEdges" role="img" aria-label="routeup">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="64" height="64" role="img" aria-label="routeup">
   <rect width="16" height="16" fill="#e8e2d0"/>
-  <!-- pixel r: stem + top + tiny hook -->
-  <rect x="4" y="3" width="2" height="10" fill="#1c160c"/>
-  <rect x="6" y="3" width="4" height="2" fill="#1c160c"/>
-  <rect x="9" y="5" width="1" height="1" fill="#1c160c"/>
-  <!-- teal accent square dot (status / brand) -->
-  <rect x="11" y="11" width="2" height="2" fill="#0e9999"/>
+  <line x1="8" y1="13.5" x2="8" y2="9" stroke="#1c160c" stroke-width="1.2" stroke-linecap="square"/>
+  <line x1="8" y1="9" x2="4" y2="5" stroke="#1c160c" stroke-width="1.2" stroke-linecap="square"/>
+  <line x1="8" y1="9" x2="12" y2="5" stroke="#0a6a6a" stroke-width="1.2" stroke-linecap="square"/>
+  <rect x="3" y="3" width="2.5" height="2.5" fill="#1c160c"/>
+  <rect x="10.5" y="3" width="2.5" height="2.5" fill="#0a6a6a"/>
 </svg>

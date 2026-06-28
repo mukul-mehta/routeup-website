@@ -1,14 +1,51 @@
 ---
 title: routeup setup
-description: One-time install of the local CA, certificates, agent autostart, and optional server credentials.
+description: One-time install of the local CA, certificates, agent, and optional server credentials.
 ---
 
-> TODO: document `routeup setup`.
+`routeup setup` prepares your machine for local HTTPS. Run it once after
+installing.
 
-Outline:
+```bash
+routeup setup
+```
 
-- What it mutates (trust store, certs, autostart unit).
-- `--server` and `--token` for public configuration.
-- Idempotent re-run behavior.
+You may be asked for Touch ID or your password once, that is the only privileged
+step.
 
-Source: `PLAN.md` Setup Model.
+## What it changes
+
+- Creates a local certificate authority under `~/.routeup`.
+- Adds that CA to your operating system trust store, so `*.localhost` routes load
+  over HTTPS with no browser warnings.
+- Lets routeup answer on port 443 (a LaunchDaemon forwarder on macOS, a
+  `cap_net_bind_service` capability on Linux).
+- Starts the background [local agent](/docs/concepts/local-agent) and enables it
+  to start on login.
+
+It explains each privileged change before making it. Nothing is sent off your
+machine, and no account is required.
+
+## Saving server credentials
+
+To configure public exposure at the same time, pass a server and token. They are
+stored for later `--public` use:
+
+```bash
+routeup setup --server https://routeup.dev --token sk_routeup_xxx
+```
+
+You can also supply these per command or through `ROUTEUP_SERVER` /
+`ROUTEUP_TOKEN`. See [Using a token](/docs/getting-started/using-a-token).
+
+## Re-running
+
+`setup` is idempotent. Running it again repairs missing pieces, for example,
+re-applying the Linux capability after a package upgrade, without duplicating
+state. [doctor](/docs/cli-reference/doctor) tells you when a re-run is needed.
+
+## Undoing it
+
+[uninstall](/docs/cli-reference/update-uninstall) reverses everything setup did:
+it stops the agent, removes the port-443 forwarder, untrusts the CA, and deletes
+`~/.routeup`.

@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 /**
- * /llms-full.txt — every docs page concatenated as one Markdown document.
+ * /llms-full.txt: every docs page concatenated as one Markdown document.
  *
  * Designed so a user can paste a single URL into Claude / GPT / Cursor
  * and have the model fetch the entire routeup docs corpus at once.
@@ -12,9 +12,9 @@ export const GET: APIRoute = async () => {
   docs.sort((a, b) => a.id.localeCompare(b.id));
 
   const parts: string[] = [];
-  parts.push('# routeup — full docs\n');
+  parts.push('# routeup: full docs\n');
   parts.push(
-    '> Stable HTTPS routes for local services. Public when you need them.\n',
+    '> Stable HTTPS routes for local services. Public when you need it.\n',
   );
   parts.push(
     'This file is the concatenation of every published docs page.',

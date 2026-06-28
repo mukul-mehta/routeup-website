@@ -1,14 +1,53 @@
 ---
 title: routeup expose
-description: Make a route public — retrofit public exposure onto a route that's being served locally.
+description: Make a route public using the explicit exposure command.
 ---
 
-> TODO: document `routeup expose`.
+`routeup expose` opens a public tunnel for a local port.
 
-Outline:
+Most docs use `routeup serve --public` because it tells the whole story in one command: serve the local route and make it public. `routeup expose` exists for the same public behavior when you want the command name to say exactly what is happening.
 
-- Relationship to `serve --expose` (one-shot) vs standalone `expose` (retrofit).
-- `--random` flag.
-- `--server` and `--token` flags / env vars.
+```bash
+routeup expose myapp --port 8080
+```
 
-Source: `PLAN.md` Exposure Model.
+Equivalent `serve` form:
+
+```bash
+routeup serve myapp --port 8080 --public
+```
+
+Both forms claim a public name, open an outbound tunnel, and forward requests to the local port.
+
+## Random public names
+
+Use `--random` when you want an ephemeral public URL instead of claiming a specific name.
+
+```bash
+routeup expose --random --port 8080
+```
+
+This uses the server's public namespace, when enabled.
+
+## Server and token
+
+Pass the server and token directly:
+
+```bash
+routeup expose myapp --port 8080 --server https://routeup.dev --token sk_routeup_xxx
+```
+
+Or configure them once:
+
+```bash
+routeup setup --server https://routeup.dev --token sk_routeup_xxx
+routeup expose myapp --port 8080
+```
+
+Environment variables work too:
+
+```bash
+export ROUTEUP_SERVER=https://routeup.dev
+export ROUTEUP_TOKEN=sk_routeup_xxx
+routeup expose myapp --port 8080
+```

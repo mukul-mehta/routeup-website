@@ -1,15 +1,53 @@
 ---
 title: Enabling the public namespace
-description: Turn on token-less ephemeral claims under one designated subdomain.
+description: Turn on token-less, ephemeral claims under one designated subdomain.
 ---
 
-> TODO: write the public-namespace operator guide.
+The public namespace lets anyone claim a public route under one designated label
+without a token. It is how the hosted `routeup.dev` offers token-less URLs under
+`*.try.routeup.dev`.
+It is **off by default** on self-hosted servers.
 
-Outline:
+## Enable it
 
-- Off by default on self-hosted servers.
-- Server config: `public_namespace: try` (or whatever subdomain you pick).
-- Implications: session-only, no grace window, no persistence, first-come-first-served.
-- Empty value disables the feature.
+Pick a label and pass it when starting the server:
 
-Source: `PLAN.md` Public namespace.
+```bash
+routeup server --domain tunnel.example.com --public-namespace try
+```
+
+Now clients can claim under `try.tunnel.example.com` without a token:
+
+```bash
+routeup serve --random --port 8080 --server https://tunnel.example.com --public
+# -> https://lively-otter-4f2.try.tunnel.example.com
+
+routeup serve demo --port 8080 --server https://tunnel.example.com --public
+# -> https://demo.try.tunnel.example.com
+```
+
+The chosen label is automatically added to the reserved-subdomain list so no
+token holder can claim it at the root tier.
+
+## Semantics
+
+Public-namespace claims are deliberately lightweight:
+
+```txt
+session-only      released as soon as the client disconnects
+no grace window   no 30s resume; the name frees immediately
+no persistence    nothing is stored across restarts
+first-come        a held name returns 409; --random gets an assigned name
+```
+
+## Disable it
+
+Omit `--public-namespace` (or set it empty) to turn the feature off. With it
+disabled, every public claim requires a [token](/docs/self-hosting/minting-tokens),
+and token-less claims are refused.
+
+## Abuse considerations
+
+With no token to attribute claims to, source IP is the only handle for abuse
+prevention. If you enable the public namespace on an internet-facing server,
+consider per-IP rate limiting on claim creation.

@@ -1,15 +1,51 @@
 ---
 title: Frontend + API behind one route
-description: Serve a dev frontend at /  and an API at /api/* behind a single route.
+description: Serve a dev frontend at / and an API at /api/* behind a single route.
 ---
 
-> TODO: write the path-proxy recipe.
+Putting your frontend and API under one origin removes CORS and makes cookies
+simple, the browser sees a single host. routeup can route by path so `/` goes to
+your dev server and `/api/*` goes to your API.
 
-Outline:
+## The shape
 
-- The single-origin pattern (no CORS, simpler cookies).
-- `/` → dev server (Vite, Next).
-- `/api/*` → API backend.
-- Configuration in `routeup.json` / `package.json` embed.
+```txt
+https://myapp.localhost/        -> dev server (e.g. Vite on a dynamic port)
+https://myapp.localhost/api/*   -> API backend (e.g. port 9080)
+```
 
-Source: `docs/MILESTONES.md` Phase 8.
+Both are the same origin, so the browser sends cookies to both and there is no
+cross-origin preflight.
+
+## Configure the paths
+
+Describe the path targets in config so the route is reproducible:
+
+```json
+{
+  "name": "myapp",
+  "routes": {
+    "/": { "port": 5173 },
+    "/api": { "port": 9080 }
+  }
+}
+```
+
+Then serve it:
+
+```bash
+routeup serve myapp
+```
+
+## Public, same shape
+
+Add `--public` and the single-origin layout is preserved on the public URL too,
+so a deployed-style `https://myapp.routeup.dev/api/...` works without
+reconfiguring the frontend:
+
+```bash
+routeup serve myapp --public
+```
+
+This is the same one-URL model your app will use in production, which means
+origin-sensitive behavior shows up in development instead of after you ship.

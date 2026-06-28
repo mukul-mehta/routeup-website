@@ -1,13 +1,53 @@
 ---
 title: Running the server
-description: Run your own routeup server on a custom domain.
+description: Run your own routeup server on a domain you control.
 ---
 
-> TODO: write the server-run guide.
+The public server is the same `routeup` binary you already have. Self-hosting
+means running it with your own domain, DNS, and TLS, the hosted `routeup.dev` is
+just one deployment of this code.
 
-Outline:
+## Prerequisites
 
-- `routeup server --domain <your.domain>`.
-- Required config (DNS, TLS, reserved-subdomain list).
-- Recommended deployment shape (single VM is fine for v1).
-- Operational concerns: logs, restarts, backups of the SQLite token store.
+- A domain (or subdomain) you control, e.g. `tunnel.example.com`.
+- DNS for that suffix pointing at the server, including a wildcard. See
+  [DNS setup](/docs/self-hosting/dns-setup).
+- A way to issue TLS. By default that is a Cloudflare API token for ACME DNS-01.
+  See [TLS](/docs/self-hosting/tls).
+
+## Start it
+
+```bash
+routeup server --domain tunnel.example.com
+```
+
+This serves HTTPS for `*.tunnel.example.com`, authenticates tunnel clients by
+token, and forwards each public request down the matching tunnel to a local
+agent.
+
+Common flags:
+
+```txt
+--domain <suffix>           public suffix to serve
+--public-namespace <label>  enable token-less claims under one label (off by default)
+--tls-mode <acme|cert>      acme auto-issues wildcards; cert uses your own files
+```
+
+## Deployment shape
+
+A single small VM is enough for v1, the server is one binary with a local SQLite
+database. Put it behind a stable IP, open 443, and run it under a process
+supervisor (systemd, a container restart policy) so it comes back after reboots.
+
+## State and backups
+
+The server keeps tokens and active claims in a SQLite database. Active claims are
+ephemeral, but the **tokens** are the durable state, back up the SQLite file so
+you do not have to re-mint and redistribute tokens after a host loss.
+
+## Operating
+
+- Mint and revoke access with [tokens](/docs/self-hosting/minting-tokens).
+- Reserved subdomains (`api`, `admin`, `www`, `try`, …) are refused for claims and
+  can be extended in server config.
+- Logs are structured; tail them through your supervisor.

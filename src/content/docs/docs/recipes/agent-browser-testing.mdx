@@ -1,12 +1,50 @@
 ---
 title: Agent and browser testing
-description: Point Playwright, Puppeteer, or an LLM agent at a stable HTTPS origin.
+description: Point Playwright, Puppeteer, or an LLM browser agent at a stable HTTPS origin.
 ---
 
-> TODO: write the agent / browser-testing recipe.
+Automated browsers behave most like production when they hit a real HTTPS origin.
+routeup gives your dev server one, locally or publicly.
 
-Outline:
+## In-process test runners
 
-- Why an HTTPS origin matters (modern web APIs, secure cookies, service workers).
-- Use `https://myapp.localhost` for in-process tests.
-- Use `https://myapp.you.routeup.dev` when the test runner is off-host (CI, cloud browser).
+When the test runner is on the same machine (Playwright, Puppeteer, Cypress),
+use the local route, real HTTPS, no network:
+
+```bash
+routeup serve myapp --port 3000
+```
+
+```js
+await page.goto('https://myapp.localhost');
+```
+
+This exercises secure cookies, service workers, and `https`-only web APIs that a
+plain `http://localhost:3000` would not.
+
+### Trusting the CA in the runner
+
+Browsers launched by these tools usually use the system trust store, so the
+routeup CA is already trusted. If a runtime ships its own CA bundle, point it at
+the routeup CA:
+
+```bash
+export NODE_EXTRA_CA_CERTS=~/.routeup/ca.crt
+```
+
+## Off-host or cloud browsers
+
+When the browser runs somewhere else, CI, a cloud browser, or an LLM agent
+driving a remote browser, `localhost` is not reachable. Expose the route and
+hand the agent the public URL:
+
+```bash
+routeup serve myapp --port 3000 --public
+```
+
+```txt
+https://myapp.routeup.dev
+```
+
+The stable name means the agent's target URL does not change between runs, so
+test configs and prompts stay valid.

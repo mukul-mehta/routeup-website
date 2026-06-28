@@ -3,11 +3,32 @@ title: routeup routes
 description: List the active routes registered with the local agent.
 ---
 
-> TODO: document `routeup routes`.
+`routeup routes` lists every route currently registered with the local agent.
 
-Outline:
+```bash
+routeup routes
+```
 
-- Output columns: route, local URL, public URL (if exposed), target, owner.
-- Behavior when the agent is not running.
+Example output:
 
-Source: `PLAN.md` User Experience.
+```txt
+ROUTE       LOCAL                        PUBLIC                        TARGET            OWNER
+myapp       https://myapp.localhost      https://myapp.routeup.dev     http://127.0.0.1:8080  pid 41021
+api.myapp   https://api.myapp.localhost  none                          http://127.0.0.1:9080  pid 41044
+```
+
+Columns:
+
+- **Route**: the dotted route name.
+- **Local**: the always-available `*.localhost` URL.
+- **Public**: the exposed URL, or `none` when the route is local-only.
+- **Target**: the local port the agent proxies to.
+- **Owner**: the process holding the route. Routes are owned by the foreground
+  `serve`/`routeup` process that registered them.
+
+## When the agent is not running
+
+If the agent is not running, there are no active routes and the command says so.
+Routes exist only while the process that registered them is alive, the agent
+keeps its registry in memory, and each live `serve` re-asserts its claim if the
+agent restarts.

@@ -16,15 +16,17 @@ https://random.try.example.com
 Ask the server to assign a name:
 
 ```bash
-routeup expose --random --port 8080 --server https://edge.example.com
+routeup serve --random --port 8080 --server https://edge.example.com --public
 ```
 
 Or request a specific single-label name if the server allows it:
 
 ```bash
-routeup expose demo --port 8080 --server https://edge.example.com
+routeup serve demo --port 8080 --server https://edge.example.com --public
 ```
 
 ## Operator behavior
 
 The public namespace is disabled by default on self-hosted servers. Enable it with `--public-namespace` when running `routeup server`.
+
+The hosted `routeup.dev` server uses `try` for token-less names, so `--random` grants URLs like `https://lively-otter-4f2.try.routeup.dev`. Named persistent URLs under `*.routeup.dev` still require a token.

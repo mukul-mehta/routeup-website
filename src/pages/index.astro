@@ -1,6 +1,6 @@
 ---
 /**
- * routeup.dev — marketing landing.
+ * routeup.dev: marketing landing.
  *
  * Aesthetic: paper-and-mono (see /Users/mukul-mehta/Personal/DESIGN.md), but
  * restrained for a marketing page. Cream paper, espresso ink, teal accent used
@@ -9,10 +9,8 @@
  * rules, one small pixel shadow.
  *
  * Copy voice: plain and technically accurate. No slogan headings, no ad
- * fragments. Explain *why*, with concrete examples.
- *
- * Layout: 1120px canvas, two-column hero, a "your machine" boundary diagram
- * for the request flows, and grids that use the width.
+ * fragments, no em-dashes. Explain *why*, with concrete examples. One example
+ * route is used throughout: myapp -> myapp.localhost / myapp.routeup.dev.
  */
 ---
 
@@ -25,15 +23,26 @@
     <title>routeup · stable HTTPS routes for local services</title>
     <meta
       name="description"
-      content="routeup gives local services stable HTTPS names — and the same route exposed publicly when you need it. Open source, MIT, self-hostable, zero telemetry."
+      content="routeup gives local services stable HTTPS names, and the same route public when you need it. Open source, MIT, self-hostable, zero telemetry."
     />
     <meta property="og:title" content="routeup · stable HTTPS routes for local services" />
     <meta
       property="og:description"
-      content="Stable HTTPS routes for local services. Public when you need them. Open source and self-hostable."
+      content="Stable HTTPS for local services. Public when you need it. Open source and self-hostable."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://routeup.dev/" />
+    <meta property="og:site_name" content="routeup" />
+    <meta property="og:image" content="https://routeup.dev/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="routeup · stable HTTPS routes for local services" />
+    <meta
+      name="twitter:description"
+      content="Stable HTTPS for local services. Public when you need it. Open source and self-hostable."
+    />
+    <meta name="twitter:image" content="https://routeup.dev/og.png" />
     <link rel="canonical" href="https://routeup.dev/" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -64,55 +73,51 @@
         {/* ──────────────────────────────── HERO ───────────────────────────── */}
         <section class="ru-hero">
           <div class="ru-hero__copy">
-            <p class="ru-hero__tags">
-              <span class="ru-hero__dot" aria-hidden="true"></span>
-              Open source · MIT · Self-hostable · Zero telemetry
-            </p>
-            <h1 class="ru-headline">Stable HTTPS for local services.</h1>
+            <h1 class="ru-headline">
+              Stable HTTPS for local services.
+              <span class="ru-headline__alt">Public when you need it.</span>
+            </h1>
             <p class="ru-lede">
-              <strong>routeup</strong> gives a local service a stable HTTPS
-              name               instead of a port. You choose the name once; it answers at
+              <strong>routeup</strong> gives local services a stable HTTPS name
+              instead of a port. You choose the name once; it answers at
               <code>myapp.localhost</code> on your machine, and at
-              <code class="u-public">myapp.routeup.dev</code> if you expose it.
-              The name stays the same between runs, and the local one works
-              with no network.
+              <code class="u-public">myapp.routeup.dev</code> when you make it
+              public. The name stays the same between runs.
             </p>
             <div class="ru-ctas">
               <a href="#install" class="ru-btn ru-btn--primary">Get routeup</a>
               <a href="/docs" class="ru-btn ru-btn--ghost">Read the docs →</a>
             </div>
             <p class="ru-hero__sub">
-              It is a single Go binary. Local routes work offline; for public
-              ones you can run your own server or use the hosted
-              <code>routeup.dev</code>.
+              <code>routeup</code> is a single Go binary. Local routes work offline and need no account.
+              To go public, use the hosted <code>routeup.dev</code> server or run your own!
             </p>
           </div>
 
           <div class="ru-hero__visual">
-            <pre class="ru-terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup setup</span>
+            <pre class="ru-terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">brew install mukul-mehta/tap/routeup</span>
+<span class="t-prompt">$</span> <span class="t-cmd">routeup setup</span>
 <span class="t-ok">✓</span> <span class="t-dim">local CA trusted · agent ready</span>
 
-<span class="t-prompt">$</span> <span class="t-cmd">routeup serve api.myapp --port 8080 --expose</span>
-<span class="t-dim">✓</span> <span class="t-local">local </span> <span class="t-localurl">https://api.myapp.localhost</span>
-<span class="t-okpub">✓</span> <span class="t-public">public</span> <span class="t-publicurl">https://api.myapp.you.routeup.dev</span><span class="t-cursor" aria-hidden="true">█</span></code></pre>
-            <p class="ru-hero__caption">
-              The serve command prints both URLs. The local one keeps working offline.
-            </p>
+<span class="t-prompt">$</span> <span class="t-cmd">routeup serve myapp --port 8080 --public</span>
+<span class="t-label">route:</span> myapp
+<span class="t-label">local:</span> <span class="t-localurl">https://myapp.localhost</span>
+<span class="t-label">public:</span> <span class="t-publicurl">https://myapp.routeup.dev</span>
+<span class="t-label">target:</span> http://localhost:8080
+
+<span class="t-dim">press Ctrl-C to stop</span><span class="t-cursor" aria-hidden="true">█</span></code></pre>
           </div>
         </section>
 
         {/* ──────────────────────────── LOCAL / PUBLIC ─────────────────────── */}
         <section class="ru-section" id="how">
           <header class="ru-head">
-            <p class="ru-kicker">Exposure.</p>
-            <h2 class="ru-head__title">A route is local until you expose it.</h2>
+            <h2 class="ru-head__title">A route is local until you make it public.</h2>
             <p class="ru-head__sub">
-              On your machine a route needs no account and no network. After a
+              On your machine, a route needs no account and no network: after a
               one-time <code>routeup setup</code>, any <code>*.localhost</code>
-              name resolves to <code>127.0.0.1</code> and serves over HTTPS.
-              When something outside your machine needs to reach the service
-              &mdash; an OAuth callback, a webhook, a phone, a cloud browser
-              &mdash; you expose the same route and get a public
+              name resolves to <code>127.0.0.1</code> over HTTPS. When a service needs to be public, for a webhook or
+              an OAuth redirect, add the <code>--public</code> flag and the route gets a
               <code>routeup.dev</code> URL.
             </p>
           </header>
@@ -123,8 +128,12 @@
                 <span class="ru-mode__pip" aria-hidden="true"></span>
                 Local
               </h3>
-              <pre class="ru-terminal ru-terminal--sm"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve api.myapp --port 8080</span>
-<span class="t-dim">✓</span> <span class="t-localurl">https://api.myapp.localhost</span></code></pre>
+              <pre class="ru-terminal ru-terminal--sm"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve myapp --port 8080</span>
+<span class="t-label">route:</span> myapp
+<span class="t-label">local:</span> <span class="t-localurl">https://myapp.localhost</span>
+<span class="t-label">target:</span> http://localhost:8080
+
+<span class="t-dim">press Ctrl-C to stop</span></code></pre>
               <p>
                 The local agent serves any <code>*.localhost</code> route, and
                 nothing is sent to a server. <code>.localhost</code> is reserved
@@ -138,14 +147,19 @@
                 <span class="ru-mode__pip ru-mode__pip--public" aria-hidden="true"></span>
                 Public
               </h3>
-              <pre class="ru-terminal ru-terminal--sm"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup expose api.myapp --port 8080</span>
-<span class="t-okpub">✓</span> <span class="t-publicurl">https://api.myapp.you.routeup.dev</span></code></pre>
+              <pre class="ru-terminal ru-terminal--sm"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve myapp --port 8080 --public</span>
+<span class="t-label">route:</span> myapp
+<span class="t-label">local:</span> <span class="t-localurl">https://myapp.localhost</span>
+<span class="t-label">public:</span> <span class="t-publicurl">https://myapp.routeup.dev</span>
+<span class="t-label">target:</span> http://localhost:8080
+
+<span class="t-dim">press Ctrl-C to stop</span></code></pre>
               <p>
-                When a service needs to be reachable from outside, the public
-                server accepts the request and tunnels it to your local agent.
-                You can expose the whole app or limit it to specific paths, so
+                The same command with <code>--public</code> also opens an
+                outbound tunnel, so the public server can reach your local
+                agent. Expose the whole app, or use config to limit exposure so
                 <code>/api/webhooks/*</code> is public while the rest stays
-                private.
+                local.
               </p>
             </article>
           </div>
@@ -154,11 +168,9 @@
         {/* ────────────────────────── WHY THIS EXISTS ──────────────────────── */}
         <section class="ru-section">
           <header class="ru-head">
-            <p class="ru-kicker">Why this exists.</p>
-            <h2 class="ru-head__title">When a stable route helps.</h2>
+            <h2 class="ru-head__title">Why this exists?</h2>
             <p class="ru-head__sub">
-              Most of these come down to the same mismatch: the work wants a
-              stable URL, and the system hands you a port.
+              <strong>TL;DR:</strong> Work needs a stable URL, and we usually get handed a port.
             </p>
           </header>
 
@@ -167,8 +179,8 @@
               <h3>Ports you have to remember.</h3>
               <p>
                 Running several services means several arbitrary ports. A name
-                like <code>api.myapp.localhost</code> is easier to keep track
-                of, and it does not change when the port does.
+                like <code>myapp.localhost</code> is easier to keep track of,
+                and it does not change when the port does.
               </p>
             </li>
             <li>
@@ -191,16 +203,16 @@
               <h3>Webhook delivery.</h3>
               <p>
                 Services like GitHub, Stripe, and Slack need to reach your
-                machine. Expose the route you already develop against and they
-                can deliver to it.
+                machine. Make the route you already develop against public and
+                they can deliver to it.
               </p>
             </li>
             <li>
-              <h3>Phones and cloud browsers.</h3>
+              <h3>Previews you can share.</h3>
               <p>
-                <code>localhost</code> only exists on the machine it runs on. A
-                real phone, or a browser running in the cloud, cannot reach it
-                &mdash; so expose the route and give them a public URL.
+                Send a teammate or a client a working URL for the branch
+                you&rsquo;re on. No deploy, no staging slot; close the route and
+                the link stops resolving.
               </p>
             </li>
           </ul>
@@ -209,14 +221,13 @@
         {/* ───────────────────────────── HOW IT WORKS ──────────────────────── */}
         <section class="ru-section">
           <header class="ru-head">
-            <p class="ru-kicker">How it works.</p>
-            <h2 class="ru-head__title">What runs where.</h2>
+            <h2 class="ru-head__title">How a request reaches your service.</h2>
             <p class="ru-head__sub">
               The same binary is the CLI, the local agent, and the public
-              server, depending on how you run it. For a local route every part
-              runs on your machine. For a public one, requests arrive at the
-              public server and travel back down an outbound tunnel, so your
-              service never has to open a port to the internet.
+              server. For a local route, every part runs on your machine. For a
+              public one, the request hits the routeup server first and rides an
+              outbound tunnel back down, so your service never opens a port to
+              the internet.
             </p>
           </header>
 
@@ -229,15 +240,17 @@
                 <div class="ru-chain">
                   <div class="ru-node">
                     <span class="ru-node__name">browser</span>
+                    <span class="ru-node__role">opens https://myapp.localhost</span>
                   </div>
-                  <div class="ru-hop"><span class="ru-hop__wire">https://api.myapp.localhost</span></div>
+                  <div class="ru-hop"><span class="ru-hop__wire">https://myapp.localhost</span></div>
                   <div class="ru-node ru-node--ru">
-                    <span class="ru-node__name">local agent</span>
+                    <span class="ru-node__name">routeup local agent</span>
                     <span class="ru-node__role">terminates TLS, reverse-proxies</span>
                   </div>
                   <div class="ru-hop"><span class="ru-hop__wire">127.0.0.1:8080</span></div>
                   <div class="ru-node">
                     <span class="ru-node__name">your service</span>
+                    <span class="ru-node__role">your dev server, listening on localhost:8080</span>
                   </div>
                 </div>
               </div>
@@ -251,7 +264,7 @@
                   <span class="ru-node__name">browser</span>
                   <span class="ru-node__role">anywhere on the internet</span>
                 </div>
-                <div class="ru-hop"><span class="ru-hop__wire ru-hop__wire--public">https://api.myapp.you.routeup.dev</span></div>
+                <div class="ru-hop"><span class="ru-hop__wire ru-hop__wire--public">https://myapp.routeup.dev</span></div>
                 <div class="ru-node ru-node--ru ru-node--cloud">
                   <span class="ru-node__name">routeup server</span>
                   <span class="ru-node__role">cloud · terminates public TLS</span>
@@ -261,12 +274,13 @@
                   <span class="ru-machine__tab">your machine</span>
                   <div class="ru-chain">
                     <div class="ru-node ru-node--ru">
-                      <span class="ru-node__name">local agent</span>
+                      <span class="ru-node__name">routeup local agent</span>
                       <span class="ru-node__role">reverse-proxies</span>
                     </div>
                     <div class="ru-hop"><span class="ru-hop__wire">127.0.0.1:8080</span></div>
                     <div class="ru-node">
                       <span class="ru-node__name">your service</span>
+                      <span class="ru-node__role">your dev server, listening on localhost:8080</span>
                     </div>
                   </div>
                 </div>
@@ -278,7 +292,6 @@
         {/* ──────────────────────────── FEATURES ──────────────────────────── */}
         <section class="ru-section">
           <header class="ru-head">
-            <p class="ru-kicker">What you get.</p>
             <h2 class="ru-head__title">How it&rsquo;s built.</h2>
           </header>
 
@@ -289,7 +302,7 @@
             </li>
             <li>
               <h3>Path-scoped exposure.</h3>
-              <p>You can expose a single path prefix instead of the whole service, so <code>/api/webhooks/*</code> is reachable publicly while everything else stays local.</p>
+              <p>Set <code>expose.paths</code> to make a single prefix public, so <code>/api/webhooks/*</code> is reachable publicly while everything else stays local.</p>
             </li>
             <li>
               <h3>One static Go binary.</h3>
@@ -299,23 +312,53 @@
               <h3>Token-scoped names.</h3>
               <p>A server token carries an allow pattern that decides which names it can claim: one subdomain, a team namespace, or the whole suffix.</p>
             </li>
-            <li>
-              <h3>Open source, MIT.</h3>
-              <p>The code is MIT-licensed and public, and the hosted <code>routeup.dev</code> runs the same server you can run yourself.</p>
-            </li>
-            <li>
-              <h3>Zero telemetry.</h3>
-              <p>Nothing is collected or sent anywhere, and local use does not require an account.</p>
-            </li>
-            <li>
-              <h3>package.json integration.</h3>
-              <p>Add <code>routeup</code> to a script and it wraps your dev server, setting <code>PORT</code> and passing through the route&rsquo;s URLs.</p>
-            </li>
-            <li>
-              <h3>Self-hostable.</h3>
-              <p>You can run the server with your own DNS suffix and certificate provider. The hosted instance is a convenience, not a requirement.</p>
-            </li>
           </ul>
+        </section>
+
+        {/* ──────────────────────────── CONFIGURE ─────────────────────────── */}
+        <section class="ru-section">
+          <header class="ru-head">
+            <h2 class="ru-head__title">Set the name once, then run it.</h2>
+            <p class="ru-head__sub">
+              Give a project a name and port in a <code>routeup.json</code>, or
+              embed the same settings in your <code>package.json</code>. After
+              that, a bare <code>routeup serve</code> uses those settings, and
+              the route travels with the repo.
+            </p>
+          </header>
+
+          <div class="ru-modes">
+            <article class="ru-mode ru-mode--cfg">
+              <h3>routeup.json</h3>
+              <pre class="ru-terminal ru-terminal--sm"><code>{`{
+  "name": "myapp",
+  "port": 8080
+}`}</code></pre>
+              <p>
+                Any language. <code>routeup serve</code> with no arguments now
+                serves <code>https://myapp.localhost</code>.
+              </p>
+            </article>
+
+            <article class="ru-mode ru-mode--cfg">
+              <h3>package.json</h3>
+              <pre class="ru-terminal ru-terminal--sm"><code>{`{
+  "scripts": {
+    "dev": "routeup",
+    "dev:app": "vite"
+  },
+  "routeup": {
+    "name": "myapp",
+    "script": "dev:app"
+  }
+}`}</code></pre>
+              <p>
+                Node projects. <code>npm run dev</code> starts your dev server
+                behind <code>https://myapp.localhost</code> and injects
+                <code>PORT</code>, <code>ROUTEUP_URL</code>, and <code>ROUTEUP_LOCAL_URL</code>.
+              </p>
+            </article>
+          </div>
         </section>
 
         {/* ──────────────────────────── INSTALL ───────────────────────────── */}
@@ -331,15 +374,15 @@
               <button class="ru-tab" role="tab" data-tab="curl" aria-selected="false">curl</button>
               <button class="ru-tab" role="tab" data-tab="release" aria-selected="false">release</button>
             </div>
-            <pre class="ru-terminal ru-terminal--install" data-tab="brew"><code><span class="t-prompt">$</span> brew install routeup/tap/routeup</code></pre>
-            <pre class="ru-terminal ru-terminal--install" data-tab="curl" hidden><code><span class="t-prompt">$</span> curl -fsSL https://routeup.dev/install.sh | sh</code></pre>
+            <pre class="ru-terminal ru-terminal--install" data-tab="brew"><code><span class="t-prompt">$</span> brew install mukul-mehta/tap/routeup</code></pre>
+            <pre class="ru-terminal ru-terminal--install" data-tab="curl" hidden><code><span class="t-prompt">$</span> curl -fsSL https://get.routeup.dev/install.sh | sh</code></pre>
             <pre class="ru-terminal ru-terminal--install" data-tab="release" hidden><code><span class="t-prompt">#</span> macOS &amp; Linux binaries at
 <span class="t-dim">github.com/mukul-mehta/routeup/releases</span></code></pre>
 
             <p class="ru-note">
               After installing, run <code>routeup setup</code> once. Then
-              <code>routeup serve --port 8080</code> inside a project and open
-              <code>https://&lt;name&gt;.localhost</code>.
+              <code>routeup serve myapp --port 8080</code> and open
+              <code>https://myapp.localhost</code>.
             </p>
 
             <div class="ru-ctas ru-ctas--end">
@@ -347,6 +390,22 @@
               <a href="https://github.com/mukul-mehta/routeup" class="ru-btn ru-btn--ghost" rel="noopener noreferrer">GitHub ↗</a>
             </div>
           </div>
+        </section>
+
+        {/* ─────────────────────────── INSPIRATIONS ───────────────────────── */}
+        <section class="ru-section">
+          <header class="ru-head">
+            <h2 class="ru-head__title">Built from prior art.</h2>
+          </header>
+
+          <ul class="ru-inspo">
+            <li><strong>ngrok</strong> <span>public URLs for localhost</span></li>
+            <li><strong>localtunnel</strong> <span>small open-source tunnels</span></li>
+            <li><strong>mkcert</strong> <span>trusted local certificates</span></li>
+            <li><strong>Caddy</strong> <span>automatic TLS defaults</span></li>
+            <li><strong>Portless</strong> <span>package.json-driven dev routes</span></li>
+            <li><strong>RFC&nbsp;6761</strong> <span>.localhost resolves with no config</span></li>
+          </ul>
         </section>
       </main>
 
@@ -398,12 +457,12 @@
         --bg-soft:   #ddd5be;
         --fg:        #1c160c;
         --fg-dim:    #3b3221;
-        --fg-faint:  #756a52;
+        --fg-faint:  #5f5640;
         --border:    #2a2418;
         --rule:      rgba(42, 36, 24, 0.16);
         --accent:    #0e9999;
-        --accent-fg: #097373;
-        --public:    #b1530e;
+        --accent-fg: #0a6a6a;
+        --public:    #8a3a05;
 
         --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         --term: 'Geist Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
@@ -464,7 +523,7 @@
         letter-spacing: -0.01em;
       }
       .ru-brand__mark { display: block; image-rendering: pixelated; image-rendering: -moz-crisp-edges; }
-      .ru-nav__links { display: flex; gap: 1.7rem; font-size: 0.92rem; color: var(--fg-dim); }
+      .ru-nav__links { display: flex; flex-wrap: wrap; gap: 1.7rem; font-size: 0.92rem; color: var(--fg-dim); }
       .ru-nav__links a { padding: 0.2rem 0; transition: color var(--motion-fast) var(--ease); }
       .ru-nav__links a:hover { color: var(--accent-fg); }
       .ru-nav__gh { font-weight: 700; }
@@ -495,7 +554,14 @@
         letter-spacing: -0.025em;
         margin: 0 0 1.5rem;
       }
-      .ru-headline__alt { display: block; color: var(--fg-dim); font-weight: 600; }
+      .ru-headline__alt {
+        display: block;
+        margin-top: 0.4rem;
+        font-size: 0.5em;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        color: var(--fg-dim);
+      }
 
       .ru-lede {
         font-size: 1.04rem;
@@ -546,13 +612,10 @@
       .ru-terminal code { font-family: var(--term); font-size: inherit; padding: 0; background: none; border: 0; font-weight: 500; }
       .t-prompt    { color: var(--fg-faint); user-select: none; }
       .t-cmd       { color: var(--fg); font-weight: 600; }
+      .t-label     { color: var(--fg-faint); }
       .t-dim       { color: var(--fg-faint); }
       .t-ok        { color: var(--accent-fg); font-weight: 700; }
-      /* local = neutral ink, public = rust — distinct from the teal brand accent */
-      .t-local     { color: var(--fg-faint); }
       .t-localurl  { color: var(--fg); }
-      .t-okpub     { color: var(--public); font-weight: 700; }
-      .t-public    { color: var(--public); font-weight: 700; }
       .t-publicurl { color: var(--public); font-weight: 700; }
       .t-cursor { display: inline-block; margin-left: 0.1ch; color: var(--fg); animation: blink 1s steps(1, end) infinite; }
       @keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
@@ -571,7 +634,7 @@
         border: 2px solid var(--border);
         transition: transform var(--motion-fast) var(--ease), box-shadow var(--motion-fast) var(--ease);
       }
-      .ru-btn--primary { background: var(--accent); color: var(--bg-elev); box-shadow: 3px 3px 0 0 var(--border); }
+      .ru-btn--primary { background: var(--accent); color: var(--fg); box-shadow: 3px 3px 0 0 var(--border); }
       .ru-btn--ghost   { background: var(--bg-elev); color: var(--fg); box-shadow: 3px 3px 0 0 var(--border); }
       .ru-btn:hover  { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 0 var(--border); }
       .ru-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 0 var(--border); }
@@ -579,7 +642,7 @@
       /* ───────────────────────────── SECTIONS ───────────────────────────── */
       .ru-section { padding: clamp(3rem, 6vw, 4.5rem) 0; border-bottom: 1px solid var(--rule); }
       .ru-section:last-of-type { border-bottom: none; }
-      .ru-head { max-width: 64ch; margin-bottom: 2.4rem; }
+      .ru-head { margin-bottom: 2.4rem; }
       .ru-kicker { font-size: 0.84rem; font-weight: 700; color: var(--accent-fg); margin: 0 0 0.9rem; }
       .ru-head__title {
         font-size: clamp(1.5rem, 2.8vw, 2.1rem);
@@ -588,11 +651,11 @@
         letter-spacing: -0.02em;
         margin: 0;
       }
-      .ru-head__sub { font-size: 0.98rem; line-height: 1.65; color: var(--fg-dim); margin: 1rem 0 0; }
+      .ru-head__sub { max-width: 96ch; font-size: 0.98rem; line-height: 1.65; color: var(--fg-dim); margin: 1rem 0 0; }
 
       /* ────────────────────────────── MODES ─────────────────────────────── */
-      .ru-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; }
-      .ru-mode { padding: 1.5rem 1.6rem 1.7rem; background: var(--bg-elev); border: 1px solid var(--rule); }
+      .ru-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; align-items: start; }
+      .ru-mode { min-width: 0; padding: 1.5rem 1.6rem 1.7rem; background: var(--bg-elev); border: 1px solid var(--rule); }
       .ru-mode h3 {
         display: flex;
         align-items: center;
@@ -604,6 +667,7 @@
         margin: 0 0 1rem;
         color: var(--fg);
       }
+      .ru-mode--cfg h3 { text-transform: none; letter-spacing: -0.005em; font-size: 0.92rem; }
       .ru-mode__pip { width: 0.55rem; height: 0.55rem; background: var(--fg); }
       .ru-mode__pip--public { background: var(--public); }
       .ru-mode .ru-terminal { box-shadow: none; }
@@ -611,6 +675,7 @@
 
       /* ────────────────────────────── GRIDS ─────────────────────────────── */
       .ru-grid { list-style: none; padding: 0; margin: 0; }
+      .ru-grid > li { min-width: 0; }
       .ru-grid--problems { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem 2.8rem; }
       .ru-grid--problems h3 { font-size: 1rem; font-weight: 800; margin: 0 0 0.4rem; letter-spacing: -0.005em; }
       .ru-grid--problems p { font-size: 0.95rem; color: var(--fg-dim); margin: 0; line-height: 1.6; }
@@ -626,9 +691,23 @@
       .ru-grid--features h3 { font-size: 0.95rem; font-weight: 800; margin: 0 0 0.5rem; letter-spacing: -0.005em; }
       .ru-grid--features p { font-size: 0.92rem; color: var(--fg-dim); margin: 0; line-height: 1.58; }
 
+      /* ──────────────────────────── INSPIRATIONS ────────────────────────── */
+      .ru-inspo { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 2.8rem; }
+      .ru-inspo li {
+        display: flex;
+        gap: 0.9rem;
+        align-items: baseline;
+        padding: 0.7rem 0;
+        border-top: 1px solid var(--rule);
+        font-size: 0.95rem;
+      }
+      .ru-inspo li strong { color: var(--fg); min-width: 6.5rem; flex: 0 0 auto; }
+      .ru-inspo li span { color: var(--fg-dim); }
+
       /* ──────────────────────────────── DIAGRAM ─────────────────────────── */
       .ru-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; align-items: start; }
       .ru-flow {
+        min-width: 0;
         padding: 1.5rem 1.6rem 1.7rem;
         background: var(--bg-elev);
         border: 1px solid var(--rule);
@@ -707,7 +786,7 @@
       .ru-machine--tail { margin-top: 0.3rem; }
 
       /* ──────────────────────────────── INSTALL ─────────────────────────── */
-      .ru-install { max-width: 640px; }
+      .ru-install { max-width: none; min-width: 0; }
       .ru-tabs { display: flex; gap: 0; margin-bottom: -2px; }
       .ru-install__panel { position: relative; }
       .ru-tab {
@@ -745,7 +824,7 @@
       }
       .ru-copy:hover { background: var(--bg-soft); color: var(--fg); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 0 var(--border); }
       .ru-copy:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 0 var(--border); }
-      .ru-copy.is-copied { background: var(--accent); color: var(--bg-elev); }
+      .ru-copy.is-copied { background: var(--accent); color: var(--fg); }
       .ru-note { margin: 1.3rem 0 0; font-size: 0.92rem; color: var(--fg-dim); line-height: 1.6; }
 
       /* ──────────────────────────────── FOOTER ──────────────────────────── */
@@ -773,7 +852,9 @@
         .ru-modes { grid-template-columns: 1fr; }
         .ru-grid--problems { grid-template-columns: 1fr; }
         .ru-grid--features { grid-template-columns: 1fr; }
-        .ru-nav__links { gap: 1rem; font-size: 0.85rem; }
+        .ru-inspo { grid-template-columns: 1fr; }
+        .ru-nav { flex-direction: column; align-items: flex-start; gap: 0.85rem; }
+        .ru-nav__links { width: 100%; justify-content: flex-start; gap: 0.7rem 1.25rem; font-size: 0.85rem; }
       }
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {

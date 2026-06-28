@@ -1,14 +1,46 @@
 ---
 title: routeup logs
-description: Tail local and public request logs from the agent's ring buffer.
+description: Tail local and public request logs from the agent.
 ---
 
-> TODO: document `routeup logs`.
+`routeup logs` shows request logs recorded by the local agent. The agent is the
+authoritative log for both local and public traffic.
 
-Outline:
+```bash
+routeup logs
+routeup logs myapp
+routeup logs api.myapp --follow
+```
 
-- Filtering by route, `--public`, `--local`, `--follow`, `--json`.
-- Ring buffer limit (10k entries in v1).
-- No body capture by default.
+Default log line:
 
-Source: `PLAN.md` Logs section.
+```txt
+12:41:03 public myapp POST /api/webhooks/github 200 38ms req_abc123
+12:41:07 local  myapp     GET  /settings             200 12ms req_def456
+```
+
+Each line shows the time, source (`local` or `public`), route, method, path,
+status, latency, and a request id.
+
+## Flags
+
+```txt
+--follow   stream new entries as they arrive
+--public   only public (tunnelled) requests
+--local    only local requests
+--json     emit structured JSON instead of the text format
+```
+
+```bash
+# Watch incoming webhooks in real time
+routeup logs myapp --follow --public
+```
+
+## Retention
+
+Logs live in an in-memory ring buffer of the last 10,000 entries. They are not
+written to disk, and they are cleared when the agent restarts.
+
+## Privacy
+
+Headers and bodies are not included in request logs, only the metadata above.

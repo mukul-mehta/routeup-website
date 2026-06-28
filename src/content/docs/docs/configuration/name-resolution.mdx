@@ -1,15 +1,43 @@
 ---
 title: Name resolution
-description: How routeup converts a CLI argument into a route name.
+description: How routeup turns a CLI argument, env var, or config value into a route name.
 ---
 
-> TODO: write the precedence and resolution rules.
+routeup resolves the route name from the first source that is set, then applies
+one simple rule about dots.
 
-Outline:
+## Source precedence
 
-- Argument-with-dot → literal route.
-- Bare argument + project in scope → `<arg>.<project>`.
-- Bare argument + no project → used as-is.
-- Flag > env > config > inference.
+```txt
+1. CLI argument        routeup serve myapp
+2. Environment         ROUTEUP_NAME=myapp
+3. Config              "name" in routeup.json or the package.json routeup block
+```
 
-Source: `PLAN.md` Product Shape (name resolution rule).
+Flags and env override config; config provides the default.
+
+## The dot rule
+
+A name **containing a dot** is taken literally. A **bare** name (no dots) is
+prefixed with the project name from config. With no project in scope, a bare name
+is used as-is.
+
+```txt
+project = myapp (from config)
+
+routeup serve              -> myapp          (uses the project name)
+routeup serve api          -> api.myapp      (bare name, scoped under the project)
+routeup serve api.myapp    -> api.myapp      (dotted, literal)
+routeup serve api.other    -> api.other      (dotted, literal, not scoped to myapp)
+
+no project in scope:
+routeup serve foo          -> foo            (bare name used as-is)
+```
+
+## Local vs public names
+
+This rule produces the **route** name. Locally any depth works
+(`api.myapp` → `https://api.myapp.localhost`). For public exposure the route must
+be a single label under the server's namespace, so use `api-myapp` rather than
+`api.myapp` when exposing. See [Routes](/docs/concepts/routes) and
+[Tokens](/docs/concepts/tokens).

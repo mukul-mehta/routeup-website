@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://routeup.dev/sitemap-index.xml

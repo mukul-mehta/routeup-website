@@ -15,7 +15,7 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
 
-# Skip the pre-script deps verification — it can fail with cached "ignored
+# Skip the pre-script deps verification because it can fail with cached "ignored
 # builds" state and stop `pnpm dev` from starting even after the builds are
 # approved. We trust the lockfile.
 verifyDepsBeforeRun: false

@@ -1,14 +1,44 @@
 ---
 title: Conflict resolution
-description: What happens when two clients try to claim the same route or two processes try to serve the same name.
+description: What happens when two processes claim the same route, locally or publicly.
 ---
 
-> TODO: write the conflict-resolution rules.
+routeup prefers loud failure over silent last-wins. A surprise "last writer
+takes the route" is a common source of "why isn't my dev server responding"
+debugging, so conflicts are explicit.
 
-Outline:
+## Local conflicts
 
-- Local: foreground CLI owns claims; agent releases them on CLI exit.
-- Server: tokens claim host suffixes; first-come within the public namespace.
-- 409 semantics and grace windows (none for public namespace).
+Two processes on one machine claiming the same route:
 
-Source: `docs/ARCHITECTURE.md` conflict resolution.
+```txt
+default:   fail closed; the CLI prints the owning pid and cwd
+override:  --force transfers ownership and unregisters the previous owner
+orphans:   the agent reaps stale claims when the owning pid is gone
+```
+
+Routes are owned by the foreground process that registered them. When that
+process exits, the agent releases its claims and tears down any matching tunnels;
+other claims are untouched.
+
+## Public conflicts
+
+Two clients claiming the same route through the same server:
+
+```txt
+default:           409 Conflict; generic message, owner identity not disclosed
+grace window:      30s after a disconnect the same token may resume the claim
+cross-token:       a held route cannot be reclaimed by a different token
+public namespace:  session-only, no grace window, first-come-first-served
+```
+
+Owner identity is never leaked to a non-owning client. A scoped token can only
+claim within its allow pattern, so conflicts across namespaces are impossible by
+construction.
+
+## Why a grace window
+
+A brief network drop or a quick restart should not lose your public name to
+someone else. The 30-second grace lets the same token resume its claim after a
+disconnect. The public namespace deliberately skips this, its claims are
+session-only by design. See [Public namespace](/docs/concepts/public-namespace).

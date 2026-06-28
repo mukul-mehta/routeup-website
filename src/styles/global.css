@@ -1,11 +1,11 @@
 /*
- * Starlight overrides — paper-and-mono, restrained.
+ * Starlight overrides: paper-and-mono, restrained.
  *
  * Draws palette + flavor from /Users/mukul-mehta/Personal/DESIGN.md but tones
  * the system down for a docs site: no Press Start 2P (the pixel font is baked
  * into the favicon only), no heavy pixel shadows on every surface, no
  * window-title-band motif. The goal is a calm, readable cream-paper docs page
- * that clearly belongs to the same project as the landing — not a game manual.
+ * that clearly belongs to the same project as the landing, not a game manual.
  *
  * We override targeted Starlight CSS variables rather than replacing rules, so
  * Starlight updates keep working.
@@ -19,11 +19,11 @@
   --ru-bg-soft:   #ddd5be;
   --ru-fg:        #1c160c;
   --ru-fg-dim:    #3b3221;
-  --ru-fg-faint:  #756a52;
+  --ru-fg-faint:  #5f5640;
   --ru-border:    #2a2418;
   --ru-rule:      rgba(42, 36, 24, 0.18);
   --ru-accent:    #0e9999;
-  --ru-accent-fg: #097373;
+  --ru-accent-fg: #0a6a6a;
   --ru-dg:        #b8860b;
   --ru-dn:        #b91c1c;
 
@@ -33,7 +33,7 @@
   --sl-font-mono: var(--ru-mono);
 }
 
-/* Single light theme — paper has no dark variant. */
+/* Single light theme. Paper has no dark variant. */
 :root,
 :root[data-theme='light'],
 :root[data-theme='dark'] {
@@ -84,7 +84,7 @@ body {
 ::selection { background: var(--ru-accent); color: var(--ru-bg-elev); }
 :focus-visible { outline: 2px solid var(--ru-accent); outline-offset: 2px; }
 
-/* Square corners on the elements that ship rounded — calm, not aggressive. */
+/* Square corners on the elements that ship rounded. Calm, not aggressive. */
 .sl-markdown-content :is(pre, blockquote, table, .starlight-aside),
 site-search button[data-open-modal],
 site-search button[data-open-modal] kbd,
@@ -139,6 +139,20 @@ site-search button[data-open-modal] kbd,
   border: 2px solid var(--ru-border) !important;
   box-shadow: 3px 3px 0 0 var(--ru-border);
 }
+.expressive-code .frame,
+.expressive-code pre {
+  background: var(--ru-bg-elev) !important;
+  color: var(--ru-fg) !important;
+}
+.expressive-code code,
+.expressive-code .code,
+.expressive-code .code span {
+  color: var(--ru-fg) !important;
+}
+.expressive-code .code span[style*='#7FDBCA' i] { color: var(--ru-accent-fg) !important; }
+.expressive-code .code span[style*='#F78C6C' i] { color: #9a3f09 !important; }
+.expressive-code .code span[style*='#C789D6' i] { color: #6f4a79 !important; }
+.expressive-code .code span[style*='#637777' i] { color: var(--ru-fg-faint) !important; }
 
 /* ──────────────────────────────── Links ───────────────────────────────── */
 
@@ -152,6 +166,73 @@ site-search button[data-open-modal] kbd,
   transition: color 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .sl-markdown-content a:not(.sl-link-button):hover { color: var(--ru-accent-fg); }
+
+/* Per-page Markdown actions: split button + dropdown for /docs-markdown-actions.js */
+.ru-md-actions {
+  position: relative;
+  margin: -0.2rem 0 1.9rem;
+}
+.ru-md-bar {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1.5px solid var(--ru-border);
+  box-shadow: 2px 2px 0 0 var(--ru-border);
+  background: var(--ru-bg-elev);
+}
+.ru-md-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 0;
+  color: var(--ru-fg-dim);
+  font-family: var(--ru-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 140ms cubic-bezier(0.22, 1, 0.36, 1),
+              color 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ru-md-bar .ru-md-primary { padding: 0.45rem 0.7rem; }
+.ru-md-bar .ru-md-caret {
+  padding: 0.45rem 0.4rem;
+  border-left: 1.5px solid var(--ru-border);
+}
+.ru-md-bar button:hover { background: var(--ru-bg-soft); color: var(--ru-fg); }
+.ru-md-caret[aria-expanded='true'] { background: var(--ru-bg-soft); color: var(--ru-fg); }
+.ru-md-bar svg { width: 0.85rem; height: 0.85rem; flex: 0 0 auto; }
+.ru-md-primary.is-copied { color: var(--ru-accent-fg); }
+
+.ru-md-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.45rem;
+  min-width: 234px;
+  padding: 0.3rem;
+  background: var(--ru-bg-elev);
+  border: 1.5px solid var(--ru-border);
+  box-shadow: 3px 3px 0 0 var(--ru-border);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+}
+.ru-md-menu[hidden] { display: none; }
+.ru-md-menu a {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.6rem;
+  color: var(--ru-fg-dim);
+  font-family: var(--ru-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+}
+.ru-md-menu a:hover { background: var(--ru-bg-soft); color: var(--ru-fg); }
+.ru-md-menu svg { width: 0.95rem; height: 0.95rem; flex: 0 0 auto; opacity: 0.75; }
 
 /* ──────────────────────────────── Blockquote ──────────────────────────── */
 
@@ -216,7 +297,7 @@ site-search button[data-open-modal] kbd,
   image-rendering: -moz-crisp-edges;
 }
 
-/* Search button — square, subtle */
+/* Search button: square, subtle */
 site-search button[data-open-modal] {
   background: var(--ru-bg-elev) !important;
   border: 1.5px solid var(--ru-border) !important;
@@ -230,6 +311,18 @@ site-search button[data-open-modal] kbd {
   font-family: var(--ru-mono) !important;
   font-weight: 700;
   color: var(--ru-fg-dim) !important;
+}
+
+button[aria-label='Menu'][aria-controls='starlight__sidebar'] {
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  background: var(--ru-bg-elev) !important;
+  color: var(--ru-fg) !important;
+  border: 1.5px solid var(--ru-border) !important;
+  border-radius: 0 !important;
+  box-shadow: 2px 2px 0 0 var(--ru-border);
 }
 
 /* ──────────────────────────────── Sidebar ─────────────────────────────── */
@@ -330,7 +423,7 @@ mobile-starlight-toc a[aria-current='true'] {
   font-weight: 700;
 }
 
-/* Single theme — hide the switcher. */
+/* Single theme. Hide the switcher. */
 starlight-theme-select { display: none !important; }
 
 @media (prefers-reduced-motion: reduce) {

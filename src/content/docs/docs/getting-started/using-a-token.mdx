@@ -3,7 +3,9 @@ title: Using a token
 description: Get persistent, named public URLs by configuring a server token.
 ---
 
-Tokens are minted by the public-server operator and authorize which public names you can claim.
+Tokens are minted by the public-server operator and authorize which persistent public names you can claim. For the hosted `routeup.dev` server, that means getting a token from the operator out-of-band; there is no browser signup flow in v1.
+
+You only need a token for named, persistent public URLs such as `https://myapp.routeup.dev`. Local-only routes do not need one, and token-less public names can work when the server enables a public namespace.
 
 ## Save a server and token
 
@@ -11,7 +13,7 @@ Tokens are minted by the public-server operator and authorize which public names
 routeup setup --server https://routeup.dev --token sk_routeup_xxx
 ```
 
-After that, `routeup expose` and `routeup serve --expose` can use the saved values.
+After that, `routeup serve --public` can use the saved values.
 
 ## Use environment variables instead
 
@@ -23,13 +25,27 @@ export ROUTEUP_TOKEN=sk_routeup_xxx
 ## Expose with the token
 
 ```bash
-routeup expose myapp --port 8080
+routeup serve myapp --port 8080 --public
 ```
 
-If the token allows `*.you.routeup.dev`, the server can grant:
+If the token allows `*.routeup.dev`, the server can grant:
 
 ```txt
-https://myapp.you.routeup.dev
+https://myapp.routeup.dev
 ```
 
 The token secret is not recoverable from the server after it is created. Store it in your password manager or secret store.
+
+## Without a token
+
+If the server enables a token-less public namespace, use `--random` for a session-only URL:
+
+```bash
+routeup serve --random --port 8080 --server https://routeup.dev --public
+```
+
+On the hosted server, token-less names live under `try.routeup.dev`, for example:
+
+```txt
+https://lively-otter-4f2.try.routeup.dev
+```

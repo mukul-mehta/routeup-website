@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 /**
- * /llms.txt — short index for LLM consumption.
+ * /llms.txt: short index for LLM consumption.
  *
  * Spec: https://llmstxt.org/
  *
@@ -19,12 +19,12 @@ export const GET: APIRoute = async () => {
   lines.push('# routeup');
   lines.push('');
   lines.push(
-    '> Stable HTTPS routes for local services. Public when you need them.',
+    '> Stable HTTPS routes for local services. Public when you need it.',
   );
   lines.push('');
   lines.push('routeup gives local services stable HTTPS names like');
   lines.push('https://myapp.localhost and can expose those same routes');
-  lines.push('publicly at https://myapp.you.routeup.dev when needed.');
+  lines.push('publicly at https://myapp.routeup.dev when needed.');
   lines.push('');
   lines.push('## Docs');
   lines.push('');

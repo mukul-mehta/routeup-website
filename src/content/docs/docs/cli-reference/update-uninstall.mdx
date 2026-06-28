@@ -1,14 +1,41 @@
 ---
 title: routeup update / uninstall
-description: Lifecycle commands for upgrading and fully removing routeup.
+description: Upgrade routeup in place, or remove it and everything setup installed.
 ---
 
-> TODO: document update + uninstall.
+## routeup update
 
-Outline:
+```bash
+routeup update
+```
 
-- `routeup update` — channel detection (Homebrew vs direct binary).
-- `routeup uninstall` — tears down agent, autostart, CA, certs, state dir.
-- Must work even when the binary is being replaced.
+`update` checks for a newer release and installs it in place. It detects how
+routeup was installed and uses the matching path:
 
-Source: `PLAN.md` Distribution And Lifecycle.
+- **Homebrew installs** are upgraded with the Homebrew flow (you can also run
+  `brew upgrade routeup`).
+- **Direct binary installs** download the latest GitHub release, verify it
+  against `checksums.txt`, and replace the running binary.
+
+The macOS port-443 forwarder points at a stable symlink, so it keeps working
+across upgrades. On Linux, the `setcap` capability lives on the binary inode and
+is dropped by a replace, run `routeup setup` (or follow the `update` prompt) to
+reapply it. [doctor](/docs/cli-reference/doctor) flags this if it happens.
+
+## routeup uninstall
+
+```bash
+routeup uninstall
+```
+
+`uninstall` reverses everything [setup](/docs/cli-reference/setup) did:
+
+- stops the local agent and removes its autostart unit,
+- removes the port-443 forwarder (macOS) or capability (Linux),
+- removes the routeup CA from your OS trust store,
+- deletes generated certificates and the `~/.routeup` state directory.
+
+It is designed to work even mid-upgrade, when the binary is being replaced.
+Removing the package alone (`brew uninstall`, deleting the binary) does **not**
+untrust the CA or remove the forwarder, run `routeup uninstall` first for a
+clean removal.

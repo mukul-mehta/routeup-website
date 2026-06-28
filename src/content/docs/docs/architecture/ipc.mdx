@@ -3,15 +3,46 @@ title: CLI ↔ agent IPC
 description: How the routeup CLI talks to the background agent over a per-user Unix socket.
 ---
 
-> TODO: write the IPC reference.
+The CLI and the local agent are separate processes. They talk over a per-user
+Unix domain socket, never a network port, so the local control plane is not
+reachable off the machine.
 
-Outline:
+## Transport
 
-- Transport: Unix domain socket per user.
-- Path: `~/.routeup/agent.sock` (or `$XDG_RUNTIME_DIR/routeup/agent.sock` on Linux).
-- Permissions: directory 0700, socket 0600.
-- Wire format: JSON over HTTP/1.1.
-- Auth: filesystem permissions only.
-- Versioning: `/v1/` URL prefix.
+```txt
+Transport:   Unix domain socket, one per user
+Path:        ~/.routeup/agent.sock
+             $XDG_RUNTIME_DIR/routeup/agent.sock on Linux when available
+Permissions: 0700 directory, 0600 socket
+Wire format: JSON over HTTP/1.1
+Auth:        filesystem permissions only (no token on the local socket)
+Versioning:  /v1/ URL prefix; a version endpoint enables friendly mismatch errors
+```
 
-Source: `PLAN.md` Local Agent (CLI-to-agent IPC).
+Filesystem permissions are the entire auth model here: only your user can read or
+write the socket, so no token is needed for local control.
+
+## API surface
+
+```txt
+POST   /v1/routes              register a route claim
+DELETE /v1/routes/{name}       release a claim
+GET    /v1/routes              list active routes
+GET    /v1/status              agent status, version, uptime, boot id
+POST   /v1/shutdown            graceful shutdown
+GET    /v1/logs?route=&follow= stream access logs (SSE)
+POST   /v1/expose              start public exposure for a claimed route
+POST   /v1/unexpose            stop public exposure
+```
+
+## Why the registry can be in-memory
+
+The status response carries a `boot_id` generated once per agent process. A
+foreground `serve` registers its claim, remembers that boot id, and re-registers
+if the id changes (the agent restarted) or the agent becomes unreachable. The
+live `serve` processes are the source of truth and re-assert their claims after
+any restart, so the agent never needs to persist the route registry to disk.
+
+See [Local agent](/docs/concepts/local-agent) for the daemon side and
+[Conflict resolution](/docs/architecture/conflict-resolution) for ownership
+rules.
