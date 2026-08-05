@@ -13,13 +13,13 @@ Many providers accept an HTTPS `localhost` redirect. For those, a local route is
 enough, no server or token needed:
 
 ```bash
-routeup serve myapp --port 3000
+routeup serve example-app --port 3000
 ```
 
 Register:
 
 ```txt
-https://myapp.localhost/oauth/callback
+https://example-app.localhost/oauth/callback
 ```
 
 Because routeup serves real HTTPS on `*.localhost`, secure cookies and
@@ -28,19 +28,19 @@ Because routeup serves real HTTPS on `*.localhost`, secure cookies and
 ## Providers that require a public URL
 
 Some providers reject `localhost` or need to reach you directly. Expose the route
-and register the public URL:
+and register the public URL. This example assumes your saved token allows
+`*.mukul.routeup.dev`:
 
 ```bash
-routeup serve myapp --port 3000 --public
+routeup serve example-app --port 3000 --public
 ```
 
 ```txt
-https://myapp.routeup.dev/oauth/callback
+https://example-app.try.routeup.dev/oauth/callback
 ```
 
 ## Why the stable name matters
 
-The redirect URI is registered once in the provider's dashboard. Since the route
-name does not change between runs, you register it a single time and never touch
-it again, even as the underlying dev port changes. See
-[Routes](/docs/concepts/routes).
+The route and namespace are configured independently of the underlying dev port,
+so you can request the same redirect URI on each run. Public claims remain
+subject to the server's normal conflict rules. See [Routes](/docs/concepts/routes).

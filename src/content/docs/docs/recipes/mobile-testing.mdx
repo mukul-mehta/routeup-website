@@ -9,14 +9,18 @@ dev server through it. Expose the route and the device gets a real HTTPS URL.
 ## Expose the dev server
 
 ```bash
-routeup serve myapp --port 3000 --public
+routeup serve example-app --port 3000 --public
 ```
 
+This example assumes your saved token allows `*.mukul.routeup.dev`.
+
 ```txt
-route: myapp
-local: https://myapp.localhost
-public: https://myapp.routeup.dev
-target: http://localhost:3000
+route: example-app
+local: https://example-app.localhost
+public: https://example-app.try.routeup.dev
+expose: all paths
+targets:
+  /        http://localhost:3000
 
 press Ctrl-C to stop
 ```
@@ -40,5 +44,6 @@ today off-host devices go through the public server.)
 
 ## Tip: keep the URL stable
 
-Register or bookmark the public URL once. The route name is stable across
-restarts, so the link keeps working session to session.
+Bookmark the named public URL. The configured route and namespace let you request
+the same URL each run instead of receiving a new random URL; claims remain
+subject to the server's normal conflict rules.

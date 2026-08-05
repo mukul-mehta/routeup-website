@@ -12,19 +12,30 @@ routeup routes
 Example output:
 
 ```txt
-ROUTE       LOCAL                        PUBLIC                        TARGET            OWNER
-myapp       https://myapp.localhost      https://myapp.routeup.dev     http://127.0.0.1:8080  pid 41021
-api.myapp   https://api.myapp.localhost  none                          http://127.0.0.1:9080  pid 41044
+NAME       TARGETS  PUBLIC                      PATHS      PID    AGE  CWD
+example-app      /:8080   https://example-app.routeup.dev   all paths  41021  12s  /Users/me/example-app
+api.example-app  /:9080   -                           -          41044  8s   /Users/me/example-app
 ```
 
 Columns:
 
-- **Route**: the dotted route name.
-- **Local**: the always-available `*.localhost` URL.
-- **Public**: the exposed URL, or `none` when the route is local-only.
-- **Target**: the local port the agent proxies to.
-- **Owner**: the process holding the route. Routes are owned by the foreground
-  `serve`/`routeup` process that registered them.
+- **Name**: the active dotted route name.
+- **Targets**: path and port pairs such as `/:8080`; multiple targets are
+  comma-separated.
+- **Public**: the public URL associated with the process that owns this local
+  claim, or `-` when none is associated.
+- **Paths**: that owner's publicly exposed path scope, or `-` when none is
+  associated.
+- **PID**: the process holding the local route.
+- **Age**: how long the current claim has been active.
+- **CWD**: the holding process's working directory.
+
+The command does not print a `LOCAL` column. Derive the local URL mechanically as
+`https://<name>.localhost`.
+
+A standalone `routeup expose` may reuse this route's targets while running under
+a different process. That separate tunnel is not annotated on the local claim's
+row.
 
 ## When the agent is not running
 

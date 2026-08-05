@@ -3,22 +3,27 @@ title: DNS setup
 description: Configure DNS for a self-hosted routeup server.
 ---
 
-A routeup server needs two records: the apex of your suffix and a wildcard, both
-pointing at the server. The wildcard is what lets every public route resolve
-without per-route DNS.
+A routeup deployment needs an address record for every namespace base it serves.
+The suffix apex itself is not the client control endpoint and does not need to
+point at routeup. The examples below use `edge.tunnel.example.com` as the control
+host; it is covered by the root wildcard.
 
 ## Records
 
-For a suffix of `tunnel.example.com` on a server at `203.0.113.10`:
+DNS wildcards do not replace records for nested namespace bases. For a suffix of
+`tunnel.example.com` on a server at `203.0.113.10`:
 
 ```txt
-tunnel.example.com.     A     203.0.113.10
-*.tunnel.example.com.   A     203.0.113.10
+*.tunnel.example.com.         A  203.0.113.10  # edge + root-tier routes
+*.try.tunnel.example.com.     A  203.0.113.10  # if public_namespace is try
+*.alice.tunnel.example.com.   A  203.0.113.10  # for *.alice.tunnel.example.com tokens
 ```
 
-Add `AAAA` records too if the server has IPv6. The wildcard covers every public
-host, `myapp.tunnel.example.com`, `<label>.<namespace>.tunnel.example.com`, and
-so on.
+Add matching `AAAA` records when the server has IPv6. Add one wildcard record for
+every token namespace, such as `*.team-x.tunnel.example.com`. A root wildcard
+resolves `edge.tunnel.example.com` and `acme.tunnel.example.com`; it does not
+replace the nested `*.try.tunnel.example.com` or
+`*.alice.tunnel.example.com` records.
 
 ## DNS for the ACME challenge
 
@@ -26,10 +31,13 @@ In the default `acme` TLS mode, the server proves domain control with the
 **DNS-01** challenge, which writes temporary `TXT` records under
 `_acme-challenge`. That requires API access to your DNS provider, routeup uses
 Cloudflare by default (`CLOUDFLARE_API_TOKEN` with `Zone.DNS:Edit` on the zone).
+Cloudflare address records must be **DNS only** (grey cloud). A proxied record
+terminates TLS at Cloudflare instead of passing the routeup wildcard certificate
+and tunnel connection through to your server.
 
 So the DNS provider serves two roles:
 
-1. Hosts the `A`/`AAAA` records above.
+1. Hosts the `A`/`AAAA` records for the root tier and every enabled namespace.
 2. Lets the server publish challenge `TXT` records for certificate issuance.
 
 See [TLS](/docs/self-hosting/tls) for the certificate side.
@@ -37,8 +45,11 @@ See [TLS](/docs/self-hosting/tls) for the certificate side.
 ## Verify
 
 ```bash
-dig +short tunnel.example.com
-dig +short anything.tunnel.example.com
+dig +short edge.tunnel.example.com
+dig +short acme.tunnel.example.com
+dig +short random.try.tunnel.example.com
+dig +short acme.alice.tunnel.example.com
 ```
 
-Both should return the server IP before you start the server.
+Verify the root tier and every enabled namespace before clients use them. Each
+command should return the server IP.

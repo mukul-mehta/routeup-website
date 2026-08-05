@@ -11,15 +11,22 @@ for the full guide.
 ## Run the server
 
 ```bash
-routeup server --domain routeup.dev
+CLOUDFLARE_API_TOKEN=… \
+  routeup server --domain tunnel.example.com --reserved edge \
+  --db /var/lib/routeup/server.db
 ```
 
 Key flags:
 
 ```txt
---domain <suffix>          public suffix the server serves (e.g. routeup.dev)
---public-namespace <label> enable a token-less namespace (e.g. try)
---tls-mode <acme|cert>     acme (default) auto-issues wildcards; cert uses your own
+--domain <suffix>           public suffix, e.g. tunnel.example.com
+--config <path>             server config file
+--db <path>                 SQLite database path
+--public-namespace <label>  enable a token-less namespace
+--reserved <label>          reserve a root-tier label; repeatable
+--tls-mode <acme|cert>      acme auto-issues wildcards; cert uses your files
+--tls-cert <path>           PEM certificate for cert mode
+--tls-key <path>            PEM private key for cert mode
 ```
 
 In `acme` mode the server obtains and renews wildcard certificates through Let's
@@ -32,19 +39,22 @@ Tokens authorize persistent, scoped public claims. Mint them out-of-band and han
 the secret to the client privately.
 
 ```bash
-routeup token create mukul --allow "*.routeup.dev"
-routeup token create alice --allow "*.alice.routeup.dev"
-routeup token list
-routeup token revoke <token-id>
+routeup token create mukul --allow "*.tunnel.example.com" --db /var/lib/routeup/server.db
+routeup token create alice --allow "*.alice.tunnel.example.com" --db /var/lib/routeup/server.db
+routeup token list --db /var/lib/routeup/server.db
+routeup token revoke <token-id> --db /var/lib/routeup/server.db
 ```
+
+Run token commands on the server host. They open SQLite directly, so use the same
+`--db` or `--config` value as the running server.
 
 The allow pattern is the only authority, the server rejects any claim whose host
 falls outside it. Tiers fall out of the pattern shape:
 
 ```txt
-*.routeup.dev          # whole suffix (admin / co-maintainer)
-*.alice.routeup.dev    # a personal namespace
-*.team-x.routeup.dev   # a shared team namespace
+*.tunnel.example.com          # whole suffix (admin / co-maintainer)
+*.alice.tunnel.example.com    # a personal namespace
+*.team-x.tunnel.example.com   # a shared team namespace
 ```
 
 Token secrets use the `sk_routeup_` prefix, are shown once at creation, and are

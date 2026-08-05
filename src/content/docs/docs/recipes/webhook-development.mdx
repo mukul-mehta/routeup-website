@@ -11,16 +11,21 @@ service one, so you can develop against real deliveries instead of mocking them.
 Run your API (say on port `8080`) and expose it:
 
 ```bash
-routeup serve myapp --port 8080 --public
+routeup serve example-app --port 8080 --public
 ```
 
-routeup prints the local URL, public URL, and target:
+The examples below assume your saved token allows
+`*.mukul.routeup.dev`.
+
+routeup prints the local URL, public URL, exposure scope, and targets:
 
 ```txt
-route: myapp
-local: https://myapp.localhost
-public: https://myapp.routeup.dev
-target: http://localhost:8080
+route: example-app
+local: https://example-app.localhost
+public: https://example-app.try.routeup.dev
+expose: all paths
+targets:
+  /        http://localhost:8080
 
 press Ctrl-C to stop
 ```
@@ -36,23 +41,23 @@ Slack:   Your App → Event Subscriptions → Request URL
 ```
 
 Use the full path your handler listens on, e.g.
-`https://myapp.routeup.dev/api/webhooks/github`.
+`https://example-app.try.routeup.dev/api/webhooks/github`.
 
 ## 3. Watch deliveries
 
 Tail public traffic as it arrives:
 
 ```bash
-routeup logs myapp --public --follow
+routeup logs example-app --public --follow
 ```
 
 ```txt
-12:41:03 public myapp POST /api/webhooks/github 200 38ms req_abc123
+12:41:03 public example-app POST /api/webhooks/github 200 38ms req_abc123
 ```
 
-Because the route name is stable, the endpoint you registered keeps working
-across restarts, you do not have to update the provider each time you start your
-dev server.
+Because the route and namespace are configured, you request the same endpoint on
+each run instead of accepting a newly generated URL. Public claims remain subject
+to the server's normal conflict rules.
 
 ## Scoping exposure
 
@@ -62,7 +67,7 @@ rest of the service stays local-only:
 
 ```json
 {
-  "name": "myapp",
+  "name": "example-app",
   "port": 8080,
   "expose": {
     "paths": ["/api/webhooks/*"]

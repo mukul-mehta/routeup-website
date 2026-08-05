@@ -10,20 +10,20 @@ A route is the stable name routeup gives a local service. Locally, routeup maps 
 Valid route names are DNS-style labels joined with dots:
 
 ```txt
-myapp
-api.myapp
-docs.myapp
+example-app
+api.example-app
+docs.example-app
 ```
 
 Invalid examples:
 
 ```txt
-.myapp
-myapp.
-api..myapp
+.example-app
+example-app.
+api..example-app
 my_app
-myapp.localhost
-myapp.routeup.dev
+example-app.localhost
+example-app.routeup.dev
 ```
 
 Route names are lowercased. Each label may contain ASCII letters, digits, and hyphens, but not leading or trailing hyphens.
@@ -33,28 +33,31 @@ Route names are lowercased. Each label may contain ASCII letters, digits, and hy
 routeup appends `.localhost` for local use:
 
 ```txt
-myapp      -> https://myapp.localhost
-api.myapp  -> https://api.myapp.localhost
+example-app      -> https://example-app.localhost
+api.example-app  -> https://api.example-app.localhost
 ```
 
 The `.localhost` suffix is not part of the route name.
 
 ## Public hostnames
 
-Public route names must be a single label under the namespace granted by the server:
+Every public hostname is one label under the namespace granted by the server:
 
 ```txt
-myapp     -> https://myapp.routeup.dev
-api-myapp -> https://api-myapp.routeup.dev
+example-app     -> https://example-app.routeup.dev
+api-example-app -> https://api-example-app.routeup.dev
 ```
 
-A dotted route such as `api.myapp` is valid locally, but it is not valid for public exposure because public wildcard certificates only cover one label. Use `api-myapp` or a token namespace such as `myapp.team.routeup.dev` instead.
+Dotted route names remain valid locally. When a dotted route is exposed, routeup
+replaces dots with hyphens for the public label: `api.example-app` stays
+`https://api.example-app.localhost` locally and becomes
+`https://api-example-app.routeup.dev` publicly.
 
 ## Name resolution
 
 `routeup serve` resolves the name in this order:
 
-1. Positional argument, such as `routeup serve myapp`.
+1. Positional argument, such as `routeup serve example-app`.
 2. `ROUTEUP_NAME`.
 3. `name` from `routeup.json` or the `package.json` `routeup` block.
 

@@ -13,9 +13,10 @@ Two processes on one machine claiming the same route:
 
 ```txt
 default:   fail closed; the CLI prints the owning pid and cwd
-override:  --force transfers ownership and unregisters the previous owner
 orphans:   the agent reaps stale claims when the owning pid is gone
 ```
+
+Stop the holding process before retrying, or choose a different route name.
 
 Routes are owned by the foreground process that registered them. When that
 process exits, the agent releases its claims and tears down any matching tunnels;

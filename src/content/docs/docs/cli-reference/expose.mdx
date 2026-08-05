@@ -3,51 +3,68 @@ title: routeup expose
 description: Make a route public using the explicit exposure command.
 ---
 
-`routeup expose` opens a public tunnel for a local port.
+`routeup expose` opens a public tunnel without registering or holding a new
+local route.
 
-Most docs use `routeup serve --public` because it tells the whole story in one command: serve the local route and make it public. `routeup expose` exists for the same public behavior when you want the command name to say exactly what is happening.
-
-```bash
-routeup expose myapp --port 8080
-```
-
-Equivalent `serve` form:
+If no `--port`, `--target`, or `ROUTEUP_PORT` override is supplied, it first
+looks for an active local route with the same name and reuses that route's
+targets. If no matching active route exists, it resolves targets from flags,
+environment, or project config.
 
 ```bash
-routeup serve myapp --port 8080 --public
+routeup expose example-app --port 8080
 ```
 
-Both forms claim a public name, open an outbound tunnel, and forward requests to the local port.
+With an explicit or config-only target, the exposure is public-only: it does not
+create or advertise `https://example-app.localhost`. When it reuses an existing active
+route, it also prints that route's local URL.
+
+Example output for an explicit target:
+
+```txt
+public: https://example-app.routeup.dev
+targets:
+  /        http://localhost:8080
+expose: all paths
+
+press Ctrl-C to stop
+```
+
+`routeup serve example-app --port 8080 --public` is different: `serve` first registers
+and holds the local route, then exposes those same targets publicly. `--public`
+is an alias for `serve --expose`.
 
 ## Random public names
 
-Use `--random` when you want an ephemeral public URL instead of claiming a specific name.
+Use `--random` to generate a random public route name:
 
 ```bash
 routeup expose --random --port 8080
 ```
 
-This uses the server's public namespace, when enabled.
+Without a token, this uses the server's public namespace when one is enabled and
+the resulting claim is session-only. With a token, the random label is placed
+under the token's allowed namespace.
 
 ## Server and token
 
 Pass the server and token directly:
 
 ```bash
-routeup expose myapp --port 8080 --server https://routeup.dev --token sk_routeup_xxx
+routeup expose example-app --port 8080 --server https://edge.routeup.dev --token sk_routeup_xxx
 ```
 
 Or configure them once:
 
 ```bash
-routeup setup --server https://routeup.dev --token sk_routeup_xxx
-routeup expose myapp --port 8080
+routeup setup --server https://edge.routeup.dev --token sk_routeup_xxx
+routeup expose example-app --port 8080
 ```
 
 Environment variables work too:
 
 ```bash
-export ROUTEUP_SERVER=https://routeup.dev
+export ROUTEUP_SERVER=https://edge.routeup.dev
 export ROUTEUP_TOKEN=sk_routeup_xxx
-routeup expose myapp --port 8080
+routeup expose example-app --port 8080
 ```

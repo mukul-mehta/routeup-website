@@ -14,7 +14,7 @@ Encrypt, using the **ACME DNS-01** challenge driven by
 provider.
 
 ```bash
-export CLOUDFLARE_API_TOKEN=<token-with-Zone.DNS:Edit>
+export CLOUDFLARE_API_TOKEN="your-cloudflare-api-token"
 routeup server --domain tunnel.example.com --tls-mode acme
 ```
 
@@ -24,21 +24,35 @@ Why DNS-01 rather than HTTP-01:
   routeup needs, one certificate per namespace base covers every label under it.
 - It does not depend on inbound port 80.
 
-The server obtains `*.<domain>` (and the public-namespace wildcard) at startup,
-and obtains `*.<namespace>.<domain>` lazily on the first claim into a token
-namespace. certmagic handles issuance, renewal, storage, and locking.
+The server manages `*.<domain>` and the optional public-namespace wildcard at
+startup. It also pre-warms wildcards for token namespaces found in its database
+and ensures the relevant namespace wildcard again when a claim is made.
+certmagic handles issuance, renewal, storage, and locking.
 
 ## cert mode
 
-Provide your own certificate and key, for example a Cloudflare origin
-certificate, or a self-signed cert for local server development:
+Provide one certificate and private key:
 
 ```bash
 routeup server --domain tunnel.example.com --tls-mode cert \
-  --cert /path/fullchain.pem --key /path/key.pem
+  --tls-cert /path/fullchain.pem \
+  --tls-key /path/key.pem \
+  --reserved edge
 ```
 
-In this mode renewal is your responsibility.
+In static `cert` mode, routeup does not obtain additional namespace
+certificates. The supplied certificate must cover every hostname tier you serve,
+for example:
+
+```txt
+*.tunnel.example.com
+*.try.tunnel.example.com
+*.alice.tunnel.example.com
+```
+
+The root wildcard covers the control host `edge.tunnel.example.com`. Add SANs
+for the public namespace and every token namespace in use. Certificate renewal
+and replacement are your responsibility.
 
 ## Failure modes
 

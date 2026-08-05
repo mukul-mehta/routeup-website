@@ -3,44 +3,48 @@ title: package.json embed
 description: Configure routeup inside an existing package.json under the routeup key.
 ---
 
-Node projects can keep routeup config in `package.json` instead of a separate
-file, under a top-level `routeup` key. The settings are identical to
-[`routeup.json`](/docs/configuration/routeup-json), this just saves a file and
-keeps project config in one place.
+Node projects can keep routeup config in `package.json` under a top-level
+`routeup` key. Routing fields are shared with
+[`routeup.json`](/docs/configuration/routeup-json), but runner configuration is
+source-specific: a `package.json` embed selects a package script with `script`,
+while standalone `routeup.json` uses `command`.
 
 ## Example
 
 ```json
 {
-  "name": "myapp-web",
+  "name": "example-app-web",
   "scripts": {
     "dev": "routeup",
     "dev:app": "vite"
   },
   "routeup": {
-    "name": "myapp",
+    "name": "example-app",
     "script": "dev:app"
   }
 }
 ```
 
 Here `npm run dev` launches `routeup`, which runs your real dev server
-(`dev:app`) behind `https://myapp.localhost` and injects `PORT`, `HOST`,
+(`dev:app`) behind `https://example-app.localhost` and injects `PORT`, `HOST`,
 `ROUTEUP_LOCAL_URL`, and `ROUTEUP_URL`. In local-only runs, `ROUTEUP_URL` is the local URL; when public exposure is enabled, it becomes the public URL. See the bare
 [`routeup`](/docs/cli-reference/routeup) command for the script-runner flow.
 
 ## The routeup block
 
 ```txt
-name    route / project name (separate from the package's own name)
-port    local port to proxy to
-script  the package script to run in script-runner mode
-routes  optional path-to-target map for one-origin frontend + API setups
-expose  optional public exposure settings, including paths
+name     route / project name (separate from the package's own name)
+port     local port to proxy to
+script   package script to run in script-runner mode
+targets  optional list of path-routed targets for one-origin frontend + API setups
+expose   optional public exposure settings, including paths
 ```
 
+`command` is not valid inside the `package.json` `routeup` block. Define the
+command in `scripts` and reference that script by name with `routeup.script`.
+
 The `routeup.name` is independent of the package's `name` field, the package can
-be `myapp-web` while the route is `myapp`.
+be `example-app-web` while the route is `example-app`.
 
 ## Precedence
 

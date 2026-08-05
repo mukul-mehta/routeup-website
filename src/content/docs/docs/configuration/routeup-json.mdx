@@ -12,47 +12,49 @@ embed the same settings in [`package.json`](/docs/configuration/package-json-emb
 
 ```json
 {
-  "name": "myapp",
+  "name": "example-app",
   "port": 8080
 }
 ```
 
-With this present, these are equivalent:
+With this present, run:
 
 ```bash
 routeup serve
-routeup serve myapp --port 8080
 ```
+
+The configured name and port are used directly. A positional bare name is a
+sub-route, so `routeup serve api` resolves to `api.example-app`.
 
 ## Fields
 
 ```txt
-name    the project / route name used for bare-name resolution (required)
-port    the local port to proxy to
-script  the npm/script name to run in script-runner mode (see the bare `routeup` command)
-routes  optional path-to-target map for one-origin frontend + API setups
-expose  optional public exposure settings, including paths
+name     default project / route name used for bare-name resolution
+port     the local port to proxy to
+command  the shell command to run in script-runner mode (see the bare `routeup` command)
+targets  optional list of path-routed targets for one-origin frontend + API setups
+expose   optional public exposure settings, including paths
 ```
 
 The `name` field doubles as the project name: a bare argument like
-`routeup serve api` resolves to `api.myapp`, while a dotted argument is used
+`routeup serve api` resolves to `api.example-app`, while a dotted argument is used
 literally. See [Name resolution](/docs/configuration/name-resolution).
 
 ## Path routing
 
-Use `routes` when one hostname should proxy different path prefixes to different local ports:
+Use `targets` when one hostname should proxy different path prefixes to different local ports:
 
 ```json
 {
-  "name": "myapp",
-  "routes": {
-    "/": { "port": 5173 },
-    "/api": { "port": 9080 }
-  }
+  "name": "example-app",
+  "targets": [
+    { "path": "/", "port": 5173 },
+    { "path": "/api", "port": 9080 }
+  ]
 }
 ```
 
-This keeps the browser on one origin, for example `https://myapp.localhost/api/users`, while routeup sends `/api/*` to the API port.
+This keeps the browser on one origin, for example `https://example-app.localhost/api/users`, while routeup sends `/api/*` to the API port.
 
 ## Path-limited exposure
 
@@ -60,7 +62,7 @@ By default, `--public` exposes every path on the route. Limit public exposure wi
 
 ```json
 {
-  "name": "myapp",
+  "name": "example-app",
   "port": 8080,
   "expose": {
     "paths": ["/api/webhooks/*"]

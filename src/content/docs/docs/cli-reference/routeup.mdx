@@ -29,8 +29,9 @@ routeup
 ```txt
 PORT=<assigned-port>
 HOST=127.0.0.1
-ROUTEUP_LOCAL_URL=https://myapp.localhost
-ROUTEUP_URL=https://myapp.localhost
+ROUTEUP_LOCAL_URL=https://example-app.localhost
+ROUTEUP_URL=https://example-app.localhost
+NODE_EXTRA_CA_CERTS=~/.routeup/ca.crt
 ```
 
 Your app should bind the port from `PORT` instead of a hard-coded one. `ROUTEUP_LOCAL_URL` is always the local HTTPS URL. `ROUTEUP_URL` is the URL your app should advertise: it is local for local-only runs and becomes the public URL when the route is exposed.
@@ -38,8 +39,8 @@ Your app should bind the port from `PORT` instead of a hard-coded one. `ROUTEUP_
 With public exposure enabled, the environment changes to:
 
 ```txt
-ROUTEUP_LOCAL_URL=https://myapp.localhost
-ROUTEUP_URL=https://myapp.routeup.dev
+ROUTEUP_LOCAL_URL=https://example-app.localhost
+ROUTEUP_URL=https://example-app.try.routeup.dev
 ```
 
 ## Config
@@ -51,14 +52,35 @@ ROUTEUP_URL=https://myapp.routeup.dev
     "dev:app": "vite"
   },
   "routeup": {
-    "name": "myapp",
+    "name": "example-app",
     "script": "dev:app"
   }
 }
 ```
 
 With this in place, `npm run dev` starts `routeup`, which in turn runs your real
-dev server (`dev:app`) behind `https://myapp.localhost`.
+dev server (`dev:app`) behind `https://example-app.localhost`.
+
+### Public exposure
+
+Add `expose.enabled` to automatically open a public tunnel when the runner
+starts. `ROUTEUP_URL` is updated to the granted public URL before the child
+process launches:
+
+```json
+{
+  "routeup": {
+    "name": "example-app",
+    "script": "dev:app",
+    "expose": {
+      "enabled": true
+    }
+  }
+}
+```
+
+Requires a server configured via `routeup setup --server`. See
+[Exposing publicly](/docs/getting-started/exposing-publicly) for setup steps.
 
 See [Configuration](/docs/configuration/routeup-json) for the full field
 reference, and [serve](/docs/cli-reference/serve) when you want to register a

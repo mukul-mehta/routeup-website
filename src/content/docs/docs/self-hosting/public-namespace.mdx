@@ -13,16 +13,21 @@ It is **off by default** on self-hosted servers.
 Pick a label and pass it when starting the server:
 
 ```bash
-routeup server --domain tunnel.example.com --public-namespace try
+routeup server --domain tunnel.example.com \
+  --public-namespace try \
+  --reserved edge
 ```
+
+Add `*.try.tunnel.example.com` to DNS. In static certificate mode, the supplied
+certificate must also cover `*.try.tunnel.example.com`.
 
 Now clients can claim under `try.tunnel.example.com` without a token:
 
 ```bash
-routeup serve --random --port 8080 --server https://tunnel.example.com --public
+routeup serve --random --port 8080 --server https://edge.tunnel.example.com --public
 # -> https://lively-otter-4f2.try.tunnel.example.com
 
-routeup serve demo --port 8080 --server https://tunnel.example.com --public
+routeup serve demo --port 8080 --server https://edge.tunnel.example.com --public
 # -> https://demo.try.tunnel.example.com
 ```
 
@@ -37,7 +42,7 @@ Public-namespace claims are deliberately lightweight:
 session-only      released as soon as the client disconnects
 no grace window   no 30s resume; the name frees immediately
 no persistence    nothing is stored across restarts
-first-come        a held name returns 409; --random gets an assigned name
+first-come        a held name returns 409; --random generates a client-side name
 ```
 
 ## Disable it

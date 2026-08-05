@@ -40,17 +40,20 @@ also hand out token-less, ephemeral public URLs.
 
 ## What's the difference between `serve --public` and `expose`?
 
-They do the same thing. `routeup serve --public` serves a local route and exposes
-it in one command, that is the form used throughout these docs.
-[`routeup expose`](/docs/cli-reference/expose) is the same public behavior when
-you want the command name to say exactly what it does.
+`routeup serve --public` first registers and holds a local `*.localhost` route,
+then exposes the same targets publicly. `--public` is an alias for
+`serve --expose`.
+
+Standalone [`routeup expose`](/docs/cli-reference/expose) does not create a local
+registration. Without a target override it can reuse a matching active route's
+targets; otherwise it exposes targets from flags, environment, or config.
 
 ## Why are public names a single label?
 
-A publicly-trusted wildcard certificate (`*.<base>`) covers exactly one label, so
-a public host is one label under a namespace base. Locally any depth works
-(`api.myapp.localhost`); for public exposure use `api-myapp` rather than
-`api.myapp`. See [Routes](/docs/concepts/routes).
+A publicly-trusted wildcard certificate (`*.<base>`) covers exactly one label,
+so every public host is one label under a namespace base. Locally any depth
+works. When exposing a dotted route such as `api.example-app`, routeup normalizes it to
+public label `api-example-app`. See [Routes](/docs/concepts/routes).
 
 ## What happens to exposed routes when my laptop sleeps?
 

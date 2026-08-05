@@ -1,6 +1,6 @@
 ---
 title: Local-only request flow
-description: How a request to https://myapp.localhost reaches your local service.
+description: How a request to https://example-app.localhost reaches your local service.
 ---
 
 The local flow never leaves your machine. It needs no server, no token, and no
@@ -10,7 +10,7 @@ network, `routeup setup` alone enables it.
 
 ```txt
 browser
-  -> https://api.myapp.localhost
+  -> https://api.example-app.localhost
   -> local agent (terminates TLS, looks up the route)
   -> 127.0.0.1:8080  (your service)
   -> response back through the agent
@@ -29,7 +29,7 @@ browser
 4. **Proxy.** It reverse-proxies to the local target (e.g. `127.0.0.1:8080`) and
    streams the response back.
 
-Because the registry is keyed by host, a dotted route like `api.myapp` works at
+Because the registry is keyed by host, a dotted route like `api.example-app` works at
 any depth locally, the local CA mints a per-SNI leaf for the exact name.
 
 See [Local agent](/docs/concepts/local-agent) for the component, and

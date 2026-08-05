@@ -26,15 +26,16 @@ Your real dev server works the same way, Vite, Next, Rails, a Go service, anythi
 ## 3. Serve it through routeup
 
 ```bash
-routeup serve myapp --port 8080
+routeup serve example-app --port 8080
 ```
 
-routeup prints the route it claimed and the target it is proxying to:
+routeup prints the route it claimed and the targets it is proxying to:
 
 ```txt
-route: myapp
-local: https://myapp.localhost
-target: http://localhost:8080
+route: example-app
+local: https://example-app.localhost
+targets:
+  /        http://localhost:8080
 
 press Ctrl-C to stop
 ```
@@ -42,7 +43,7 @@ press Ctrl-C to stop
 Open:
 
 ```txt
-https://myapp.localhost
+https://example-app.localhost
 ```
 
 The route stays stable even if you later move the app to another local port.

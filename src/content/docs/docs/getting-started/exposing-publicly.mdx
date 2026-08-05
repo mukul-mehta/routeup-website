@@ -7,49 +7,64 @@ Public exposure sends requests through a routeup server and back to your local a
 
 ## Requirements
 
-You need a public server URL. For a named, persistent URL such as `https://myapp.routeup.dev`, you also need a token from the server operator. Without a token, public exposure only works if the server enables a token-less public namespace.
+You need a public-server control URL. For the hosted service, use
+`https://edge.routeup.dev`. The server grants public URLs under `routeup.dev`,
+such as `https://example-app.routeup.dev`. A named, persistent URL also requires a
+token; without one, exposure works only when the server enables a token-less
+public namespace.
+
+The named examples below assume a root-tier token that allows `*.routeup.dev`.
+A personal namespace token such as `*.mukul.routeup.dev` would grant
+`https://example-app.try.routeup.dev` instead.
 
 You can save both during setup:
 
 ```bash
-routeup setup --server https://routeup.dev --token sk_routeup_xxx
+routeup setup --server https://edge.routeup.dev --token sk_routeup_xxx
 ```
 
 Or pass them per command:
 
 ```bash
-routeup serve myapp --port 8080 --server https://routeup.dev --token sk_routeup_xxx --public
+routeup serve example-app --port 8080 --server https://edge.routeup.dev --token sk_routeup_xxx --public
 ```
 
 ## Expose a local port
 
 ```bash
-routeup serve myapp --port 8080 --public
+routeup serve example-app --port 8080 --public
 ```
 
-The command prints the local route, the public URL granted by the server, and the local target port. It holds the tunnel open until you press `Ctrl-C`.
+The command prints the local route, the public URL, the exposed path scope, and
+the resolved targets. It holds both the local route and public tunnel until you
+press `Ctrl-C`.
 
 ```txt
-route: myapp
-local: https://myapp.localhost
-public: https://myapp.routeup.dev
-target: http://localhost:8080
+route: example-app
+local: https://example-app.localhost
+public: https://example-app.routeup.dev
+expose: all paths
+targets:
+  /        http://localhost:8080
 
 press Ctrl-C to stop
 ```
 
 ## Name rules
 
-Local route names may be dotted, such as `api.myapp`. Public route names are one label under the namespace granted by the server, so use `myapp` or `api-myapp` for public exposure.
+Local route names may be dotted, such as `api.example-app`. Public hosts must be one
+label under their namespace, so routeup normalizes dots to hyphens when
+exposing: local route `api.example-app` becomes public label `api-example-app`.
 
-Do not include `https://` or the public suffix in the route name. Pass `myapp`, not `myapp.routeup.dev`.
+Do not include `https://` or the public suffix in the route name. Pass `example-app`, not `https://example-app.routeup.dev`.
 
 ## Token-less random names
 
-For a server with a token-less public namespace enabled, `--random` asks the server to assign a session-only name:
+`--random` generates a random route name. Without a token, a server's public
+namespace makes that claim session-only:
 
 ```bash
-routeup serve --random --port 8080 --server https://routeup.dev --public
+routeup serve --random --port 8080 --server https://edge.routeup.dev --public
 ```
 
 On the hosted server, random token-less names are under `try.routeup.dev`:
@@ -58,7 +73,9 @@ On the hosted server, random token-less names are under `try.routeup.dev`:
 route: lively-otter-4f2
 local: https://lively-otter-4f2.localhost
 public: https://lively-otter-4f2.try.routeup.dev
-target: http://localhost:8080
+expose: all paths
+targets:
+  /        http://localhost:8080
 
 press Ctrl-C to stop
 ```
@@ -69,7 +86,7 @@ By default, public exposure forwards every path on the route. To expose only a w
 
 ```json
 {
-  "name": "myapp",
+  "name": "example-app",
   "port": 8080,
   "expose": {
     "paths": ["/api/webhooks/*"]
@@ -80,7 +97,7 @@ By default, public exposure forwards every path on the route. To expose only a w
 Then run:
 
 ```bash
-routeup serve myapp --public
+routeup serve --public
 ```
 
-Requests to `https://myapp.routeup.dev/api/webhooks/...` are public; other paths stay local-only.
+Requests to `https://example-app.routeup.dev/api/webhooks/...` are public; other paths stay local-only.

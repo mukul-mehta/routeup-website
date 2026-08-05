@@ -12,7 +12,8 @@ You usually do not run it directly. `routeup setup` starts it, and `routeup serv
 - Terminates local HTTPS using certificates signed by the routeup local CA.
 - Keeps the active route registry.
 - Reverse-proxies requests by `Host` header to the configured local port.
-- Owns public tunnel clients for `routeup serve --public`.
+- Owns public tunnel clients started by `routeup serve --public` and standalone
+  `routeup expose`.
 
 ## Debug commands
 

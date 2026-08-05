@@ -12,11 +12,11 @@ When the test runner is on the same machine (Playwright, Puppeteer, Cypress),
 use the local route, real HTTPS, no network:
 
 ```bash
-routeup serve myapp --port 3000
+routeup serve example-app --port 3000
 ```
 
 ```js
-await page.goto('https://myapp.localhost');
+await page.goto('https://example-app.localhost');
 ```
 
 This exercises secure cookies, service workers, and `https`-only web APIs that a
@@ -36,15 +36,17 @@ export NODE_EXTRA_CA_CERTS=~/.routeup/ca.crt
 
 When the browser runs somewhere else, CI, a cloud browser, or an LLM agent
 driving a remote browser, `localhost` is not reachable. Expose the route and
-hand the agent the public URL:
+hand the agent the public URL. This example assumes your saved token allows
+`*.mukul.routeup.dev`:
 
 ```bash
-routeup serve myapp --port 3000 --public
+routeup serve example-app --port 3000 --public
 ```
 
 ```txt
-https://myapp.routeup.dev
+https://example-app.try.routeup.dev
 ```
 
-The stable name means the agent's target URL does not change between runs, so
-test configs and prompts stay valid.
+The configured route and namespace let you request the same target URL between
+runs, so test configs and prompts do not need a newly generated URL. Public
+claims remain subject to the server's normal conflict rules.

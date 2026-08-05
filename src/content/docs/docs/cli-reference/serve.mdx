@@ -4,59 +4,69 @@ description: Register a local route and reverse-proxy it to a local port.
 ---
 
 `routeup serve` registers a route with the local agent and reverse-proxies it to
-a port you are already running. The route is local by default; add `--public` to
-also expose it through a routeup server.
+one or more targets you are already running. The route is local by default; add
+`--public`, an alias for `--expose`, to expose the same targets through a routeup
+server.
 
 ```bash
-routeup serve myapp --port 8080
+routeup serve example-app --port 8080
 ```
 
-Opens `https://myapp.localhost`. The command holds the route until you press
+Opens `https://example-app.localhost`. The command holds the route until you press
 `Ctrl-C`.
 
 ## Usage
 
 ```bash
 routeup serve                       # use the name + port from config
-routeup serve myapp --port 8080     # bare name, scoped by the project name
-routeup serve api.myapp --port 8080 # literal dotted route
-routeup serve myapp --port 8080 --public   # also expose publicly
+routeup serve example-app --port 8080     # bare name, scoped by the project name
+routeup serve api.example-app --port 8080 # literal dotted route
+routeup serve example-app --port 8080 --public   # also expose publicly
 ```
 
 ## Name resolution
 
 The route name comes from the first source that is set:
 
-1. The positional argument (`routeup serve myapp`).
+1. The positional argument (`routeup serve example-app`).
 2. `ROUTEUP_NAME`.
 3. The `name` field in `routeup.json` or the `package.json` `routeup` block.
 
-A name **containing a dot is taken literally** (`api.myapp` → route `api.myapp`).
-A **bare** name is prefixed with the project name from config (project `myapp` +
-`api` → `api.myapp`). With no project in scope, a bare name is used as-is. See
-[Name resolution](/docs/configuration/name-resolution).
+For a positional argument, a name **containing a dot is taken literally**
+(`api.example-app` → route `api.example-app`). A positional **bare** name is prefixed with
+the project name from config (project `example-app` + `api` → `api.example-app`). With no
+project in scope, a bare positional name is used as-is. Environment and config
+names are literal. See [Name resolution](/docs/configuration/name-resolution).
 
 ## Flags
 
 ```txt
---port <n>        local port to proxy to (required if not in config)
---public          also expose the route through the server
---server <url>    server to expose through (or ROUTEUP_SERVER)
---token <secret>  server token (or ROUTEUP_TOKEN)
---random          ask the server to assign a public name
---dry-run         resolve the route and print what would happen, then exit
+--port <n>             root target port (required when no target is configured)
+--target </path=port>  path target; repeat for multiple targets
+--expose               also expose the route through the server
+--public               alias for --expose
+--server <url>         public-server control URL
+--token <secret>       server token
+--random               generate a random route name
 ```
 
 ## Local vs public
 
-Without `--public`, the route is served only by your local agent over
-`*.localhost`, no server, no token, no network. With `--public`, the agent also
-opens an outbound tunnel so the server can reach your local port. Local route
-names may be dotted; public names are a single label under the server's
-namespace. See [Exposing publicly](/docs/getting-started/exposing-publicly).
+Without `--public`, the route is served only by the local agent over
+`*.localhost`: no server, token, or network is involved. With `--public`,
+`serve` keeps that local registration and also opens an outbound tunnel for the
+same targets.
+
+Standalone [`routeup expose`](/docs/cli-reference/expose) does not create a local
+registration. It reuses a matching active route when available, or exposes
+targets supplied through flags, environment, or config.
+
+Dotted local names are normalized to one public label: `api.example-app` remains
+`https://api.example-app.localhost` locally and is requested as public label
+`api-example-app`. See [Exposing publicly](/docs/getting-started/exposing-publicly).
 
 ## Conflicts
 
 If the route is already claimed on this machine, `serve` fails closed and prints
-the owning process. Use `--force` to take over the route and release the previous
-owner.
+the owning process and its working directory. Stop the holding process and retry,
+or use a different route name.

@@ -8,7 +8,6 @@ Lives at `routeup.dev`:
 
 - `/`: marketing landing (custom Astro page)
 - `/docs/*`: docs (Starlight)
-- `/app/*`: future dashboard (token CRUD + route list, when it ships)
 - `/llms.txt`: short LLM index
 - `/llms-full.txt`: every docs page concatenated
 
@@ -24,7 +23,7 @@ pnpm preview         # preview the production build
 pnpm check           # astro type/diagnostic check
 ```
 
-Pagefind search (Cmd/Ctrl+K on docs pages) is wired by Starlight automatically. Per-page Markdown actions are injected by `public/docs-markdown-actions.js`.
+Pagefind search (Cmd/Ctrl+K on docs pages) is wired by Starlight automatically. Plain-page Markdown files are served at `/docs/<path>.md` by `src/pages/docs/[...slug].md.ts`, and `llms.txt` / `llms-full.txt` by `src/pages/llms*.txt.ts`.
 
 ## Repo layout
 
@@ -66,6 +65,22 @@ Why docs are nested at `src/content/docs/docs/`: Starlight maps content-collecti
 
 ## Adding content
 
+### Content boundaries
+
+The landing page and docs have different jobs:
+
+- **Landing page**: explain the product promise, the local/public workflow, the
+  main use cases, a high-level request flow, a small set of differentiators, one
+  canonical quick start, and install/documentation calls to action.
+- **Docs**: own exact command behavior, complete flag lists, configuration
+  schemas, lifecycle details, failure modes, security boundaries, recipes,
+  self-hosting operations, and protocol/architecture internals.
+
+Keep landing-page snippets real and runnable, but deliberately narrow. Link to a
+docs page rather than adding a second detailed explanation to the landing page.
+When behavior changes, update the CLI reference and task guide first, then update
+any canonical snippet repeated on the landing page.
+
 ### A new docs page
 
 1. Add an MDX file under the right section in `src/content/docs/docs/...`.
@@ -78,32 +93,36 @@ Starlight picks up the file on save. Sidebar updates automatically for `autogene
 
 Add an `.astro` file under `src/pages/`. Astro picks up the route by filename. Starlight will not interfere with non-`/docs/*` routes.
 
-### A new dashboard page (later)
-
-When the dashboard ships:
-
-1. Switch Astro to SSR or hybrid mode (`output: 'server'` / `'hybrid'`) and add an adapter (Cloudflare / Node / Vercel).
-2. Add an auth integration (Better-Auth, Clerk, etc.).
-3. Build pages under `src/pages/app/*`, likely React islands mounted on Astro pages.
-4. Add middleware in `src/middleware.ts` to gate `/app/*`.
-
-This stays a single project; the marketing and docs routes can remain statically prerendered while `/app/*` renders on demand.
-
 ## Deployment
 
 Designed for GitHub Pages via `.github/workflows/deploy.yml`.
 
-The site uses Astro's default static output. When the dashboard is added, switch to a hybrid output and pick an adapter.
+The site uses Astro's default static output.
 
 DNS plan:
 
 - `routeup.dev` -> website (this app)
-- `*.routeup.dev` -> routeup public server (the Go binary, on a different machine)
-- `routeup.dev` and `routeup.dev/docs` are served by this site; the wildcard catches everything else for user tunnels.
+- `*.routeup.dev` -> public server; covers `edge.routeup.dev` and root-tier routes
+- `*.try.routeup.dev` -> public server for the hosted token-less namespace
+- `*.<namespace>.routeup.dev` -> public server for each token namespace
+- `get.routeup.dev` -> installer host, as an exact override of the wildcard
+
+The apex and `/docs` are served by this site. The root wildcard handles the
+control host and flat public routes; nested public and token namespaces require
+their own wildcard DNS records.
 
 ## Launch gating
 
-Before launch, verify the Homebrew tap, curl installer, GitHub Pages settings, apex DNS, and wildcard public-server DNS.
+Before launch:
+
+1. Verify every documented command and output block against the release binary.
+2. Compare CLI-reference flags with `routeup <command> --help`.
+3. Verify Homebrew, the curl installer, GitHub Pages, apex DNS, the hosted
+   `edge.routeup.dev` control host, and every public/token namespace wildcard.
+4. Run `pnpm check`, `pnpm build`, an internal-link crawl, and desktop/mobile
+   accessibility scans.
+5. Review the landing page after docs are final so its canonical snippets cannot
+   drift from the reference.
 
 Milestones tracked in `../routeup/docs/MILESTONES.md`.
 

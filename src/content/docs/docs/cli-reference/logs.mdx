@@ -8,15 +8,15 @@ authoritative log for both local and public traffic.
 
 ```bash
 routeup logs
-routeup logs myapp
-routeup logs api.myapp --follow
+routeup logs example-app
+routeup logs api.example-app --follow
 ```
 
 Default log line:
 
 ```txt
-12:41:03 public myapp POST /api/webhooks/github 200 38ms req_abc123
-12:41:07 local  myapp     GET  /settings             200 12ms req_def456
+12:41:03 public example-app POST /api/webhooks/github 200 38ms req_abc123
+12:41:07 local  example-app     GET  /settings             200 12ms req_def456
 ```
 
 Each line shows the time, source (`local` or `public`), route, method, path,
@@ -33,7 +33,7 @@ status, latency, and a request id.
 
 ```bash
 # Watch incoming webhooks in real time
-routeup logs myapp --follow --public
+routeup logs example-app --follow --public
 ```
 
 ## Retention

@@ -10,27 +10,42 @@ just one deployment of this code.
 ## Prerequisites
 
 - A domain (or subdomain) you control, e.g. `tunnel.example.com`.
-- DNS for that suffix pointing at the server, including a wildcard. See
-  [DNS setup](/docs/self-hosting/dns-setup).
+- DNS for the root wildcard and every enabled nested namespace pointing at the
+  server. See [DNS setup](/docs/self-hosting/dns-setup).
 - A way to issue TLS. By default that is a Cloudflare API token for ACME DNS-01.
   See [TLS](/docs/self-hosting/tls).
 
 ## Start it
 
 ```bash
-routeup server --domain tunnel.example.com
+export CLOUDFLARE_API_TOKEN="your-cloudflare-api-token"
+routeup server --domain tunnel.example.com \
+  --reserved edge \
+  --db /var/lib/routeup/server.db
 ```
 
-This serves HTTPS for `*.tunnel.example.com`, authenticates tunnel clients by
-token, and forwards each public request down the matching tunnel to a local
-agent.
+This serves HTTPS for root-tier and configured namespace hosts, authenticates
+tunnel clients, and forwards public requests down their matching tunnels.
+`edge.tunnel.example.com` is the client control host in these examples;
+`--reserved edge` prevents a root-tier token from claiming that label.
+
+Configure a client with the control host, not the suffix apex:
+
+```bash
+routeup setup --server https://edge.tunnel.example.com --token sk_routeup_xxx
+```
 
 Common flags:
 
 ```txt
 --domain <suffix>           public suffix to serve
---public-namespace <label>  enable token-less claims under one label (off by default)
---tls-mode <acme|cert>      acme auto-issues wildcards; cert uses your own files
+--config <path>             server config file
+--db <path>                 SQLite database path
+--public-namespace <label>  enable token-less claims under one label
+--reserved <label>          reserve a root-tier label; repeatable
+--tls-mode <acme|cert>      acme auto-issues wildcards; cert uses your files
+--tls-cert <path>           PEM certificate for cert mode
+--tls-key <path>            PEM private key for cert mode
 ```
 
 ## Deployment shape
@@ -41,9 +56,9 @@ supervisor (systemd, a container restart policy) so it comes back after reboots.
 
 ## State and backups
 
-The server keeps tokens and active claims in a SQLite database. Active claims are
-ephemeral, but the **tokens** are the durable state, back up the SQLite file so
-you do not have to re-mint and redistribute tokens after a host loss.
+The server keeps tokens and token-backed route holds in SQLite. Public-namespace
+holds are session-only and are purged at startup. Back up the SQLite file so you
+do not have to re-mint and redistribute tokens after a host loss.
 
 ## Operating
 

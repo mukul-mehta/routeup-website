@@ -4,7 +4,6 @@ import sitemap from '@astrojs/sitemap';
 
 // Marketing landing lives at src/pages/index.astro and renders at `/`.
 // Starlight content lives under src/content/docs/docs/* so it renders at `/docs/*`.
-// Future dashboard will live under src/pages/app/* and render at `/app/*`.
 
 export default defineConfig({
   site: 'https://routeup.dev',
@@ -39,10 +38,6 @@ export default defineConfig({
         {
           tag: 'meta',
           attrs: { name: 'twitter:image', content: 'https://routeup.dev/og.png' },
-        },
-        {
-          tag: 'script',
-          attrs: { src: '/docs-markdown-actions.js', defer: true },
         },
       ],
       social: [

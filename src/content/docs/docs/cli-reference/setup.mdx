@@ -20,19 +20,19 @@ step.
   over HTTPS with no browser warnings.
 - Lets routeup answer on port 443 (a LaunchDaemon forwarder on macOS, a
   `cap_net_bind_service` capability on Linux).
-- Starts the background [local agent](/docs/concepts/local-agent) and enables it
-  to start on login.
+- Starts the background [local agent](/docs/concepts/local-agent). Later commands
+  start it on demand when it is not already running.
 
 It explains each privileged change before making it. Nothing is sent off your
 machine, and no account is required.
 
 ## Saving server credentials
 
-To configure public exposure at the same time, pass a server and token. They are
-stored for later `--public` use:
+To configure hosted public exposure at the same time, save the hosted control
+endpoint and your token. Granted public URLs still use the `routeup.dev` suffix:
 
 ```bash
-routeup setup --server https://routeup.dev --token sk_routeup_xxx
+routeup setup --server https://edge.routeup.dev --token sk_routeup_xxx
 ```
 
 You can also supply these per command or through `ROUTEUP_SERVER` /

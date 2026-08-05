@@ -10,8 +10,8 @@ your dev server and `/api/*` goes to your API.
 ## The shape
 
 ```txt
-https://myapp.localhost/        -> dev server (e.g. Vite on a dynamic port)
-https://myapp.localhost/api/*   -> API backend (e.g. port 9080)
+https://example-app.localhost/        -> dev server (e.g. Vite on a dynamic port)
+https://example-app.localhost/api/*   -> API backend (e.g. port 9080)
 ```
 
 Both are the same origin, so the browser sends cookies to both and there is no
@@ -23,28 +23,29 @@ Describe the path targets in config so the route is reproducible:
 
 ```json
 {
-  "name": "myapp",
-  "routes": {
-    "/": { "port": 5173 },
-    "/api": { "port": 9080 }
-  }
+  "name": "example-app",
+  "targets": [
+    { "path": "/", "port": 5173 },
+    { "path": "/api", "port": 9080 }
+  ]
 }
 ```
 
 Then serve it:
 
 ```bash
-routeup serve myapp
+routeup serve
 ```
 
 ## Public, same shape
 
 Add `--public` and the single-origin layout is preserved on the public URL too,
-so a deployed-style `https://myapp.routeup.dev/api/...` works without
-reconfiguring the frontend:
+so a deployed-style `https://example-app.try.routeup.dev/api/...` works without
+reconfiguring the frontend. This example assumes your saved token allows
+`*.mukul.routeup.dev`:
 
 ```bash
-routeup serve myapp --public
+routeup serve --public
 ```
 
 This is the same one-URL model your app will use in production, which means

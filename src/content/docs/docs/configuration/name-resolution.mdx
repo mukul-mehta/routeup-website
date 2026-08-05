@@ -3,41 +3,49 @@ title: Name resolution
 description: How routeup turns a CLI argument, env var, or config value into a route name.
 ---
 
-routeup resolves the route name from the first source that is set, then applies
-one simple rule about dots.
+routeup resolves the route name from the first source that is set. Positional
+arguments have one additional project-scoping rule; environment and config names
+are used literally.
 
 ## Source precedence
 
 ```txt
-1. CLI argument        routeup serve myapp
-2. Environment         ROUTEUP_NAME=myapp
+1. CLI argument        routeup serve example-app
+2. Environment         ROUTEUP_NAME=example-app
 3. Config              "name" in routeup.json or the package.json routeup block
+4. Directory basename  working directory name (last-resort fallback)
 ```
 
-Flags and env override config; config provides the default.
+Flags and env override config; config provides the default. When none of the
+above are set, routeup uses the basename of the current working directory as the
+route name — so running from `~/projects/example-app` gives `https://example-app.localhost`
+automatically without any config.
 
-## The dot rule
+## Positional-name scoping
 
-A name **containing a dot** is taken literally. A **bare** name (no dots) is
-prefixed with the project name from config. With no project in scope, a bare name
-is used as-is.
+A positional name **containing a dot** is taken literally. A positional **bare**
+name (no dots) is prefixed with the project name from config. With no project in
+scope, a bare positional name is used as-is. `ROUTEUP_NAME` and the config's own
+`name` are always literal.
 
 ```txt
-project = myapp (from config)
+project = example-app (from config)
 
-routeup serve              -> myapp          (uses the project name)
-routeup serve api          -> api.myapp      (bare name, scoped under the project)
-routeup serve api.myapp    -> api.myapp      (dotted, literal)
-routeup serve api.other    -> api.other      (dotted, literal, not scoped to myapp)
+routeup serve              -> example-app  (uses the project name)
+routeup serve api          -> api.example-app      (bare name, scoped under the project)
+routeup serve api.example-app    -> api.example-app      (dotted, literal)
+routeup serve api.other    -> api.other      (dotted, literal, not scoped to example-app)
 
 no project in scope:
 routeup serve foo          -> foo            (bare name used as-is)
+
+ROUTEUP_NAME=api routeup serve -> api        (environment name is literal)
 ```
 
 ## Local vs public names
 
 This rule produces the **route** name. Locally any depth works
-(`api.myapp` → `https://api.myapp.localhost`). For public exposure the route must
-be a single label under the server's namespace, so use `api-myapp` rather than
-`api.myapp` when exposing. See [Routes](/docs/concepts/routes) and
-[Tokens](/docs/concepts/tokens).
+(`api.example-app` → `https://api.example-app.localhost`). Public hosts must be one label
+under the server's namespace, so routeup normalizes dots to hyphens when
+exposing (`api.example-app` → public label `api-example-app`). See
+[Routes](/docs/concepts/routes) and [Tokens](/docs/concepts/tokens).

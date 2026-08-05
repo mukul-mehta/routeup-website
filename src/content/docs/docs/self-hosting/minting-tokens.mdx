@@ -9,14 +9,23 @@ and hand the secret to each client out-of-band, there is no hosted signup flow.
 ## Create
 
 ```bash
-routeup token create mukul --allow "*.routeup.dev"
-routeup token create alice --allow "*.alice.routeup.dev"
+routeup token create mukul --allow "*.tunnel.example.com" \
+  --db /var/lib/routeup/server.db
+routeup token create alice --allow "*.alice.tunnel.example.com" \
+  --db /var/lib/routeup/server.db
 ```
 
+Run token commands on the server host. They open SQLite directly, so every token
+command must use the same `--db` or `--config` as the running server.
+
 The secret (`sk_routeup_…`) is printed **once**. The server stores only a
-SHA-256 hash of it, so it cannot be shown again. Send it to the client privately
-and have them save it in a password manager or run
-`routeup setup --token …`.
+SHA-256 hash of it, so it cannot be shown again. Send it to the client privately.
+For this example deployment, the client saves both the control endpoint and
+token with:
+
+```bash
+routeup setup --server https://edge.tunnel.example.com --token sk_routeup_xxx
+```
 
 ## Allow patterns and tiers
 
@@ -24,22 +33,27 @@ The allow pattern is the only authority, the server rejects any claim whose host
 falls outside it. The tier follows from the pattern shape:
 
 ```txt
-*.routeup.dev          # whole suffix, admin / co-maintainer
-*.alice.routeup.dev    # a personal namespace
-*.team-x.routeup.dev   # a shared team namespace
+*.tunnel.example.com          # whole suffix, admin / co-maintainer
+*.alice.tunnel.example.com    # a personal namespace
+*.team-x.tunnel.example.com   # a shared team namespace
 ```
 
 A `*` matches exactly one label, mirroring the wildcard certificate. So
-`*.alice.routeup.dev` grants `myapp.alice.routeup.dev` but not
-`alice.routeup.dev` itself or a deeper `api.myapp.alice.routeup.dev`. Granting a
-namespace also reserves its label at the root tier, so a `*.routeup.dev` token
-cannot grab it back.
+`*.alice.tunnel.example.com` grants `acme.alice.tunnel.example.com` but not
+`alice.tunnel.example.com` itself or a deeper
+`api.example-app.alice.tunnel.example.com`. Granting that namespace also reserves
+`alice` at the root tier, so a `*.tunnel.example.com` token cannot claim
+`alice.tunnel.example.com`.
+
+Before using a namespace grant, add its DNS wildcard, for example
+`*.alice.tunnel.example.com`, and ensure static TLS certificates include it when
+using `tls-mode: cert`.
 
 ## List and revoke
 
 ```bash
-routeup token list
-routeup token revoke <token-id>
+routeup token list --db /var/lib/routeup/server.db
+routeup token revoke <token-id> --db /var/lib/routeup/server.db
 ```
 
 Revoking a token immediately stops it from making new claims. Distribute
