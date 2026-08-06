@@ -44,3 +44,6 @@ written to disk, and they are cleared when the agent restarts.
 ## Privacy
 
 Headers and bodies are not included in request logs, only the metadata above.
+To see full headers and bodies for a specific request, enable
+[capture](/docs/configuration/routeup-json#request-and-response-capture) on the
+route and use [`routeup inspect <request-id>`](/docs/cli-reference/inspect).

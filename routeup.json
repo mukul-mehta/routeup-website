@@ -1,0 +1,13 @@
+{
+  "name": "routeup-website",
+  "command": "pnpm dev --port ${PORT}",
+  "capture": {
+    "request": true,
+    "response": true,
+    "redact_headers": ["authorization", "cookie", "x-forwarded-for"]
+  },
+  "expose": {
+    "enabled": true,
+    "paths": ["/"]
+  }
+}

@@ -59,6 +59,50 @@ Because the route and namespace are configured, you request the same endpoint on
 each run instead of accepting a newly generated URL. Public claims remain subject
 to the server's normal conflict rules.
 
+## 4. Inspect a specific delivery
+
+`routeup logs` shows metadata only. To see the full payload and response for a
+delivery, enable capture in `routeup.json`:
+
+```json
+{
+  "name": "example-app",
+  "port": 8080,
+  "capture": {
+    "request": true,
+    "response": true,
+    "redact_headers": ["x-hub-signature-256", "authorization"]
+  }
+}
+```
+
+Then grab the request id from the log line and inspect it:
+
+```bash
+routeup inspect req_abc123
+```
+
+```txt
+Request
+-------
+Capture: complete
+Body bytes: 842
+X-Github-Event: push
+
+Body
+----
+{"ref":"refs/heads/main","repository":{"full_name":"acme/api"},...}
+
+Response
+--------
+Capture: complete
+Body bytes: 4
+
+Body
+----
+{"ok":true}
+```
+
 ## Scoping exposure
 
 If you only want the webhook path reachable and the rest of the app private, you

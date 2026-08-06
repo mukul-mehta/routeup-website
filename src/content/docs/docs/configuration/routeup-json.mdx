@@ -72,6 +72,70 @@ By default, `--public` exposes every path on the route. Limit public exposure wi
 
 The route still works locally at every path, but only matching paths are reachable through the public URL.
 
+## Request and response capture
+
+routeup can retain request and response data so you can inspect it later with
+`routeup inspect <request-id>`. Capture is off by default because retained data
+may contain secrets.
+
+```json
+{
+  "name": "example-app",
+  "port": 8080,
+  "capture": {
+    "request": true,
+    "response": true,
+    "redact_headers": ["authorization", "cookie"]
+  }
+}
+```
+
+| Field | Description |
+|---|---|
+| `request` | Retain incoming request headers and body |
+| `response` | Retain upstream response headers and body |
+| `redact_headers` | Headers to omit from capture (case-insensitive); they are still forwarded to the upstream |
+
+Each captured message is bounded to 256 KiB. If a body exceeds that, `routeup inspect`
+shows a partial prefix and marks the capture as incomplete.
+
+Get the request id from `routeup logs`, then inspect it:
+
+```bash
+routeup logs example-app --follow
+# 12:41:03 public example-app POST /api/webhooks/github 200 38ms req_abc123
+
+routeup inspect req_abc123
+```
+
+## Request capture
+
+Enable `capture` to retain incoming request and outgoing response data so
+`routeup inspect` can show the full headers and body later:
+
+```json
+{
+  "name": "myapp",
+  "port": 8080,
+  "capture": {
+    "request": true,
+    "response": true,
+    "redact_headers": ["authorization", "cookie"]
+  }
+}
+```
+
+`request` and `response` are independent — enable only the direction you need.
+`redact_headers` removes those header values from the stored copy before
+`routeup inspect` can see them; the upstream service still receives the
+originals untouched.
+
+Captured data is kept in an in-memory ring buffer (last 200 requests) and
+cleared when the agent restarts. Each message is capped at 256 KiB.
+
+See [`routeup inspect`](/docs/cli-reference/inspect) and
+[`routeup logs`](/docs/cli-reference/logs).
+
 ## Discovery
 
 routeup looks for config in the **current working directory only**: there is no
