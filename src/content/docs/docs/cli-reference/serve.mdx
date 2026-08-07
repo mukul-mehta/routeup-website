@@ -5,7 +5,7 @@ description: Register a local route and reverse-proxy it to a local port.
 
 `routeup serve` registers a route with the local agent and reverse-proxies it to
 one or more targets you are already running. The route is local by default; add
-`--public`, an alias for `--expose`, to expose the same targets through a routeup
+`--expose` to expose the same targets through a routeup
 server.
 
 ```bash
@@ -21,7 +21,7 @@ Opens `https://example-app.localhost`. The command holds the route until you pre
 routeup serve                       # use the name + port from config
 routeup serve example-app --port 8080     # bare name, scoped by the project name
 routeup serve api.example-app --port 8080 # literal dotted route
-routeup serve example-app --port 8080 --public   # also expose publicly
+routeup serve example-app --port 8080 --expose   # also expose publicly
 ```
 
 ## Name resolution
@@ -52,14 +52,15 @@ names are literal. See [Name resolution](/docs/configuration/name-resolution).
 
 ## Local vs public
 
-Without `--public`, the route is served only by the local agent over
-`*.localhost`: no server, token, or network is involved. With `--public`,
+Without `--expose`, the route is served only by the local agent over
+`*.localhost`: no server, token, or network is involved. With `--expose`,
 `serve` keeps that local registration and also opens an outbound tunnel for the
 same targets.
 
-Standalone [`routeup expose`](/docs/cli-reference/expose) does not create a local
-registration. It reuses a matching active route when available, or exposes
-targets supplied through flags, environment, or config.
+Standalone [`routeup expose`](/docs/cli-reference/expose) reuses a matching
+active route when available. If there is no active route, it resolves targets
+from flags, environment, or config and attempts to register a local route for
+the exposure session as well.
 
 Dotted local names are normalized to one public label: `api.example-app` remains
 `https://api.example-app.localhost` locally and is requested as public label

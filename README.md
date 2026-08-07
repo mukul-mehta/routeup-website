@@ -69,15 +69,16 @@ Why docs are nested at `src/content/docs/docs/`: Starlight maps content-collecti
 
 The landing page and docs have different jobs:
 
-- **Landing page**: explain the product promise, the local/public workflow, the
-  main use cases, a high-level request flow, a small set of differentiators, one
-  canonical quick start, and install/documentation calls to action.
+- **Landing page**: explain the product promise, one-time setup, both daily
+  operating modes, the common compose/expose/observe workflows, public URL
+  lifetimes, a high-level request flow, and install/documentation calls to
+  action.
 - **Docs**: own exact command behavior, complete flag lists, configuration
   schemas, lifecycle details, failure modes, security boundaries, recipes,
   self-hosting operations, and protocol/architecture internals.
 
-Keep landing-page snippets real and runnable, but deliberately narrow. Link to a
-docs page rather than adding a second detailed explanation to the landing page.
+Keep landing-page snippets real and runnable. Complete the common path on the
+landing page, then link to docs for edge cases, full schemas, and flag details.
 When behavior changes, update the CLI reference and task guide first, then update
 any canonical snippet repeated on the landing page.
 

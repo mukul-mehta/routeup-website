@@ -29,4 +29,4 @@ routeup serve demo --port 8080 --server https://edge.example.com --public
 
 The public namespace is disabled by default on self-hosted servers. Enable it with `--public-namespace` when running `routeup server`.
 
-The hosted `routeup.dev` server uses `try` for token-less names, so `--random` grants URLs like `https://lively-otter-4f2.try.routeup.dev`. Named persistent URLs under `*.routeup.dev` still require a token.
+The hosted `routeup.dev` server uses `try` for token-less names, so `--random` grants URLs like `https://lively-otter-4f2.try.routeup.dev`. Reusable named URLs under `*.routeup.dev` still require a token and are reachable only while a tunnel is connected.

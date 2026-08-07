@@ -1,16 +1,8 @@
 ---
 /**
- * routeup.dev: marketing landing.
- *
- * Aesthetic: paper-and-mono (see /Users/mukul-mehta/Personal/DESIGN.md), but
- * restrained for a marketing page. Cream paper, espresso ink, teal accent used
- * sparingly. UI/body type is JetBrains Mono; terminals use a distinct mono
- * (Geist Mono) so code reads differently from chrome. Square corners, hairline
- * rules, one small pixel shadow.
- *
- * Copy voice: plain and technically accurate. No slogan headings, no ad
- * fragments, no em-dashes. Explain *why*, with concrete examples. One example
- * route is used throughout: example-app -> example-app.localhost / example-app.try.routeup.dev.
+ * routeup.dev landing page.
+ * Structure: hero → problem strip → 01 daily workflow → 02 setup →
+ *            03 recipes → public URL types → how it works → boundaries
  */
 ---
 
@@ -20,15 +12,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>routeup · stable HTTPS routes for local services</title>
+    <title>routeup | stable HTTPS names for local apps</title>
     <meta
       name="description"
-      content="routeup gives local services stable HTTPS names, and the same route public when you need it. Open source, MIT, self-hostable, zero telemetry."
+      content="Give local apps stable, trusted HTTPS names. Keep your current dev command or let routeup run it, then expose the same targets publicly when needed."
     />
-    <meta property="og:title" content="routeup · stable HTTPS routes for local services" />
+    <meta property="og:title" content="routeup | stable HTTPS names for local apps" />
     <meta
       property="og:description"
-      content="Stable HTTPS for local services. Public when you need it. Open source and self-hostable."
+      content="Use myapp.localhost instead of localhost:3000. Local by default, public only when you choose."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://routeup.dev/" />
@@ -37,443 +29,557 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="routeup · stable HTTPS routes for local services" />
+    <meta name="twitter:title" content="routeup | stable HTTPS names for local apps" />
     <meta
       name="twitter:description"
-      content="Stable HTTPS for local services. Public when you need it. Open source and self-hostable."
+      content="Use myapp.localhost instead of localhost:3000. Local by default, public only when you choose."
     />
     <meta name="twitter:image" content="https://routeup.dev/og.png" />
     <link rel="canonical" href="https://routeup.dev/" />
-    <meta name="theme-color" content="#e8e2d0" />
+    <meta name="theme-color" content="#e9e3d2" />
     <meta name="color-scheme" content="light" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap"
-    />
   </head>
 
   <body>
     <a href="#main-content" class="ru-skip">Skip to main content</a>
     <div role="status" class="ru-sr-live" aria-live="polite" aria-atomic="true"></div>
+
     <div class="ru-page">
-      {/* ──────────────────────────────── NAV ─────────────────────────────── */}
       <header class="ru-nav">
         <a href="/" class="ru-brand" aria-label="routeup home">
           <img src="/favicon.svg" alt="" width="22" height="22" class="ru-brand__mark" />
           <span>routeup</span>
         </a>
         <nav class="ru-nav__links" aria-label="Primary">
-          <a href="/docs">Docs</a>
+          <a href="#workflows">Use routeup</a>
+          <a href="#recipes">Recipes</a>
           <a href="#how">How it works</a>
-          <a href="#install">Install</a>
-          <a href="https://github.com/mukul-mehta/routeup" rel="noopener noreferrer" class="ru-nav__gh" aria-label="routeup on GitHub (opens in new tab)">GitHub ↗</a>
+          <a href="/docs">Docs</a>
+          <a href="https://github.com/mukul-mehta/routeup" rel="noopener noreferrer" class="ru-nav__gh">GitHub &nearr;</a>
         </nav>
       </header>
 
       <main id="main-content">
-        {/* ──────────────────────────────── HERO ───────────────────────────── */}
+
+        {/* ── HERO ── */}
         <section class="ru-hero">
           <div class="ru-hero__copy">
-            <p class="ru-hero__tags">
-              <span class="ru-hero__dot" aria-hidden="true"></span>
-              MIT licensed · self-hostable · zero telemetry
-            </p>
-            <h1 class="ru-headline">
-              Stable HTTPS for local services.
-              <span class="ru-headline__alt">Public when you need it.</span>
-            </h1>
-            <p class="ru-lede">
-              <strong>routeup</strong> gives local services a stable HTTPS name
-              instead of a port. You choose the name once; it answers at
-              <code>example-app.localhost</code> on your machine, and at
-              <code class="u-public">example-app.try.routeup.dev</code> when you make it
-              public. The name stays the same between runs.
+            <h1>Your local apps, by name.</h1>
+            <p class="ru-hero__lede">
+              Use <code>myapp.localhost</code> instead of <code>localhost:3000</code>.
+              Keep running your app the way you already do, or let routeup start it and inject the URL.
+              The route stays local unless you choose to expose it.
             </p>
             <div class="ru-ctas">
-              <a href="#install" class="ru-btn ru-btn--primary">Get routeup</a>
-              <a href="/docs" class="ru-btn ru-btn--ghost">Read the docs →</a>
+              <a href="#workflows" class="ru-btn ru-btn--primary">Choose your workflow</a>
+              <a href="/docs/getting-started/install" class="ru-btn ru-btn--ghost">Install routeup</a>
             </div>
-            <p class="ru-hero__sub">
-              <code>routeup</code> is a single binary — the CLI, daemon, and public server are all the same executable. Local routes work offline and need no account.
-              To go public, use routeup&rsquo;s hosted service or run your own server!
-            </p>
+            <ul class="ru-proof" aria-label="Product guarantees">
+              <li>No account for local routes</li>
+              <li>Trusted local HTTPS</li>
+              <li>Self-hostable server</li>
+              <li>Open source</li>
+              <li>Zero telemetry</li>
+              <li>macOS and Linux</li>
+            </ul>
           </div>
 
-          <div class="ru-hero__visual">
-            <pre translate="no" class="ru-terminal" data-title="routeup"><code id="hero-term-code"><span class="t-prompt">$</span> <span class="t-cmd">brew install mukul-mehta/tap/routeup</span>
-<span class="t-prompt">$</span> <span class="t-cmd">routeup setup</span>
+          <div class="ru-hero__demo">
+            <div class="ru-hero-modes" data-tabs>
+              <div class="ru-hero-mode-tabs" role="tablist" aria-label="routeup usage mode">
+                <button type="button" role="tab" aria-selected="true" aria-controls="hero-serve" id="tab-hero-serve" data-tab-target="hero-serve">routeup serve</button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="hero-runner" id="tab-hero-runner" data-tab-target="hero-runner" tabindex="-1">routeup (runner)</button>
+              </div>
 
-<span class="t-prompt">$</span> <span class="t-cmd">routeup serve <span class="ru-rn">example-app</span> --port 8080 --public</span>
-<span class="t-label">route:</span> <span class="ru-rn">example-app</span>
-<span class="t-label">local:</span> <span class="t-localurl" data-tpl="https://{n}.localhost">https://example-app.localhost</span>
-<span class="t-label">public:</span> <span class="t-publicurl" data-tpl="https://{n}.try.routeup.dev">https://example-app.try.routeup.dev</span>
-<span class="t-label">expose:</span> all paths
+              <div id="hero-serve" role="tabpanel" aria-labelledby="tab-hero-serve" data-tab-panel="hero-serve" class="ru-hero-panel">
+                <p class="ru-demo__context">Your app is already listening on port 3000</p>
+                <div class="ru-code-wrap">
+                  <pre translate="no" class="ru-terminal ru-hero-terminal" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve myapp --port 3000</span>
+
+<span class="t-label">route:</span>   myapp
+<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span>
 <span class="t-label">targets:</span>
-  /        http://localhost:8080
-
-<span class="t-dim">press Ctrl-C to stop</span><span class="t-cursor" aria-hidden="true">█</span></code></pre>
-          </div>
-        </section>
-
-        {/* ──────────────────────────── LOCAL / PUBLIC ─────────────────────── */}
-        <section class="ru-section" id="how">
-          <header class="ru-head">
-            <h2 class="ru-head__title">A route is local until you make it public.</h2>
-            <p class="ru-head__sub">
-              On your machine, a route needs no account and no network: after a
-              one-time <code>routeup setup</code>, any <code>*.localhost</code>
-              name resolves to <code>127.0.0.1</code> over HTTPS. When a service needs to be public, for a webhook or
-              an OAuth redirect, add the <code>--public</code> flag and the route gets a
-              URL in the namespace granted by the server.
-            </p>
-          </header>
-
-          <div class="ru-modes">
-            <article class="ru-mode">
-              <h3>
-                <span class="ru-mode__pip" aria-hidden="true"></span>
-                Local
-              </h3>
-              <pre translate="no" class="ru-terminal ru-terminal--sm"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve <span class="ru-rn">example-app</span> --port 8080</span>
-<span class="t-label">route:</span> <span class="ru-rn">example-app</span>
-<span class="t-label">local:</span> <span class="t-localurl" data-tpl="https://{n}.localhost">https://example-app.localhost</span>
-<span class="t-label">targets:</span>
-  /        http://localhost:8080
+  /       http://localhost:3000
 
 <span class="t-dim">press Ctrl-C to stop</span></code></pre>
-              <p>
-                The local daemon serves any <code>*.localhost</code> route, and
-                nothing is sent to a server. <code>.localhost</code> is reserved
-                by RFC&nbsp;6761, so browsers resolve it to
-                <code>127.0.0.1</code> with no DNS lookup and no configuration.
-              </p>
-            </article>
-
-            <article class="ru-mode">
-              <h3>
-                <span class="ru-mode__pip ru-mode__pip--public" aria-hidden="true"></span>
-                Public
-              </h3>
-              <pre translate="no" class="ru-terminal ru-terminal--sm"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve <span class="ru-rn">example-app</span> --port 8080 --public</span>
-<span class="t-label">route:</span> <span class="ru-rn">example-app</span>
-<span class="t-label">local:</span> <span class="t-localurl" data-tpl="https://{n}.localhost">https://example-app.localhost</span>
-<span class="t-label">public:</span> <span class="t-publicurl" data-tpl="https://{n}.try.routeup.dev">https://example-app.try.routeup.dev</span>
-<span class="t-label">expose:</span> all paths
-<span class="t-label">targets:</span>
-  /        http://localhost:8080
-
-<span class="t-dim">press Ctrl-C to stop</span></code></pre>
-              <p>
-                The same command with <code>--public</code> also opens an
-                outbound tunnel, so the public server can reach your local
-                 daemon. Expose the whole app, or limit public access by path:
-                set <code>expose.paths</code> in your config — for example,
-                <code>["/api/webhooks/*"]</code> — and only that prefix reaches
-                the internet while the rest stays local.
-              </p>
-            </article>
-          </div>
-        </section>
-
-
-        {/* ──────────────────────── OBSERVE ──────────────────────────────── */}
-        <section class="ru-section">
-          <header class="ru-head">
-            <h2 class="ru-head__title">Inspect and follow traffic.</h2>
-            <p class="ru-head__sub">
-              <code>routeup logs</code> streams request logs for any route — method, path, status, and latency.
-              <code>routeup inspect</code> shows the full captured request for any opted-in route, including headers and body.
-            </p>
-          </header>
-
-          <div class="ru-modes">
-            <article class="ru-mode">
-              <h3>Follow logs</h3>
-              <pre translate="no" class="ru-terminal ru-terminal--sm"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup logs example-app --follow</span>
-<span class="t-dim">TIME     SOURCE  ROUTE        METHOD  PATH              STATUS  DUR    ID</span>
-<span class="t-dim">14:02:01</span> local   example-app  <span class="t-cmd">GET    </span> /api/users        <span class="t-localurl">200</span>     12ms   req_Kx4mT9
-<span class="t-dim">14:02:03</span> public  example-app  <span class="t-cmd">POST   </span> /api/webhooks     <span class="t-localurl">204</span>      8ms   req_Jz6nR2
-<span class="t-dim">14:02:07</span> local   example-app  <span class="t-cmd">GET    </span> /                 <span class="t-localurl">200</span>     31ms   req_Mv8sY5</code></pre>
-              <p>
-                Logs show method, path, status code, and latency. Works for both
-                local and public routes.
-              </p>
-            </article>
-
-            <article class="ru-mode">
-              <h3>Inspect a request</h3>
-              <pre translate="no" class="ru-terminal ru-terminal--sm"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup inspect req_Jz6nR2</span>
-Request req_Jz6nR2wLzC
-
-Metadata
---------
-<span class="t-label">Source:</span>   public
-<span class="t-label">Route:</span>    example-app
-<span class="t-label">Target:</span>   /:8080
-<span class="t-label">Status:</span>   <span class="t-localurl">204</span>
-<span class="t-label">Duration:</span> 8ms
-<span class="t-label">Method:</span>   POST
-<span class="t-label">Path:</span>     /api/webhooks/stripe
-<span class="t-label">Host:</span>     <span class="t-publicurl">example-app.try.routeup.dev</span></code></pre>
-              <p>
-                Routes that opt into capture retain the full incoming request.
-                IDs come from <code>routeup logs</code> — copy one and run
-                <code>routeup inspect &lt;id&gt;</code> to see headers and body.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        {/* ────────────────────────── WHY THIS EXISTS ──────────────────────── */}
-        <section class="ru-section">
-          <header class="ru-head">
-            <h2 class="ru-head__title">Why this exists.</h2>
-            <p class="ru-head__sub">
-              <strong>TL;DR:</strong> Work needs a stable URL, and we usually get handed a port.
-            </p>
-          </header>
-
-          <ul class="ru-grid ru-grid--problems">
-            <li>
-              <span class="ru-problem-tag">[ports]</span>
-              <h3>Ports you have to remember.</h3>
-              <p>
-                Running several services means several arbitrary ports. A name
-                like <code>example-app.localhost</code> is easier to keep track of,
-                and it does not change when the port does.
-              </p>
-            </li>
-            <li>
-              <span class="ru-problem-tag">[tls]</span>
-              <h3>HTTPS that matches production.</h3>
-              <p>
-                Secure cookies, <code>SameSite=None</code>, and SDKs that reject
-                plain-<code>http</code> origins behave the same locally as they
-                will once deployed, so the problems show up before you ship.
-              </p>
-            </li>
-            <li>
-              <span class="ru-problem-tag">[oauth]</span>
-              <h3>OAuth callback URLs.</h3>
-              <p>
-                Most providers want a single registered redirect URI. Point it
-                at your named public route once, and you do not have
-                to change it again.
-              </p>
-            </li>
-            <li>
-              <span class="ru-problem-tag">[webhooks]</span>
-              <h3>Webhook delivery.</h3>
-              <p>
-                Services like GitHub, Stripe, and Slack need to reach your
-                machine. Make the route you already develop against public and
-                they can deliver to it.
-              </p>
-            </li>
-            <li>
-              <span class="ru-problem-tag">[previews]</span>
-              <h3>Previews you can share.</h3>
-              <p>
-                Send a teammate or a client a working URL for the branch
-                you&rsquo;re on. No deploy, no staging slot; close the route and
-                the link stops serving your app.
-              </p>
-            </li>
-          </ul>
-        </section>
-
-        {/* ───────────────────────────── HOW IT WORKS ──────────────────────── */}
-        <section class="ru-section">
-          <header class="ru-head">
-            <h2 class="ru-head__title">How a request reaches your service.</h2>
-            <p class="ru-head__sub">
-              The same binary is the CLI, the local daemon, and the public
-              server. For a local route, every part runs on your machine. For a
-              public one, the request hits the routeup server first and rides an
-              outbound tunnel back down, so your service never opens a port to
-              the internet.
-            </p>
-          </header>
-
-          <div class="ru-diagram">
-            {/* LOCAL */}
-            <div class="ru-flow">
-              <p class="ru-flow__label">Local request</p>
-              <div class="ru-machine">
-                <span class="ru-machine__tab">your machine · offline-capable</span>
-                <div class="ru-chain">
-                  <div class="ru-node">
-                    <span class="ru-node__name">browser</span>
-                    <span class="ru-node__role">opens https://example-app.localhost</span>
-                  </div>
-                  <div class="ru-hop"><span class="ru-hop__wire">https://example-app.localhost</span></div>
-                  <div class="ru-node ru-node--ru">
-                    <span class="ru-node__name">routeup daemon</span>
-                    <span class="ru-node__role">terminates TLS, reverse-proxies</span>
-                  </div>
-                  <div class="ru-hop"><span class="ru-hop__wire">127.0.0.1:8080</span></div>
-                  <div class="ru-node">
-                    <span class="ru-node__name">your service</span>
-                    <span class="ru-node__role">your dev server, listening on localhost:8080</span>
-                  </div>
+                  <button class="ru-copy" type="button" data-copy="routeup serve myapp --port 3000" aria-label="Copy routeup serve command">Copy</button>
                 </div>
               </div>
-            </div>
 
-            {/* PUBLIC */}
-            <div class="ru-flow">
-              <p class="ru-flow__label">Public request</p>
-              <div class="ru-chain ru-chain--public">
-                <div class="ru-node">
-                  <span class="ru-node__name">browser</span>
-                  <span class="ru-node__role">anywhere on the internet</span>
-                </div>
-                <div class="ru-hop"><span class="ru-hop__wire ru-hop__wire--public">https://example-app.try.routeup.dev</span></div>
-                <div class="ru-node ru-node--ru ru-node--cloud">
-                  <span class="ru-node__name">routeup server</span>
-                  <span class="ru-node__role">cloud · terminates public TLS</span>
-                </div>
-                <div class="ru-hop ru-hop--tunnel"><span class="ru-hop__wire">encrypted outbound tunnel</span></div>
-                <div class="ru-machine ru-machine--tail">
-                  <span class="ru-machine__tab">your machine</span>
-                  <div class="ru-chain">
-                    <div class="ru-node ru-node--ru">
-                      <span class="ru-node__name">routeup daemon</span>
-                      <span class="ru-node__role">reverse-proxies</span>
-                    </div>
-                    <div class="ru-hop"><span class="ru-hop__wire">127.0.0.1:8080</span></div>
-                    <div class="ru-node">
-                      <span class="ru-node__name">your service</span>
-                      <span class="ru-node__role">your dev server, listening on localhost:8080</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────── FEATURES ──────────────────────────── */}
-        <section class="ru-section">
-          <header class="ru-head">
-            <h2 class="ru-head__title">How it&rsquo;s built.</h2>
-          </header>
-
-          <ul class="ru-grid ru-grid--features">
-            <li>
-              <h3>Real local certificates.</h3>
-              <p>After the one-time setup, a local CA signs every <code>*.localhost</code> route. Browsers load them without warnings, so secure cookies and HTTPS-only APIs behave like production.</p>
-            </li>
-            <li>
-              <h3>Path-scoped exposure.</h3>
-              <p>Set <code>expose.paths</code> to limit public access to one prefix — for example, <code>/api/webhooks/*</code> reaches the internet while your frontend, admin routes, and local tooling stay private.</p>
-            </li>
-            <li>
-              <h3>One executable, everything included.</h3>
-              <p>The CLI, the local daemon, and the public server are all invoked by the same binary. No Docker required, no Node runtime, no build step. Works in CI without an extra install.</p>
-            </li>
-            <li>
-              <h3>Token-scoped names.</h3>
-              <p>A server token carries an allow pattern that decides which namespace it can claim: a personal or team namespace, or the whole suffix. Bring your own server and your own domain.</p>
-            </li>
-          </ul>
-        </section>
-
-        {/* ──────────────────────────── CONFIGURE ─────────────────────────── */}
-        <section class="ru-section">
-          <header class="ru-head">
-            <h2 class="ru-head__title">Set the name once, then run it.</h2>
-            <p class="ru-head__sub">
-              Give a project a name and port in a <code>routeup.json</code>, or
-              embed the same settings in your <code>package.json</code>. After
-              that, a bare <code>routeup serve</code> uses those settings, and
-              the route travels with the repo.
-            </p>
-          </header>
-
-          <div class="ru-modes ru-modes--config">
-            <article class="ru-mode ru-mode--cfg">
-              <h3>routeup.json</h3>
-              <pre translate="no" class="ru-terminal ru-terminal--sm" data-title="routeup.json"><code>{`{
-  "name": "example-app",
-  "port": 8080
-}`}</code></pre>
-              <p>
-                Any language. <code>routeup serve</code> with no arguments now
-                serves <code>https://example-app.localhost</code>.
-              </p>
-            </article>
-
-            <article class="ru-mode ru-mode--cfg">
-              <h3>package.json</h3>
-              <pre translate="no" class="ru-terminal ru-terminal--sm" data-title="package.json"><code>{`{
+              <div id="hero-runner" role="tabpanel" aria-labelledby="tab-hero-runner" data-tab-panel="hero-runner" class="ru-hero-panel" hidden>
+                <p class="ru-demo__context">Let routeup pick the port and start your app</p>
+                <div class="ru-code-stack">
+                  <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="package.json"><code>{`{
   "scripts": {
     "dev": "routeup",
-    "dev:app": "vite"
+    "dev:app": "node server.mjs"
   },
   "routeup": {
-    "name": "example-app",
+    "name": "myapp",
     "script": "dev:app"
   }
 }`}</code></pre>
-              <p>
-                Node projects. <code>npm run dev</code> starts your dev server
-                behind <code>https://example-app.localhost</code> and injects
-                <code>PORT</code>, <code>HOST</code>, <code>ROUTEUP_URL</code>, <code>ROUTEUP_LOCAL_URL</code>, and <code>NODE_EXTRA_CA_CERTS</code>.
-              </p>
+                  <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">npm run dev</span>
+<span class="t-dim">running: node server.mjs</span>
+
+<span class="t-label">route:</span>   myapp
+<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </section>
+
+        {/* ── 01 WORKFLOWS ── */}
+        <section class="ru-section" id="workflows">
+          <header class="ru-head">
+
+            <h2>Two ways to use it. Same URL either way.</h2>
+            <p>
+              Route a port your app already listens on, or let routeup start the process and manage cleanup.
+            </p>
+          </header>
+
+          <div class="ru-workflows" data-tabs>
+            <div class="ru-workflow-tabs" role="tablist" aria-label="Choose how routeup runs">
+              <button class="ru-workflow-tab" type="button" role="tab" aria-selected="true" aria-controls="workflow-existing" id="tab-workflow-existing" data-tab-target="workflow-existing">
+                <span class="ru-choice__label">I already run my app</span>
+                <span class="ru-choice__command">routeup serve</span>
+                <span class="ru-choice__copy">Keep your current dev command and route its port.</span>
+              </button>
+              <button class="ru-workflow-tab" type="button" role="tab" aria-selected="false" aria-controls="workflow-runner" id="tab-workflow-runner" data-tab-target="workflow-runner" tabindex="-1">
+                <span class="ru-choice__label">Let routeup run my app</span>
+                <span class="ru-choice__command">routeup</span>
+                <span class="ru-choice__copy">Assign a port, start the child process, and own cleanup.</span>
+              </button>
+            </div>
+
+            <div class="ru-workflow-panel" id="workflow-existing" role="tabpanel" aria-labelledby="tab-workflow-existing" data-tab-panel="workflow-existing">
+              <div class="ru-workflow-panel__copy">
+                <p class="ru-panel-tag">Best for fixed ports and existing tooling</p>
+                <h3>Keep your app in one terminal. Route it in another.</h3>
+                <p>
+                  Nothing about your application command changes. Routeup registers the
+                  name and proxies trusted HTTPS traffic to the port you provide.
+                </p>
+                <ol class="ru-steps">
+                  <li><span>1</span>Start the app as usual.</li>
+                  <li><span>2</span>Give its port a route name.</li>
+                  <li><span>3</span>Open the stable HTTPS URL.</li>
+                </ol>
+                <a href="/docs/getting-started/first-route">Run your first route &rarr;</a>
+              </div>
+              <div class="ru-code-stack">
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal 1"><code><span class="t-prompt">$</span> <span class="t-cmd">npm run dev</span>
+<span class="t-dim">app listening on http://127.0.0.1:3000</span></code></pre>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal 2"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve myapp --port 3000</span>
+
+<span class="t-label">route:</span>   myapp
+<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span></code></pre>
+              </div>
+            </div>
+
+            <div class="ru-workflow-panel" id="workflow-runner" role="tabpanel" aria-labelledby="tab-workflow-runner" data-tab-panel="workflow-runner" hidden>
+              <div class="ru-workflow-panel__copy">
+                <p class="ru-panel-tag">Best for the normal project dev command</p>
+                <h3>Add the block once. Keep running <code>npm run dev</code>.</h3>
+                <p>
+                  Bare <code>routeup</code> picks a free port, registers the route before
+                  launch, starts your script, and releases everything when the process exits.
+                </p>
+<a href="/docs/configuration/package-json-embed">package.json configuration &rarr;</a>
+              </div>
+              <div class="ru-code-stack">
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="package.json"><code>{`{
+  "scripts": {
+    "dev": "routeup",
+    "dev:app": "node server.mjs"
+  },
+  "routeup": {
+    "name": "myapp",
+    "script": "dev:app"
+  }
+}`}</code></pre>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">npm run dev</span>
+<span class="t-dim">running: node server.mjs</span>
+
+<span class="t-label">route:</span>   myapp
+<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span></code></pre>
+                <div class="ru-language-note">
+                  <strong>Not using package.json?</strong>
+                  <span>Put <code>{`"command": "go run ."`}</code> in <code>routeup.json</code>, then run <code>routeup</code>.</span>
+                  <a href="/docs/configuration/frameworks">Check framework port setup &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── PROBLEM STRIP ── */}
+        <section class="ru-problems" aria-label="Why routeup exists">
+          <ul>
+            <li>
+              <span class="ru-problem__tag">[ports]</span>
+              <p>Three services. Three ports to remember. One changes and the browser goes to the wrong app.</p>
+            </li>
+            <li>
+              <span class="ru-problem__tag">[tls]</span>
+              <p>Secure cookies and HTTPS-only SDKs behave differently on <code>http://localhost</code>. The bugs show up after deploy.</p>
+            </li>
+            <li>
+              <span class="ru-problem__tag">[tunnel urls]</span>
+              <p>Every ngrok session hands you a new random URL. Re-register it with Stripe or GitHub every morning.</p>
+            </li>
+            <li>
+              <span class="ru-problem__tag">[callbacks]</span>
+              <p>OAuth providers want one redirect URI. Yours includes <code>localhost:3000</code> and breaks when the port changes.</p>
+            </li>
+          </ul>
+        </section>
+
+        {/* ── 02 INSTALL ── */}
+        <section class="ru-section ru-section--split" id="install">
+          <header class="ru-section__intro">
+
+            <h2>Trust the local CA once.</h2>
+            <p>
+              Install the single routeup binary, then run setup. It creates a local
+              certificate authority, trusts it in your OS, prepares port 443, and
+              starts the local agent.
+            </p>
+            <p class="ru-aside">
+              Setup asks about a public server. Accept <code>https://edge.routeup.dev</code>
+              if you want public routes later, or enter <code>none</code> for local-only use.
+            </p>
+          </header>
+
+          <div class="ru-install" data-tabs>
+            <div class="ru-tabs" role="tablist" aria-label="Install method">
+              <button type="button" role="tab" aria-selected="true" aria-controls="install-brew" id="tab-install-brew" data-tab-target="install-brew">Homebrew</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="install-curl" id="tab-install-curl" data-tab-target="install-curl" tabindex="-1">Install script</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="install-release" id="tab-install-release" data-tab-target="install-release" tabindex="-1">Release</button>
+            </div>
+
+            <div class="ru-tab-panel" id="install-brew" role="tabpanel" aria-labelledby="tab-install-brew" data-tab-panel="install-brew">
+              <div class="ru-code-wrap">
+                <pre translate="no" class="ru-terminal ru-terminal--flat"><code><span class="t-prompt">$</span> <span class="t-cmd">brew install mukul-mehta/tap/routeup</span>
+<span class="t-prompt">$</span> <span class="t-cmd">routeup setup</span></code></pre>
+                <button class="ru-copy" type="button" data-copy="brew install mukul-mehta/tap/routeup" aria-label="Copy Homebrew install command">Copy install</button>
+              </div>
+            </div>
+
+            <div class="ru-tab-panel" id="install-curl" role="tabpanel" aria-labelledby="tab-install-curl" data-tab-panel="install-curl" hidden>
+              <div class="ru-code-wrap">
+                <pre translate="no" class="ru-terminal ru-terminal--flat"><code><span class="t-prompt">$</span> <span class="t-cmd">curl -fsSL https://get.routeup.dev | sh</span>
+<span class="t-prompt">$</span> <span class="t-cmd">routeup setup</span></code></pre>
+                <button class="ru-copy" type="button" data-copy="curl -fsSL https://get.routeup.dev | sh" aria-label="Copy install script command">Copy install</button>
+              </div>
+            </div>
+
+            <div class="ru-tab-panel ru-release" id="install-release" role="tabpanel" aria-labelledby="tab-install-release" data-tab-panel="install-release" hidden>
+              <p>Download a checksum-verified macOS or Linux binary from GitHub.</p>
+              <a href="https://github.com/mukul-mehta/routeup/releases" rel="noopener noreferrer">Open releases &nearr;</a>
+            </div>
+
+            <div class="ru-setup-result">
+              <span>After setup</span>
+              <ul>
+                <li><strong>CA</strong> trusted by your OS</li>
+                <li><strong>443</strong> ready for local HTTPS</li>
+                <li><strong>Agent</strong> starts automatically when needed</li>
+              </ul>
+              <a href="/docs/getting-started/install">Installation details &rarr;</a>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 03 RECIPES ── */}
+        <section class="ru-section" id="recipes">
+          <header class="ru-head">
+
+            <h2>Common tasks.</h2>
+            <p>
+              After your first route is running.
+            </p>
+          </header>
+
+          <div class="ru-recipes" data-tabs>
+            <div class="ru-recipe-tabs" role="tablist" aria-label="Routeup recipes">
+              <button type="button" role="tab" aria-selected="true" aria-controls="recipe-compose" id="tab-recipe-compose" data-tab-target="recipe-compose">
+                <span>01</span><strong>Frontend + API</strong><small>One origin, two targets</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-public" id="tab-recipe-public" data-tab-target="recipe-public" tabindex="-1">
+                <span>02</span><strong>Share publicly</strong><small>Reuse an active route</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-webhook" id="tab-recipe-webhook" data-tab-target="recipe-webhook" tabindex="-1">
+                <span>03</span><strong>Expose one path</strong><small>Keep the rest local</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-logs" id="tab-recipe-logs" data-tab-target="recipe-logs" tabindex="-1">
+                <span>04</span><strong>Follow traffic</strong><small>Local and public logs</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-inspect" id="tab-recipe-inspect" data-tab-target="recipe-inspect" tabindex="-1">
+                <span>05</span><strong>Inspect a request</strong><small>Opt-in capture</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-diagnose" id="tab-recipe-diagnose" data-tab-target="recipe-diagnose" tabindex="-1">
+                <span>06</span><strong>Diagnose routes</strong><small>See owners and health</small>
+              </button>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-compose" role="tabpanel" aria-labelledby="tab-recipe-compose" data-tab-panel="recipe-compose">
+              <div class="ru-recipe-panel__copy">
+                <p class="ru-panel-tag">Compose local services</p>
+                <h3>Put the frontend and API behind one origin.</h3>
+                <p>
+                  Longest path prefix wins. The browser sees one HTTPS origin, so cookies
+                  work across both targets and local CORS configuration disappears.
+                </p>
+                <dl>
+                  <div><dt><code>/</code></dt><dd>Frontend on port 5173</dd></div>
+                  <div><dt><code>/api</code></dt><dd>API on port 8080</dd></div>
+                </dl>
+                <a href="/docs/recipes/frontend-plus-api">Frontend + API recipe &rarr;</a>
+              </div>
+              <div class="ru-code-stack">
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
+  "name": "myapp",
+  "targets": [
+    { "path": "/", "port": 5173 },
+    { "path": "/api", "port": 8080 }
+  ]
+}`}</code></pre>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve</span>
+<span class="t-localurl">https://myapp.localhost/</span>       &rarr; :5173
+<span class="t-localurl">https://myapp.localhost/api</span>    &rarr; :8080</code></pre>
+              </div>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-public" role="tabpanel" aria-labelledby="tab-recipe-public" data-tab-panel="recipe-public" hidden>
+              <div class="ru-recipe-panel__copy">
+                <p class="ru-panel-tag">Mobile testing and previews</p>
+                <h3>Expose an already-running route from a second terminal.</h3>
+                <p>
+                  <code>routeup expose</code> reuses a route that is already active in another terminal —
+                  your app keeps running unchanged. It exposes all paths. Use recipe 03 if you want to
+                  limit which paths the public server forwards.
+                </p>
+                <p class="ru-warning">
+                  A <code>try.routeup.dev</code> address is session-only and reachable by anyone who has
+                  the URL. Routeup does not add viewer authentication in v1.
+                </p>
+                <a href="/docs/getting-started/exposing-publicly">Public exposure guide &rarr;</a>
+              </div>
+              <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal 2"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup expose</span>
+
+<span class="t-label">route:</span>   myapp
+<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span>
+<span class="t-label">public:</span>  <span class="t-publicurl">https://myapp.try.routeup.dev</span>
+<span class="t-label">expose:</span>  all paths
+
+<span class="t-dim">press Ctrl-C to stop</span></code></pre>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-webhook" role="tabpanel" aria-labelledby="tab-recipe-webhook" data-tab-panel="recipe-webhook" hidden>
+              <div class="ru-recipe-panel__copy">
+                <p class="ru-panel-tag">Webhook development</p>
+                <h3>Make the webhook handler public, not the whole app.</h3>
+                <p>
+                  <code>expose.paths</code> limits which paths the public server forwards. Local traffic
+                  still reaches every target. Requests from the internet receive a 404 unless they match
+                  the allowed prefix.
+                </p>
+                <p>
+                  Setting <code>"enabled": true</code> in <code>expose</code> lets bare <code>routeup</code> (runner mode)
+                  open the public tunnel automatically before your app starts, injecting the live public URL
+                  into <code>ROUTEUP_URL</code>. For <code>routeup serve</code>, pass <code>--expose</code> instead and skip <code>enabled</code>.
+                </p>
+                <a href="/docs/recipes/webhook-development">Webhook recipe &rarr;</a>
+              </div>
+              <div class="ru-code-stack">
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
+  "name": "myapp",
+  "port": 8080,
+  "expose": {
+    "enabled": true,
+    "paths": ["/api/webhooks/*"]
+  }
+}`}</code></pre>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal (runner mode)"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup</span>
+<span class="t-label">route:</span>   myapp
+<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span>
+<span class="t-label">public:</span>  <span class="t-publicurl">https://myapp.try.routeup.dev</span>
+<span class="t-label">expose:</span>  /api/webhooks/*</code></pre>
+              </div>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-logs" role="tabpanel" aria-labelledby="tab-recipe-logs" data-tab-panel="recipe-logs" hidden>
+              <div class="ru-recipe-panel__copy">
+                <p class="ru-panel-tag">Request visibility</p>
+                <h3>Follow local and public requests in one stream.</h3>
+                <p>
+                  Request logs include source, route, method, path, status, duration, and a
+                  request ID. Headers and bodies are not retained unless capture is enabled.
+                </p>
+                <a href="/docs/cli-reference/logs">Logs reference &rarr;</a>
+              </div>
+              <pre translate="no" class="ru-terminal ru-terminal--flat ru-terminal--wide" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup logs myapp --follow</span>
+
+<span class="t-dim">TIME      SOURCE  METHOD  PATH                  STATUS  ID</span>
+14:02:01  local   GET     /api/users            <span class="t-ok">200</span>  req_Kx4mT9pL2aQ7vN6cR
+14:02:03  public  POST    /api/webhooks/stripe  <span class="t-ok">204</span>  req_Jz6nR2wL8cP4sD9h</code></pre>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-inspect" role="tabpanel" aria-labelledby="tab-recipe-inspect" data-tab-panel="recipe-inspect" hidden>
+              <div class="ru-recipe-panel__copy">
+                <p class="ru-panel-tag">Opt-in request capture</p>
+                <h3>Capture deliberately, redact secrets, then inspect.</h3>
+                <p>
+                  Capture is off by default. Enable request or response capture per route and
+                  list every sensitive header that should not be retained.
+                </p>
+                <p class="ru-warning">Captured data stays in the local agent's bounded in-memory buffer and is cleared on restart.</p>
+                <a href="/docs/cli-reference/inspect">Inspect reference &rarr;</a>
+              </div>
+              <div class="ru-code-stack">
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
+  "capture": {
+    "request": true,
+    "response": true,
+    "redact_headers": [
+      "authorization",
+      "cookie",
+      "x-webhook-signature"
+    ]
+  }
+}`}</code></pre>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup inspect req_Jz6nR2wL8cP4sD9h</span>
+<span class="t-label">Source:</span>  public
+<span class="t-label">Method:</span>  POST
+<span class="t-label">Path:</span>    /api/webhooks/stripe
+<span class="t-label">Capture:</span> complete</code></pre>
+              </div>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-diagnose" role="tabpanel" aria-labelledby="tab-recipe-diagnose" data-tab-panel="recipe-diagnose" hidden>
+              <div class="ru-recipe-panel__copy">
+                <p class="ru-panel-tag">Route ownership and setup health</p>
+                <h3>See what is active before changing anything.</h3>
+                <p>
+                  <code>routeup routes</code> identifies every active name, target, public URL,
+                  owner PID, age, and working directory. <code>routeup doctor</code> checks the
+                  CA, trust store, port 443, and agent.
+                </p>
+                <a href="/docs/cli-reference/routes">Routes reference &rarr;</a>
+              </div>
+              <pre translate="no" class="ru-terminal ru-terminal--flat ru-terminal--wide" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup routes</span>
+<span class="t-dim">NAME    TARGETS  PUBLIC  PID    CWD</span>
+myapp   /:3000   -       48172  ~/code/myapp
+
+<span class="t-prompt">$</span> <span class="t-cmd">routeup doctor</span>
+<span class="t-ok">ok</span>  certificate authority
+<span class="t-ok">ok</span>  system trust
+<span class="t-ok">ok</span>  port 443</code></pre>
+            </div>
+          </div>
+        </section>
+
+        {/* ── PUBLIC URL TYPES ── */}
+        <section class="ru-section" id="public">
+          <header class="ru-head ru-head--narrow">
+            <p class="ru-kicker">URL types</p>
+            <h2>Local and public routes have different lifetimes.</h2>
+            <p>
+              A route name, a public address, and a running process expire independently.
+            </p>
+          </header>
+
+          <div class="ru-lifetimes">
+            <article>
+              <p class="ru-lifetime__label ru-lifetime__label--local">Local</p>
+              <h3><code>myapp.localhost</code></h3>
+              <p>Stable on your machine. No account, token, public server, DNS, or network connection.</p>
+              <strong>Available while the owning command runs</strong>
+            </article>
+            <article>
+              <p class="ru-lifetime__label ru-lifetime__label--try">Try public</p>
+              <h3><code>myapp.try.routeup.dev</code></h3>
+              <p>Token-less and internet-accessible. The claim is session-only and can be taken again after disconnect.</p>
+              <strong>For previews, webhooks, and mobile tests</strong>
+            </article>
+            <article>
+              <p class="ru-lifetime__label ru-lifetime__label--named">Named public</p>
+              <h3><code>myapp.mukul.routeup.dev</code></h3>
+              <p>A reusable address authorized by an operator-issued namespace token. The app is still offline when no tunnel is connected.</p>
+              <strong>For OAuth callbacks and repeat integrations</strong>
+            </article>
+            <article>
+              <p class="ru-lifetime__label ru-lifetime__label--self">Self-hosted</p>
+              <h3><code>myapp.dev.example.com</code></h3>
+              <p>Run the same routeup binary as your public server and control the domain, TLS, tokens, and namespace policy.</p>
+              <a href="/docs/self-hosting/running-the-server">Self-hosting guide &rarr;</a>
             </article>
           </div>
         </section>
 
-        {/* ──────────────────────────── INSTALL ───────────────────────────── */}
-        <section class="ru-section" id="install">
-          <header class="ru-head">
-            <p class="ru-kicker">Install.</p>
-            <h2 class="ru-head__title">macOS and Linux.</h2>
+        {/* ── HOW IT WORKS ── */}
+        <section class="ru-section" id="how">
+          <header class="ru-head ru-head--narrow">
+            <p class="ru-kicker">How it works</p>
+            <h2>The same local target, two paths to reach it.</h2>
+            <p>
+              Local requests never leave your machine. Public requests reach a routeup
+              server first, then travel through an outbound encrypted tunnel. Your app
+              keeps listening on loopback in both cases.
+            </p>
           </header>
 
-          <div class="ru-install">
-            <div class="ru-tabs" role="tablist" aria-label="Install method">
-              <button id="install-tab-brew" class="ru-tab is-active" type="button" role="tab" data-tab="brew" aria-controls="install-panel-brew" aria-selected="true" tabindex="0">brew</button>
-              <button id="install-tab-curl" class="ru-tab" type="button" role="tab" data-tab="curl" aria-controls="install-panel-curl" aria-selected="false" tabindex="-1">curl</button>
-              <button id="install-tab-release" class="ru-tab" type="button" role="tab" data-tab="release" aria-controls="install-panel-release" aria-selected="false" tabindex="-1">release</button>
-            </div>
-            <div id="install-panel-brew" class="ru-install__panel" role="tabpanel" aria-labelledby="install-tab-brew" data-tab-panel="brew">
-              <pre translate="no" class="ru-terminal ru-terminal--install"><code><span class="t-prompt">$</span> brew install mukul-mehta/tap/routeup</code></pre>
-              <button class="ru-copy" type="button" data-copy="brew install mukul-mehta/tap/routeup" aria-label="Copy Homebrew install command">Copy</button>
-            </div>
-            <div id="install-panel-curl" class="ru-install__panel" role="tabpanel" aria-labelledby="install-tab-curl" data-tab-panel="curl" hidden>
-              <pre translate="no" class="ru-terminal ru-terminal--install"><code><span class="t-prompt">$</span> curl -fsSL https://get.routeup.dev/install.sh | sh</code></pre>
-              <button class="ru-copy" type="button" data-copy="curl -fsSL https://get.routeup.dev/install.sh | sh" aria-label="Copy curl install command">Copy</button>
-            </div>
-            <div id="install-panel-release" class="ru-install__panel ru-install__panel--release" role="tabpanel" aria-labelledby="install-tab-release" data-tab-panel="release" hidden>
-              <p class="ru-release__label">Download a macOS or Linux binary from GitHub:</p>
-              <a href="https://github.com/mukul-mehta/routeup/releases" class="ru-release__link" rel="noopener noreferrer">github.com/mukul-mehta/routeup/releases ↗</a>
-            </div>
-
-            <p class="ru-note">
-              After installing, run <code>routeup setup</code> once. It
-              creates a local certificate authority, trusts it in your OS, and
-              binds port 443 (one sudo prompt). Then
-              <code>routeup serve example-app --port 8080</code> and open
-              <code>https://example-app.localhost</code>. Run
-              <code>routeup doctor</code> at any point to check your setup.
-            </p>
-
-            <div class="ru-ctas ru-ctas--end">
-              <a href="/docs" class="ru-btn ru-btn--primary">Read the docs</a>
-              <a href="https://github.com/mukul-mehta/routeup" class="ru-btn ru-btn--ghost" rel="noopener noreferrer">GitHub ↗</a>
-            </div>
+          <div class="ru-flows">
+            <article class="ru-flow">
+              <div class="ru-flow__header"><span class="ru-status ru-status--local"></span><strong>Local request</strong><small>No server contact</small></div>
+              <ol>
+                <li><span>Browser</span><code>https://myapp.localhost</code></li>
+                <li><span>Local agent</span><small>terminates trusted TLS</small></li>
+                <li><span>Your app</span><code>127.0.0.1:3000</code></li>
+              </ol>
+            </article>
+            <article class="ru-flow ru-flow--public">
+              <div class="ru-flow__header"><span class="ru-status ru-status--public"></span><strong>Public request</strong><small>Only when exposed</small></div>
+              <ol>
+                <li><span>Internet client</span><code>https://myapp.try.routeup.dev</code></li>
+                <li><span>Routeup server</span><small>terminates public TLS</small></li>
+                <li><span>Outbound tunnel</span><small>encrypted back to your agent</small></li>
+                <li><span>Your app</span><code>127.0.0.1:3000</code></li>
+              </ol>
+            </article>
           </div>
         </section>
 
+        {/* ── BOUNDARIES ── */}
+        <section class="ru-section ru-section--split ru-section--last">
+          <header class="ru-section__intro">
+            <p class="ru-kicker">The boundaries</p>
+            <h2>One binary. No hidden platform.</h2>
+            <p>
+              The CLI, local agent, and public server are one Go binary. Local use is
+              offline-capable and sends no telemetry. Public exposure is optional and
+              can point at the hosted server or your own deployment.
+            </p>
+            <div class="ru-ctas">
+              <a href="/docs" class="ru-btn ru-btn--primary">Read the docs</a>
+              <a href="https://github.com/mukul-mehta/routeup" rel="noopener noreferrer" class="ru-btn ru-btn--ghost">View source &nearr;</a>
+            </div>
+          </header>
+          <ul class="ru-boundaries">
+            <li><strong>Local means local</strong><span>No account, token, DNS, or server request for <code>*.localhost</code>.</span></li>
+            <li><strong>Capture is opt-in</strong><span>Request bodies are not retained unless a route explicitly enables capture.</span></li>
+            <li><strong>Foreground owns lifetime</strong><span>Ctrl-C releases the route, child process, and tunnel owned by that command.</span></li>
+            <li><strong>No hidden platform</strong><span>MIT licensed, zero telemetry, and self-hostable with documented server operations.</span></li>
+          </ul>
+        </section>
 
       </main>
 
-      {/* ──────────────────────────────── FOOTER ───────────────────────────── */}
       <footer class="ru-footer">
         <div class="ru-footer__top">
           <a href="/" class="ru-brand">
@@ -482,683 +588,559 @@ Metadata
           </a>
           <nav aria-label="Footer">
             <a href="/docs">Docs</a>
+            <a href="/docs/getting-started/first-route">First route</a>
             <a href="/docs/self-hosting/running-the-server">Self-host</a>
             <a href="https://github.com/mukul-mehta/routeup" rel="noopener noreferrer">GitHub</a>
             <a href="/llms.txt">llms.txt</a>
           </nav>
         </div>
-        <p class="ru-footer__meta">
-          © 2026 routeup contributors · MIT licensed · <a href="/docs/faq#does-routeup-phone-home">Zero telemetry</a> · Open source
-        </p>
-        <p class="ru-footer__credits">
-          Built on the shoulders of ngrok · localtunnel · mkcert · Caddy · Portless · RFC&nbsp;6761
-        </p>
+        <p>&copy; 2026 routeup contributors. MIT licensed. Zero telemetry.</p>
       </footer>
     </div>
 
     <script is:inline>
-      // Install method tabs and copy actions.
       (function () {
-        var tabs = Array.from(document.querySelectorAll('.ru-tab'));
-        var panels = Array.from(document.querySelectorAll('.ru-install__panel'));
+        var live = document.querySelector('.ru-sr-live');
 
-        function activate(tab, moveFocus) {
-          var target = tab.getAttribute('data-tab');
-          tabs.forEach(function (item) {
-            var active = item === tab;
-            item.classList.toggle('is-active', active);
-            item.setAttribute('aria-selected', active ? 'true' : 'false');
-            item.setAttribute('tabindex', active ? '0' : '-1');
-          });
-          panels.forEach(function (panel) {
-            panel.hidden = panel.getAttribute('data-tab-panel') !== target;
-          });
-          if (moveFocus) tab.focus();
-        }
+        document.querySelectorAll('[data-tabs]').forEach(function (group) {
+          var tabs = Array.from(group.querySelectorAll('[role="tab"]'));
+          var panels = Array.from(group.querySelectorAll('[role="tabpanel"]'));
 
-        tabs.forEach(function (tab) {
-          tab.addEventListener('click', function () {
-            activate(tab, false);
+          function activate(tab, moveFocus, updateHash) {
+            var target = tab.getAttribute('data-tab-target');
+            tabs.forEach(function (item) {
+              var active = item === tab;
+              item.setAttribute('aria-selected', active ? 'true' : 'false');
+              item.setAttribute('tabindex', active ? '0' : '-1');
+            });
+            panels.forEach(function (panel) {
+              panel.hidden = panel.getAttribute('data-tab-panel') !== target;
+            });
+            if (moveFocus) tab.focus();
+            if (updateHash && target && !target.startsWith('install-') && !target.startsWith('hero-')) {
+              history.replaceState(null, '', '#' + target);
+            }
+          }
+
+          tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+              activate(tab, false, true);
+            });
+            tab.addEventListener('keydown', function (event) {
+              var index = tabs.indexOf(tab);
+              var next = index;
+              if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % tabs.length;
+              else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + tabs.length) % tabs.length;
+              else if (event.key === 'Home') next = 0;
+              else if (event.key === 'End') next = tabs.length - 1;
+              else return;
+              event.preventDefault();
+              activate(tabs[next], true, true);
+            });
           });
-          tab.addEventListener('keydown', function (event) {
-            var index = tabs.indexOf(tab);
-            var next = index;
-            if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-            else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-            else if (event.key === 'Home') next = 0;
-            else if (event.key === 'End') next = tabs.length - 1;
-            else return;
-            event.preventDefault();
-            activate(tabs[next], true);
+
+          var hash = window.location.hash.slice(1);
+          var requested = tabs.find(function (tab) {
+            return tab.getAttribute('data-tab-target') === hash;
           });
+          if (requested) activate(requested, false, false);
         });
 
         document.querySelectorAll('.ru-copy').forEach(function (button) {
           button.addEventListener('click', async function () {
-            var origLabel = button.getAttribute('aria-label');
+            var original = button.textContent;
             try {
-              await navigator.clipboard.writeText(button.getAttribute('data-copy'));
+              await navigator.clipboard.writeText(button.getAttribute('data-copy') || '');
               button.textContent = 'Copied';
-              button.setAttribute('aria-label', 'Copied to clipboard');
               button.classList.add('is-copied');
-              window.setTimeout(function () {
-                button.textContent = 'Copy';
-                button.setAttribute('aria-label', origLabel);
-                button.classList.remove('is-copied');
-              }, 1600);
+              if (live) live.textContent = 'Command copied to clipboard';
             } catch (_error) {
               button.textContent = 'Copy failed';
-              button.setAttribute('aria-label', 'Copy failed');
-              window.setTimeout(function () {
-                button.textContent = 'Copy';
-                button.setAttribute('aria-label', origLabel);
-              }, 1600);
+              if (live) live.textContent = 'Could not copy command';
             }
+            window.setTimeout(function () {
+              button.textContent = original;
+              button.classList.remove('is-copied');
+            }, 1600);
           });
         });
       })();
     </script>
 
-    <script is:inline>
-      // Hero terminal typing animation. No-JS fallback: content is in the HTML and visible.
-      (function () {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        var code = document.getElementById('hero-term-code');
-        if (!code || code.dataset.anim) return;
-        code.dataset.anim = '1';
-        while (code.firstChild) code.removeChild(code.firstChild);
-
-        var seq = [
-          { type: 'cmd',   text: 'brew install mukul-mehta/tap/routeup' },
-          { type: 'pause', ms: 350 },
-          { type: 'cmd',   text: 'routeup setup' },
-          { type: 'pause', ms: 300 },
-          { type: 'blank' },
-          { type: 'cmd',   text: 'routeup serve example-app --port 8080 --public' },
-          { type: 'pause', ms: 150 },
-          { type: 'out', html: '<span class="t-label">route:</span> example-app' },
-          { type: 'out', html: '<span class="t-label">local:</span> <span class="t-localurl">https://example-app.localhost</span>' },
-          { type: 'out', html: '<span class="t-label">public:</span> <span class="t-publicurl">https://example-app.try.routeup.dev</span>' },
-          { type: 'out', html: '<span class="t-label">expose:</span> all paths' },
-          { type: 'out', html: '<span class="t-label">targets:</span>' },
-          { type: 'out', html: '  /        http://localhost:8080' },
-          { type: 'blank' },
-          { type: 'out', html: '<span class="t-dim">press Ctrl-C to stop</span><span class="t-cursor" aria-hidden="true">█</span>' },
-        ];
-
-        function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
-
-        function appendLine(el) {
-          code.appendChild(el);
-          code.appendChild(document.createTextNode('\n'));
-        }
-
-        async function run() {
-          await wait(500);
-          for (var i = 0; i < seq.length; i++) {
-            var s = seq[i];
-            if (s.type === 'pause') {
-              await wait(s.ms);
-            } else if (s.type === 'blank') {
-              code.appendChild(document.createTextNode('\n'));
-            } else if (s.type === 'cmd') {
-              var line = document.createElement('span');
-              var prompt = document.createElement('span');
-              prompt.className = 't-prompt';
-              prompt.textContent = '$';
-              line.appendChild(prompt);
-              line.appendChild(document.createTextNode(' '));
-              var cmd = document.createElement('span');
-              cmd.className = 't-cmd';
-              line.appendChild(cmd);
-              appendLine(line);
-              for (var j = 0; j < s.text.length; j++) {
-                cmd.textContent += s.text[j];
-                await wait(30 + Math.random() * 25);
-              }
-            } else if (s.type === 'out') {
-              var out = document.createElement('span');
-              out.innerHTML = s.html;
-              appendLine(out);
-              await wait(70);
-            }
-          }
-        }
-
-        run();
-      })();
-    </script>
-
-
-
-
     <style is:global>
       :root {
-        --bg:        #e8e2d0;
-        --bg-elev:   #faf6e8;
-        --bg-soft:   #ddd5be;
-        --fg:        #1c160c;
-        --fg-dim:    #3b3221;
-        --fg-faint:  #5f5640;
-        --border:    #2a2418;
-        --rule:      rgba(42, 36, 24, 0.16);
-        --accent:    #0e9999;
-        --accent-fg: #0a6a6a;
-        --public:    #8a3a05;
-
-        --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        --term: 'Geist Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
-
-        --motion-fast: 140ms;
+        --paper: #e9e3d2;
+        --paper-deep: #d9d0b8;
+        --surface: #fffaf0;
+        --surface-cool: #edf4ee;
+        --ink: #1b1812;
+        --ink-soft: #464034;
+        --ink-faint: #595247;
+        --rule: rgba(27, 24, 18, 0.17);
+        --teal: #087f79;
+        --teal-dark: #075d59;
+        --public: #a44a16;
+        --named: #3d6b62;
+        --terminal: #171512;
+        --terminal-bar: #211e19;
+        --terminal-text: #d8d0ba;
+        --ok: #9dc7a2;
+        --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --mono: ui-monospace, "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+        --max: 1180px;
+        --gutter: clamp(1.1rem, 4vw, 3.2rem);
+        --fast: 140ms;
         --ease: cubic-bezier(0.22, 1, 0.36, 1);
-
-        --max: 1120px;
-        --gutter: clamp(1.2rem, 4vw, 3rem);
-
         color-scheme: light;
       }
 
       *, *::before, *::after { box-sizing: border-box; }
-      html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+      html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
       body {
         margin: 0;
-        background: var(--bg);
-        color: var(--fg);
-        font-family: var(--mono);
-        font-weight: 500;
-        font-size: 15.5px;
-        line-height: 1.6;
-        font-variant-numeric: tabular-nums;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 16px;
+        line-height: 1.65;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
       }
-      ::selection { background: var(--accent); color: var(--bg-elev); }
       a { color: inherit; text-decoration: none; }
-      strong { font-weight: 700; color: var(--fg); }
+      button { color: inherit; }
       code {
-        font-family: var(--mono);
-        font-size: 0.92em;
-        font-weight: 600;
-        padding: 0.08em 0.32em;
-        background: var(--bg-elev);
+        padding: 0.08em 0.3em;
         border: 1px solid var(--rule);
-        color: var(--fg);
+        background: rgba(255, 250, 240, 0.7);
+        font-family: var(--mono);
+        font-size: 0.9em;
+        font-weight: 650;
       }
-      :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      strong { font-weight: 750; }
+      ::selection { background: var(--teal); color: var(--surface); }
+      :focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+      [hidden] { display: none !important; }
 
-      .ru-skip {
+      .ru-sr-live, .ru-skip {
         position: absolute;
-        width: 1px; height: 1px;
-        padding: 0; margin: -1px;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
         overflow: hidden;
-        clip: rect(0,0,0,0);
+        clip: rect(0, 0, 0, 0);
         white-space: nowrap;
         border: 0;
       }
       .ru-skip:focus-visible {
         position: fixed;
-        top: 0.6rem; left: 0.6rem;
-        width: auto; height: auto;
-        padding: 0.5rem 1rem;
+        top: 0.75rem;
+        left: 0.75rem;
+        z-index: 100;
+        width: auto;
+        height: auto;
         margin: 0;
+        padding: 0.55rem 0.85rem;
         overflow: visible;
         clip: auto;
-        white-space: normal;
-        z-index: 9999;
-        background: var(--accent-fg);
-        color: var(--bg-elev);
+        background: var(--surface);
+        border: 2px solid var(--ink);
         font-family: var(--mono);
         font-weight: 700;
-        font-size: 0.88rem;
-        border: 2px solid var(--border);
-        box-shadow: 3px 3px 0 0 var(--border);
-        outline: none;
       }
 
       .ru-page { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 
-      /* ──────────────────────────────── NAV ─────────────────────────────── */
+      /* ── NAV ── */
       .ru-nav {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.3rem 0;
-        flex-wrap: wrap;
-        gap: 1rem;
+        gap: 1.5rem;
+        padding: 1.15rem 0;
         border-bottom: 1px solid var(--rule);
       }
       .ru-brand {
         display: inline-flex;
         align-items: center;
         gap: 0.55rem;
-        font-weight: 700;
-        font-size: 1.02rem;
-        letter-spacing: -0.01em;
+        font-family: var(--mono);
+        font-size: 0.95rem;
+        font-weight: 800;
       }
-      .ru-brand__mark { display: block; image-rendering: pixelated; image-rendering: -moz-crisp-edges; }
-      .ru-nav__links { display: flex; flex-wrap: wrap; gap: 1.7rem; font-size: 0.92rem; color: var(--fg-dim); }
-      .ru-nav__links a { padding: 0.2rem 0; transition: color var(--motion-fast) var(--ease); }
-      .ru-nav__links a:hover { color: var(--accent-fg); }
-      .ru-nav__gh { font-weight: 700; }
+      .ru-brand__mark { display: block; image-rendering: pixelated; }
+      .ru-nav__links { display: flex; align-items: center; gap: clamp(0.8rem, 2.4vw, 1.8rem); font-family: var(--mono); font-size: 0.78rem; font-weight: 650; }
+      .ru-nav__links a { padding: 0.25rem 0; color: var(--ink-soft); transition: color var(--fast) var(--ease); }
+      .ru-nav__links a:hover { color: var(--teal-dark); }
+      .ru-nav__gh { font-weight: 800; }
 
-      /* ──────────────────────────────── HERO ────────────────────────────── */
+      /* ── HERO ── */
       .ru-hero {
         display: grid;
-        grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
-        gap: clamp(2rem, 5vw, 4.5rem);
+        grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+        gap: clamp(2.5rem, 6vw, 5rem);
         align-items: center;
-        padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(3rem, 6vw, 5rem);
-        border-bottom: 1px solid var(--rule);
+        padding: clamp(3rem, 6vw, 5rem) 0 0;
       }
-      .ru-hero__tags {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.55rem;
-        margin: 0 0 1.7rem;
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: var(--accent-fg);
-      }
-      .ru-hero__dot { width: 0.5rem; height: 0.5rem; background: var(--accent); flex: 0 0 auto; }
-      .ru-headline {
-        font-size: clamp(1.9rem, 3.4vw, 2.85rem);
+      .ru-eyebrow, .ru-kicker, .ru-panel-tag {
+        margin: 0 0 1rem;
+        color: var(--teal-dark);
+        font-family: var(--mono);
+        font-size: 0.76rem;
         font-weight: 800;
-        line-height: 1.12;
-        letter-spacing: -0.025em;
-        margin: 0 0 1.5rem;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+      .ru-eyebrow { display: flex; align-items: center; gap: 0.6rem; }
+      .ru-eyebrow span { width: 0.55rem; height: 0.55rem; background: var(--teal); flex-shrink: 0; }
+
+      .ru-hero h1, .ru-head h2, .ru-section__intro h2 {
+        margin: 0;
+        font-family: var(--mono);
+        font-weight: 850;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
         text-wrap: balance;
       }
-      .ru-headline__alt {
-        display: block;
-        margin-top: 0.4rem;
-        font-size: 0.65em;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        color: var(--fg-dim);
-      }
-
-      .ru-lede {
-        font-size: 1.04rem;
-        line-height: 1.74;
-        max-width: 52ch;
-        color: var(--fg-dim);
-        margin: 0 0 2rem;
-      }
-      /* URLs in the lede read as inline emphasis, not bordered chips */
-      .ru-lede code {
-        background: transparent;
-        border: 0;
-        padding: 0;
-        color: var(--accent-fg);
-        font-weight: 700;
-      }
-      .ru-lede code.u-public { color: var(--public); }
-      .ru-hero__sub {
-        font-size: 0.88rem;
-        line-height: 1.65;
-        color: var(--fg-faint);
-        max-width: 50ch;
-        margin: 1.6rem 0 0;
-      }
-      .ru-hero__sub code { background: var(--bg-elev); }
-      .ru-hero__visual { min-width: 0; }
-      .ru-hero__visual .ru-terminal { box-shadow: 6px 6px 0 0 var(--border); }
-      .ru-hero__caption {
-        margin: 0.9rem 0 0;
-        font-size: 0.82rem;
-        color: var(--fg-faint);
-        text-align: center;
-      }
-
-      /* ────────────────────────────── TERMINAL ──────────────────────────── */
-      .ru-terminal {
-        margin: 0;
-        padding: 0.9rem 1.4rem 1.25rem;
-        padding-top: calc(2.5rem + 0.9rem);
-        background: #191410;
-        border: 2px solid var(--border);
-        box-shadow: 4px 4px 0 0 var(--border);
-        font-family: var(--term);
-        font-size: 0.875rem;
-        line-height: 1.75;
-        overflow-x: auto;
-        position: relative;
-        color: #c8c0a8;
-      }
-      .ru-terminal::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 2.5rem;
-        background: #211a13;
-        border-bottom: 1px solid #302418;
-      }
-      .ru-terminal::after {
-        content: '';
-        position: absolute;
-        top: 0.88rem;
-        left: 1rem;
-        width: 0.75rem;
-        height: 0.75rem;
-        border-radius: 50%;
-        background: #ff5f57;
-        box-shadow: 1.15rem 0 0 #ffbd2e, 2.3rem 0 0 #28c841;
-      }
-      .ru-terminal--sm { padding: 0.75rem 1.1rem 0.95rem; padding-top: calc(2.25rem + 0.75rem); font-size: 0.82rem; line-height: 1.7; }
-      .ru-terminal--sm::before { height: 2.25rem; }
-      .ru-terminal--sm::after { top: 0.77rem; }
-      .ru-terminal[data-title]::before {
-        content: attr(data-title);
-        text-align: center;
-        line-height: 2.5rem;
-        font-family: var(--term);
-        font-size: 0.68rem;
-        font-weight: 500;
-        color: #6a5f55;
-        letter-spacing: 0.02em;
-      }
-      .ru-terminal--sm[data-title]::before { line-height: 2.25rem; }
-      .ru-terminal--install { margin: 0; }
-      .ru-terminal code { font-family: var(--term); font-size: inherit; padding: 0; background: none; border: 0; font-weight: 500; color: inherit; }
-      .t-prompt    { color: #4a4038; user-select: none; }
-      .t-cmd       { color: #e8e2d0; font-weight: 600; }
-      .t-label     { color: #c8c0a8; }
-      .t-dim       { color: #8a7d70; }
-      .t-localurl  { color: #b4c49e; }
-      .t-publicurl { color: #5ec8a0; font-weight: 700; }
-      .t-cursor { display: inline-block; margin-left: 0.1ch; color: #e8e2d0; user-select: none; animation: blink 1s steps(1, end) infinite; }
-      @keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
-
-      /* ───────────────────────────── BUTTONS ─────────────────────────────── */
-      .ru-ctas { display: flex; gap: 0.7rem; flex-wrap: wrap; }
-      .ru-ctas--end { margin-top: 1.8rem; }
+      /* Reduced font sizes — previous values were 5.6rem and 3.7rem max */
+      .ru-hero h1 { max-width: 16ch; font-size: clamp(1.9rem, 3.2vw, 2.85rem); }
+      .ru-hero__lede { max-width: 59ch; margin: 1.5rem 0 1.8rem; color: var(--ink-soft); font-size: clamp(0.98rem, 1.4vw, 1.08rem); line-height: 1.72; }
+      .ru-hero__lede code { color: var(--teal-dark); }
+      .ru-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
       .ru-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
-        padding: 0.65rem 1.1rem;
+        justify-content: center;
+        min-height: 2.7rem;
+        padding: 0.6rem 1rem;
+        border: 2px solid var(--ink);
         font-family: var(--mono);
-        font-size: 0.9rem;
-        font-weight: 700;
-        border: 2px solid var(--border);
-        touch-action: manipulation;
-        transition: transform var(--motion-fast) var(--ease), box-shadow var(--motion-fast) var(--ease);
-      }
-      .ru-btn--primary { background: var(--accent-fg); color: var(--bg-elev); box-shadow: 3px 3px 0 0 var(--border); }
-      .ru-btn--ghost   { background: var(--bg-elev); color: var(--fg); box-shadow: 3px 3px 0 0 var(--border); }
-      .ru-btn:hover  { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 0 var(--border); }
-      .ru-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 0 var(--border); }
-
-      /* ───────────────────────────── SECTIONS ───────────────────────────── */
-      #how, #install { scroll-margin-top: 4.5rem; }
-      .ru-section { padding: clamp(3rem, 6vw, 4.5rem) 0; border-bottom: 1px solid var(--rule); }
-      .ru-section:last-of-type { border-bottom: none; }
-      .ru-head { margin-bottom: 2.4rem; }
-      .ru-kicker { font-size: 0.84rem; font-weight: 700; color: var(--accent-fg); margin: 0 0 0.9rem; }
-      .ru-head__title {
-        font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+        font-size: 0.8rem;
         font-weight: 800;
-        line-height: 1.18;
-        letter-spacing: -0.02em;
-        margin: 0;
-        text-wrap: balance;
+        box-shadow: 3px 3px 0 var(--ink);
+        transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
       }
-      .ru-head__title::before {
-        content: '';
-        display: block;
-        width: 1.5rem;
-        height: 2px;
-        background: var(--accent);
-        margin-bottom: 0.7rem;
-      }
-      .ru-head__sub { max-width: 78ch; font-size: 0.98rem; line-height: 1.65; color: var(--fg-dim); margin: 1rem 0 0; }
+      .ru-btn--primary { background: var(--teal-dark); color: var(--surface); }
+      .ru-btn--ghost { background: var(--surface); }
+      .ru-btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
+      .ru-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+      .ru-proof { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; padding: 0; margin: 1.5rem 0 0; list-style: none; color: var(--ink-faint); font-family: var(--mono); font-size: 0.72rem; font-weight: 650; }
+      .ru-proof li::before { content: ""; display: inline-block; width: 0.42rem; height: 0.42rem; margin-right: 0.5rem; background: var(--teal); vertical-align: 0.08rem; }
 
-      /* ────────────────────────────── MODES ─────────────────────────────── */
-      .ru-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; align-items: start; }
-      .ru-modes--config { align-items: stretch; }
-      .ru-modes--config .ru-mode { display: flex; flex-direction: column; }
-      .ru-modes--config .ru-mode p { margin-top: auto; padding-top: 1.1rem; }
-      .ru-mode { min-width: 0; padding: 1.5rem 1.6rem 1.7rem; background: var(--bg-elev); border: 1px solid var(--rule); }
-      .ru-mode h3 {
+      /* ── HERO DEMO ── */
+      .ru-hero__demo { min-width: 0; }
+      .ru-hero-mode-tabs {
         display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.82rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin: 0 0 1rem;
-        color: var(--fg);
+        gap: 0.4rem;
+        margin-bottom: 0.6rem;
       }
-      .ru-mode--cfg h3 { text-transform: none; letter-spacing: -0.005em; font-size: 0.92rem; }
-      .ru-mode__pip { width: 0.55rem; height: 0.55rem; background: var(--fg); }
-      .ru-mode__pip--public { background: var(--public); }
-      .ru-mode .ru-terminal { box-shadow: none; }
-      .ru-mode p { font-size: 0.93rem; color: var(--fg-dim); margin: 1.1rem 0 0; line-height: 1.62; }
-
-      /* ────────────────────────────── GRIDS ─────────────────────────────── */
-      .ru-grid { list-style: none; padding: 0; margin: 0; }
-      .ru-grid > li { min-width: 0; }
-      .ru-grid--problems { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem 2.8rem; }
-      .ru-grid--problems > li { position: relative; padding-left: 1rem; }
-      .ru-grid--problems > li::before {
-        content: '';
-        position: absolute;
-        left: 0; top: 0; bottom: 0;
-        width: 2px;
-        background: var(--accent);
-        opacity: 0.2;
-        transition: opacity var(--motion-fast) var(--ease);
-      }
-      .ru-grid--problems > li:hover::before { opacity: 1; }
-      .ru-grid--problems > li:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 1.4rem); justify-self: center; }
-      .ru-problem-tag {
-        display: block;
-        font-size: 0.74rem;
-        font-weight: 700;
-        color: var(--accent-fg);
-        letter-spacing: 0.04em;
-        margin-bottom: 0.4rem;
-      }
-      .ru-grid--problems h3 { font-size: 1rem; font-weight: 800; margin: 0 0 0.4rem; letter-spacing: -0.005em; }
-      .ru-grid--problems p { font-size: 0.95rem; color: var(--fg-dim); margin: 0; line-height: 1.6; }
-
-      .ru-grid--features {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1px;
-        background: var(--rule);
-        border: 1px solid var(--rule);
-      }
-      .ru-grid--features li { background: var(--bg-elev); padding: 1.5rem 1.6rem 1.6rem; }
-      .ru-grid--features li::before { content: ''; display: block; width: 1.5rem; height: 2px; background: var(--accent); margin-bottom: 0.8rem; }
-      .ru-grid--features h3 { font-size: 0.95rem; font-weight: 800; margin: 0 0 0.5rem; letter-spacing: -0.005em; }
-      .ru-grid--features p { font-size: 0.92rem; color: var(--fg-dim); margin: 0; line-height: 1.58; }
-
-      /* ──────────────────────────────── DIAGRAM ─────────────────────────── */
-      .ru-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; align-items: start; }
-      .ru-flow {
-        min-width: 0;
-        padding: 1.5rem 1.6rem 1.7rem;
-        background: var(--bg-elev);
-        border: 1px solid var(--rule);
-      }
-      .ru-flow__label {
-        font-size: 0.74rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--fg-faint);
-        margin: 0 0 1.3rem;
-      }
-
-      /* a vertical chain of nodes connected by hops */
-      .ru-chain { display: flex; flex-direction: column; }
-      .ru-node {
-        position: relative;
-        padding-left: 1.55rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.12rem;
-      }
-      .ru-node::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0.18rem;
-        width: 0.62rem;
-        height: 0.62rem;
-        background: var(--fg);
-        box-shadow: 0 0 0 3px var(--bg-elev);
-      }
-      .ru-node--ru::before { background: var(--accent); }
-      .ru-node--cloud::before { background: var(--accent); box-shadow: 0 0 0 3px var(--bg-elev), 0 0 0 4.5px var(--accent); }
-      .ru-node__name { font-weight: 700; font-size: 0.92rem; }
-      .ru-node--ru .ru-node__name { color: var(--accent-fg); }
-      .ru-node__role { font-size: 0.74rem; color: var(--fg-faint); }
-      .ru-hop {
-        position: relative;
-        padding: 0.3rem 0 0.3rem 1.55rem;
-        min-height: 1.4rem;
-      }
-      .ru-hop::before {
-        content: '';
-        position: absolute;
-        left: 0.3rem;
-        top: 0; bottom: 0;
-        width: 2px;
-        background: var(--border);
-        opacity: 0.3;
-      }
-      .ru-hop__wire { font-size: 0.76rem; color: var(--fg-faint); }
-      .ru-hop__wire--public { color: var(--public); font-weight: 600; }
-      .ru-hop--tunnel::before { background: var(--accent); opacity: 0.6; }
-      .ru-hop--tunnel .ru-hop__wire { color: var(--accent-fg); font-weight: 600; }
-
-      /* "your machine" boundary box */
-      .ru-machine {
-        position: relative;
-        border: 1.5px solid var(--border);
-        padding: 1.15rem 1.1rem 1.1rem;
-        margin: 0.2rem 0;
-      }
-      .ru-machine__tab {
-        position: absolute;
-        top: -0.62rem;
-        left: 0.8rem;
-        background: var(--bg-elev);
-        padding: 0 0.45rem;
-        font-size: 0.72rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: var(--fg-faint);
-      }
-      .ru-machine--tail { margin-top: 0.3rem; }
-
-      /* ──────────────────────────────── INSTALL ─────────────────────────── */
-      .ru-install { max-width: none; min-width: 0; }
-      /* Tabs sit above the terminal as a segmented control, clearly
-         separated. The active tab is an espresso "pressed" tab — an ink
-         surface that echoes the dark terminal below it, instead of a cream
-         tab melting into the dark title bar. */
-      .ru-tabs { display: flex; gap: 0.45rem; margin-bottom: 0.7rem; }
-      .ru-install__panel { position: relative; }
-      .ru-tab {
-        background: var(--bg-elev);
-        color: var(--fg-dim);
-        border: 2px solid var(--border);
-        padding: 0.5rem 1rem;
+      .ru-hero-mode-tabs button {
+        padding: 0.36rem 0.65rem;
+        border: 1px solid var(--ink);
+        background: transparent;
         font-family: var(--mono);
-        font-size: 0.84rem;
-        font-weight: 700;
+        font-size: 0.68rem;
+        font-weight: 750;
         cursor: pointer;
-        touch-action: manipulation;
-        transition: background-color var(--motion-fast) var(--ease), color var(--motion-fast) var(--ease);
+        transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
       }
-      .ru-tab.is-active { background: var(--fg); color: var(--bg-elev); }
-      .ru-tab:hover:not(.is-active) { background: var(--bg-soft); color: var(--fg); }
+      .ru-hero-mode-tabs button[aria-selected="true"] { background: var(--ink); color: var(--surface); }
+      .ru-hero-mode-tabs button:hover:not([aria-selected="true"]) { background: var(--paper-deep); }
+      .ru-demo__context { margin: 0 0 0.6rem; font-family: var(--mono); font-size: 0.7rem; color: var(--ink-faint); }
+      .ru-hero-terminal { box-shadow: 8px 8px 0 var(--ink); }
+
+      /* ── LEDGER ── */
+      .ru-ledger {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        margin-top: clamp(3rem, 6vw, 5rem);
+        border: 1px solid var(--rule);
+        border-bottom: 0;
+        background: var(--surface);
+      }
+      .ru-ledger a { display: flex; align-items: center; gap: 1rem; min-width: 0; padding: 1.2rem 1.4rem; border-right: 1px solid var(--rule); transition: background-color var(--fast) var(--ease); }
+      .ru-ledger a:last-child { border-right: 0; }
+      .ru-ledger a:hover { background: var(--surface-cool); }
+      .ru-ledger__number { color: var(--teal-dark); font-family: var(--mono); font-size: 0.75rem; font-weight: 850; flex-shrink: 0; }
+      .ru-ledger strong, .ru-ledger small { display: block; }
+      .ru-ledger strong { font-family: var(--mono); font-size: 0.88rem; }
+      .ru-ledger small { margin-top: 0.1rem; color: var(--ink-faint); font-size: 0.76rem; }
+
+      /* ── PROBLEM STRIP ── */
+      .ru-problems {
+        border-top: 1px solid var(--rule);
+        background: var(--surface);
+      }
+      .ru-problems ul {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        padding: 1px;
+        margin: 0;
+        list-style: none;
+        background: var(--rule);
+      }
+      .ru-problems li {
+        padding: 1.3rem 1.5rem 1.5rem;
+        background: var(--surface);
+      }
+      .ru-problem__tag {
+        display: block;
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        font-weight: 800;
+        color: var(--teal-dark);
+        letter-spacing: 0.05em;
+        margin-bottom: 0.55rem;
+      }
+      .ru-problems p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        line-height: 1.55;
+      }
+
+      /* ── SECTIONS ── */
+      .ru-section { padding: clamp(4rem, 7vw, 6.5rem) 0; border-top: 1px solid var(--rule); scroll-margin-top: 2rem; }
+      .ru-section--last { border-bottom: 1px solid var(--rule); }
+      .ru-section--split { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: clamp(2.5rem, 7vw, 6rem); align-items: start; }
+      .ru-section__intro { position: sticky; top: 2rem; }
+      .ru-section__intro h2, .ru-head h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
+      .ru-section__intro > p:not(.ru-kicker), .ru-head > p:not(.ru-kicker) { max-width: 69ch; margin: 1.1rem 0 0; color: var(--ink-soft); }
+      .ru-head { margin-bottom: 2.4rem; }
+      .ru-head--narrow { max-width: 780px; }
+      .ru-aside, .ru-warning {
+        padding: 0.85rem 1rem;
+        border-left: 3px solid var(--public);
+        background: rgba(255, 250, 240, 0.56);
+        color: var(--ink-soft);
+        font-size: 0.88rem;
+        margin-top: 1rem;
+      }
+      .ru-section__intro .ru-ctas { margin-top: 1.8rem; }
+
+      /* ── TERMINAL ── */
+      .ru-terminal {
+        position: relative;
+        margin: 0;
+        min-width: 0;
+        padding: 3.4rem 1.35rem 1.25rem;
+        overflow-x: auto;
+        border: 2px solid var(--ink);
+        background: var(--terminal);
+        color: var(--terminal-text);
+        font-family: var(--mono);
+        font-size: clamp(0.76rem, 1.25vw, 0.86rem);
+        line-height: 1.75;
+        tab-size: 2;
+      }
+      .ru-terminal::before {
+        content: attr(data-title);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2.45rem;
+        padding-left: 4.2rem;
+        border-bottom: 1px solid #383229;
+        background: var(--terminal-bar);
+        color: #9c9282;
+        font-size: 0.66rem;
+        line-height: 2.45rem;
+        text-align: center;
+      }
+      .ru-terminal::after {
+        content: "";
+        position: absolute;
+        top: 0.84rem;
+        left: 1rem;
+        width: 0.68rem;
+        height: 0.68rem;
+        border-radius: 50%;
+        background: #ff5f57;
+        box-shadow: 1rem 0 0 #ffbd2e, 2rem 0 0 #28c840;
+      }
+      .ru-terminal--flat { box-shadow: none; }
+      .ru-terminal--wide { font-size: clamp(0.7rem, 1.05vw, 0.8rem); }
+      .ru-terminal code { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; }
+      .t-prompt { color: #9c9282; user-select: none; }
+      .t-cmd { color: #f4edda; font-weight: 700; }
+      .t-label { color: #bcb19e; }
+      .t-dim { color: #a79d8d; }
+      .t-localurl { color: #b8d2aa; }
+      .t-publicurl { color: #66cfaa; font-weight: 750; }
+      .t-ok { color: var(--ok); font-weight: 800; }
+      .ru-code-wrap { position: relative; }
       .ru-copy {
         position: absolute;
-        top: 0.75rem;
-        right: 0.8rem;
-        min-width: 5rem;
-        padding: 0.32rem 0.55rem;
-        background: var(--bg);
-        color: var(--fg);
-        border: 1.5px solid var(--border);
-        box-shadow: 2px 2px 0 0 var(--border);
+        z-index: 2;
+        top: 0.65rem;
+        right: 0.7rem;
+        padding: 0.32rem 0.52rem;
+        border: 1px solid #514a40;
+        background: #2d2923;
+        color: #d8d0ba;
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        font-weight: 750;
+        cursor: pointer;
+      }
+      .ru-copy:hover, .ru-copy.is-copied { background: var(--teal-dark); color: white; }
+
+      /* ── INSTALL TABS ── */
+      .ru-tabs { display: flex; gap: 0.45rem; margin-bottom: 0.65rem; }
+      .ru-tabs button {
+        padding: 0.48rem 0.75rem;
+        border: 1px solid var(--ink);
+        background: transparent;
         font-family: var(--mono);
         font-size: 0.72rem;
-        font-weight: 800;
+        font-weight: 750;
         cursor: pointer;
-        touch-action: manipulation;
-        transition: transform var(--motion-fast) var(--ease), box-shadow var(--motion-fast) var(--ease), background-color var(--motion-fast) var(--ease);
       }
-      .ru-copy:hover { background: var(--bg-soft); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 0 var(--border); }
-      .ru-copy:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 0 var(--border); }
-      .ru-copy.is-copied { background: var(--accent-fg); color: var(--bg-elev); }
-      .ru-note { margin: 1.3rem 0 0; font-size: 0.92rem; color: var(--fg-dim); line-height: 1.6; }
+      .ru-tabs button[aria-selected="true"] { background: var(--ink); color: var(--surface); }
+      .ru-release { padding: 1.5rem; border: 2px solid var(--ink); background: var(--surface); }
+      .ru-release p { margin: 0 0 0.6rem; }
+      .ru-release a, .ru-setup-result a, .ru-workflow-panel a, .ru-recipe-panel a, .ru-lifetimes a { color: var(--teal-dark); font-family: var(--mono); font-size: 0.78rem; font-weight: 800; text-decoration: underline; text-underline-offset: 0.25rem; }
+      .ru-setup-result { display: grid; grid-template-columns: auto 1fr; gap: 0.8rem 1.5rem; padding: 1.25rem 1.4rem; border: 1px solid var(--rule); border-top: 0; background: var(--surface); }
+      .ru-setup-result > span { grid-row: 1 / 3; color: var(--teal-dark); font-family: var(--mono); font-size: 0.72rem; font-weight: 850; text-transform: uppercase; }
+      .ru-setup-result ul { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; padding: 0; margin: 0; list-style: none; font-size: 0.84rem; }
+      .ru-setup-result strong { font-family: var(--mono); }
 
+      /* ── WORKFLOW TABS ── */
+      .ru-workflow-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; padding: 1px; background: var(--ink); }
+      .ru-workflow-tab { display: grid; grid-template-columns: 1fr auto; gap: 0.35rem 1.5rem; padding: 1.3rem 1.4rem; border: 0; background: var(--surface); text-align: left; cursor: pointer; }
+      .ru-workflow-tab[aria-selected="true"] { background: var(--teal-dark); color: var(--surface); }
+      .ru-choice__label { font-family: var(--mono); font-size: clamp(0.9rem, 1.5vw, 1.1rem); font-weight: 850; }
+      .ru-choice__command { align-self: center; grid-row: 1 / 3; grid-column: 2; padding: 0.28rem 0.48rem; border: 1px solid currentColor; font-family: var(--mono); font-size: 0.7rem; font-weight: 750; }
+      .ru-choice__copy { color: var(--ink-faint); font-size: 0.84rem; }
+      .ru-workflow-tab[aria-selected="true"] .ru-choice__copy { color: rgba(255, 250, 240, 0.74); }
+      .ru-workflow-panel, .ru-recipe-panel { display: grid; grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr); gap: clamp(2rem, 5vw, 4.5rem); padding: clamp(1.5rem, 3.5vw, 2.8rem); border: 1px solid var(--rule); border-top: 0; background: var(--surface); }
+      .ru-workflow-panel__copy h3, .ru-recipe-panel__copy h3 { margin: 0; font-family: var(--mono); font-size: clamp(1.1rem, 2vw, 1.55rem); line-height: 1.28; letter-spacing: -0.02em; }
+      .ru-workflow-panel__copy > p:not(.ru-panel-tag), .ru-recipe-panel__copy > p:not(.ru-panel-tag) { color: var(--ink-soft); }
+      .ru-workflow-panel__copy > a, .ru-recipe-panel__copy > a { display: inline-block; margin-top: 0.6rem; }
+      .ru-steps { padding: 0; margin: 1.2rem 0; list-style: none; }
+      .ru-steps li { display: flex; align-items: center; gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); font-size: 0.9rem; }
+      .ru-steps li span { color: var(--teal-dark); font-family: var(--mono); font-size: 0.68rem; font-weight: 850; }
+      .ru-env { font-size: 0.84rem; }
+      .ru-code-stack { display: grid; gap: 1rem; min-width: 0; align-content: start; }
+      .ru-language-note { display: grid; gap: 0.35rem; padding: 0.9rem 1rem; border: 1px solid var(--rule); background: var(--surface-cool); font-size: 0.82rem; }
+      .ru-language-note strong { font-family: var(--mono); }
 
+      /* ── RECIPE TABS ── */
+      .ru-recipe-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; padding: 1px; background: var(--rule); border: 1px solid var(--rule); }
+      .ru-recipe-tabs button { display: grid; grid-template-columns: auto 1fr; gap: 0.1rem 0.75rem; min-height: 6.2rem; padding: 1rem 1.1rem; border: 0; background: var(--surface); text-align: left; cursor: pointer; transition: background-color var(--fast) var(--ease); }
+      .ru-recipe-tabs button:hover { background: var(--surface-cool); }
+      .ru-recipe-tabs button[aria-selected="true"] { background: var(--ink); color: var(--surface); }
+      .ru-recipe-tabs button > span { grid-row: 1 / 3; color: var(--teal); font-family: var(--mono); font-size: 0.68rem; font-weight: 850; }
+      .ru-recipe-tabs button[aria-selected="true"] > span { color: #62c5bc; }
+      .ru-recipe-tabs strong { align-self: end; font-family: var(--mono); font-size: 0.86rem; }
+      .ru-recipe-tabs small { color: var(--ink-faint); font-size: 0.75rem; }
+      .ru-recipe-tabs button[aria-selected="true"] small { color: #b9b2a2; }
+      .ru-recipe-panel { border-top: 0; }
+      .ru-recipe-panel dl { margin: 1.1rem 0; }
+      .ru-recipe-panel dl div { display: grid; grid-template-columns: 5rem 1fr; gap: 0.8rem; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); }
+      .ru-recipe-panel dt, .ru-recipe-panel dd { margin: 0; font-size: 0.86rem; }
+      .ru-recipe-panel dd { color: var(--ink-soft); }
 
+      /* ── PUBLIC LIFETIMES ── */
+      .ru-lifetimes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; padding: 1px; background: var(--rule); border: 1px solid var(--rule); }
+      .ru-lifetimes article { min-width: 0; padding: clamp(1.3rem, 2.8vw, 1.9rem); background: var(--surface); }
+      .ru-lifetime__label { margin: 0 0 0.8rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
+      .ru-lifetime__label::before { content: ""; display: inline-block; width: 0.52rem; height: 0.52rem; margin-right: 0.48rem; background: currentColor; }
+      .ru-lifetime__label--local { color: var(--teal-dark); }
+      .ru-lifetime__label--try { color: var(--public); }
+      .ru-lifetime__label--named { color: var(--named); }
+      .ru-lifetime__label--self { color: var(--ink-soft); }
+      .ru-lifetimes h3 { margin: 0; font-size: 1rem; }
+      .ru-lifetimes h3 code { overflow-wrap: anywhere; }
+      .ru-lifetimes article > p:not(.ru-lifetime__label) { color: var(--ink-soft); font-size: 0.91rem; }
+      .ru-lifetimes article > strong { display: block; margin-top: 1rem; font-family: var(--mono); font-size: 0.72rem; }
 
-      /* ──────────────────────────── RELEASES PANEL ─────────────────────── */
-      .ru-install__panel--release:not([hidden]) { display: flex; flex-direction: column; gap: 0.8rem; padding: 1.4rem 1.6rem; border: 2px solid var(--border); margin-top: 0.6rem; }
-      .ru-release__label { font-size: 0.88rem; color: var(--fg-dim); margin: 0; }
-      .ru-release__link {
-        font-family: var(--mono);
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--fg);
-        text-decoration: underline;
-        text-decoration-color: var(--accent);
-        text-decoration-thickness: 1.5px;
-        text-underline-offset: 3px;
-        transition: color var(--motion-fast) var(--ease);
+      /* ── HOW IT WORKS ── */
+      .ru-flows { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; }
+      .ru-flow { padding: clamp(1.2rem, 2.8vw, 1.9rem); border: 1px solid var(--rule); background: var(--surface); }
+      .ru-flow--public { background: #f7eee3; }
+      .ru-flow__header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0.65rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--rule); }
+      .ru-flow__header strong { font-family: var(--mono); }
+      .ru-flow__header small { color: var(--ink-faint); }
+      .ru-status { width: 0.6rem; height: 0.6rem; }
+      .ru-status--local { background: var(--teal); }
+      .ru-status--public { background: var(--public); }
+      .ru-flow ol { padding: 0; margin: 1.2rem 0 0; list-style: none; counter-reset: flow; }
+      .ru-flow li { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; padding: 0 0 1.55rem 2rem; counter-increment: flow; }
+      .ru-flow li:last-child { padding-bottom: 0; }
+      .ru-flow li::before { content: counter(flow); position: absolute; left: 0; top: 0.05rem; display: grid; place-items: center; width: 1.05rem; height: 1.05rem; background: var(--ink); color: var(--surface); font-family: var(--mono); font-size: 0.58rem; font-weight: 850; }
+      .ru-flow li:not(:last-child)::after { content: ""; position: absolute; left: 0.49rem; top: 1.15rem; bottom: 0.1rem; width: 1px; background: var(--ink); opacity: 0.3; }
+      .ru-flow li > span { font-family: var(--mono); font-size: 0.84rem; font-weight: 800; }
+      .ru-flow li > code, .ru-flow li > small { grid-column: 2; color: var(--ink-faint); font-size: 0.72rem; }
+
+      /* ── BOUNDARIES ── */
+      .ru-boundaries { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; padding: 1px; margin: 0; background: var(--rule); border: 1px solid var(--rule); list-style: none; }
+      .ru-boundaries li { padding: 1.35rem; background: var(--surface); }
+      .ru-boundaries strong, .ru-boundaries span { display: block; }
+      .ru-boundaries strong { margin-bottom: 0.45rem; font-family: var(--mono); font-size: 0.86rem; }
+      .ru-boundaries span { color: var(--ink-soft); font-size: 0.85rem; }
+
+      /* ── FOOTER ── */
+      .ru-footer { padding: 2.2rem 0 3rem; }
+      .ru-footer__top { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; }
+      .ru-footer nav { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; font-family: var(--mono); font-size: 0.72rem; font-weight: 650; }
+      .ru-footer nav a:hover { color: var(--teal-dark); }
+      .ru-footer > p { margin: 1rem 0 0; color: var(--ink-faint); font-family: var(--mono); font-size: 0.68rem; }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 920px) {
+        .ru-hero { grid-template-columns: 1fr; }
+        .ru-hero h1 { max-width: 22ch; }
+        .ru-section--split { grid-template-columns: 1fr; }
+        .ru-section__intro { position: static; }
+        .ru-workflow-panel, .ru-recipe-panel { grid-template-columns: 1fr; }
+        .ru-flows { grid-template-columns: 1fr; }
+        .ru-problems ul { grid-template-columns: repeat(2, 1fr); }
       }
-      .ru-release__link:hover { color: var(--accent-fg); }
 
-      /* ──────────────────────────────── FOOTER ──────────────────────────── */
-      .ru-footer { padding: 2.4rem 0 3rem; }
-      .ru-footer__top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1.4rem;
-        flex-wrap: wrap;
-        margin-bottom: 1.3rem;
+      @media (max-width: 700px) {
+        body { font-size: 15px; }
+        .ru-nav { align-items: flex-start; }
+        .ru-nav__links { justify-content: flex-end; gap: 0.5rem 0.9rem; }
+        .ru-nav__links a:nth-child(3) { display: none; }
+        .ru-ledger { grid-template-columns: 1fr; }
+        .ru-ledger a { border-right: 0; border-bottom: 1px solid var(--rule); }
+        .ru-ledger a:last-child { border-bottom: 0; }
+        .ru-workflow-tabs { grid-template-columns: 1fr; }
+        .ru-workflow-tab { min-height: 7rem; }
+        .ru-recipe-tabs { grid-template-columns: 1fr 1fr; }
+        .ru-lifetimes { grid-template-columns: 1fr; }
+        .ru-boundaries { grid-template-columns: 1fr; }
+        .ru-setup-result { grid-template-columns: 1fr; }
+        .ru-setup-result > span { grid-row: auto; }
+        .ru-setup-result ul { display: grid; }
+        .ru-flow__header { grid-template-columns: auto 1fr; }
+        .ru-flow__header small { grid-column: 2; }
+        .ru-problems ul { grid-template-columns: 1fr; }
       }
-      .ru-footer__top nav { display: flex; gap: 1.4rem; font-size: 0.88rem; color: var(--fg-dim); }
-      .ru-footer__top nav a { transition: color var(--motion-fast) var(--ease); }
-      .ru-footer__top nav a:hover { color: var(--accent-fg); }
-      .ru-footer__meta { font-size: 0.78rem; color: var(--fg-faint); margin: 0; }
-      .ru-footer__meta a { text-decoration: underline; text-underline-offset: 2px; }
-      .ru-footer__credits { font-size: 0.74rem; color: var(--fg-faint); margin: 0.5rem 0 0; }
 
-      /* ────────────────────────── RESPONSIVE ──────────────────────────── */
-      @media (max-width: 900px) {
-        .ru-hero { grid-template-columns: 1fr; gap: 2.4rem; }
-        .ru-hero__caption { text-align: left; }
-        .ru-diagram { grid-template-columns: 1fr; }
+      @media (max-width: 480px) {
+        .ru-page { padding: 0 1rem; }
+        .ru-nav { display: block; }
+        .ru-nav__links { justify-content: flex-start; margin-top: 0.9rem; }
+        .ru-nav__links a:nth-child(1), .ru-nav__links a:nth-child(3) { display: none; }
+        .ru-hero { padding-top: 2.5rem; }
+        .ru-proof { display: grid; }
+        .ru-recipe-tabs { grid-template-columns: 1fr; }
+        .ru-recipe-tabs button { min-height: 5rem; }
+        .ru-tabs { overflow-x: auto; padding-bottom: 0.2rem; }
+        .ru-tabs button { flex: 0 0 auto; }
+        .ru-workflow-panel, .ru-recipe-panel { padding: 1.1rem; }
+        .ru-terminal { font-size: 0.74rem; }
+        .ru-footer__top { align-items: flex-start; flex-direction: column; }
       }
-      @media (max-width: 680px) {
-        .ru-modes { grid-template-columns: 1fr; }
-        .ru-grid--problems { grid-template-columns: 1fr; }
-        .ru-grid--problems > li:last-child:nth-child(odd) { grid-column: auto; width: auto; justify-self: stretch; }
-        .ru-grid--features { grid-template-columns: 1fr; }
-        .ru-nav { flex-direction: column; align-items: flex-start; gap: 0.85rem; }
-        .ru-nav__links { width: 100%; justify-content: flex-start; gap: 0.7rem 1.25rem; font-size: 0.85rem; }
-        .ru-terminal--sm { font-size: 0.875rem; }
-        .ru-flow__label, .ru-node__role, .ru-hop__wire, .ru-machine__tab { font-size: 0.78rem; }
-      }
+
       @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-          transition-duration: 1ms !important;
-          animation-duration: 1ms !important;
-          animation-iteration-count: 1 !important;
-          scroll-behavior: auto !important;
-        }
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { transition-duration: 1ms !important; }
       }
     </style>
   </body>

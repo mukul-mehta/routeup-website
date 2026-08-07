@@ -1,0 +1,55 @@
+---
+title: routeup completion
+description: Generate shell completion scripts for bash, zsh, fish, and PowerShell.
+---
+
+`routeup completion` generates a completion script for your shell. Install it
+once and tab-complete subcommands, flags, and live data from the agent.
+
+## What completes
+
+- **Subcommands and flags** — always available, generated statically.
+- **`routeup logs [route]`** — completes active route names when the local agent is running.
+- **`routeup inspect <request-id>`** — completes captured request IDs when the local agent is running.
+
+If the agent is not running, positional completions return empty silently.
+
+## Install
+
+### Zsh
+
+```bash
+routeup completion zsh > "${fpath[1]}/_routeup"
+```
+
+Add the following to your `~/.zshrc` if completions are not already enabled:
+
+```bash
+autoload -U compinit && compinit
+```
+
+### Bash
+
+```bash
+# Per-user (most common):
+routeup completion bash > ~/.local/share/bash-completion/completions/routeup
+
+# System-wide:
+sudo routeup completion bash > /etc/bash_completion.d/routeup
+```
+
+Requires `bash-completion` v2. On macOS: `brew install bash-completion@2`.
+
+### Fish
+
+```bash
+routeup completion fish > ~/.config/fish/completions/routeup.fish
+```
+
+### PowerShell
+
+```powershell
+routeup completion powershell | Out-String | Invoke-Expression
+```
+
+To persist, add the above line to your PowerShell profile (`$PROFILE`).

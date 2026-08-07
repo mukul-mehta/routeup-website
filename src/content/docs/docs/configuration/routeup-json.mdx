@@ -30,15 +30,35 @@ sub-route, so `routeup serve api` resolves to `api.example-app`.
 
 ```txt
 name     default project / route name used for bare-name resolution
-port     the local port to proxy to
-command  the shell command to run in script-runner mode (see the bare `routeup` command)
+port     the local port to proxy to (optional when using command)
+command  the shell command to run in script-runner mode
 targets  optional list of path-routed targets for one-origin frontend + API setups
 expose   optional public exposure settings, including paths
+capture  optional request/response capture settings for routeup inspect
 ```
 
 The `name` field doubles as the project name: a bare argument like
 `routeup serve api` resolves to `api.example-app`, while a dotted argument is used
 literally. See [Name resolution](/docs/configuration/name-resolution).
+
+## Running a command
+
+When `command` is set, routeup starts your dev server and manages its lifetime.
+It assigns a free port, injects it as `PORT`, and routes to it automatically —
+you do not need to set `port` explicitly:
+
+```json
+{
+  "name": "my-app",
+  "command": "pnpm dev"
+}
+```
+
+Frameworks that read `PORT` from the environment (Next.js, Nuxt, Express) work
+with no further changes. Vite and Astro need one line of config to forward
+`process.env.PORT` to `server.port`. See the
+[Framework setup](/docs/configuration/frameworks) guide for per-framework
+instructions.
 
 ## Path routing
 
@@ -107,34 +127,6 @@ routeup logs example-app --follow
 
 routeup inspect req_abc123
 ```
-
-## Request capture
-
-Enable `capture` to retain incoming request and outgoing response data so
-`routeup inspect` can show the full headers and body later:
-
-```json
-{
-  "name": "myapp",
-  "port": 8080,
-  "capture": {
-    "request": true,
-    "response": true,
-    "redact_headers": ["authorization", "cookie"]
-  }
-}
-```
-
-`request` and `response` are independent — enable only the direction you need.
-`redact_headers` removes those header values from the stored copy before
-`routeup inspect` can see them; the upstream service still receives the
-originals untouched.
-
-Captured data is kept in an in-memory ring buffer (last 200 requests) and
-cleared when the agent restarts. Each message is capped at 256 KiB.
-
-See [`routeup inspect`](/docs/cli-reference/inspect) and
-[`routeup logs`](/docs/cli-reference/logs).
 
 ## Discovery
 

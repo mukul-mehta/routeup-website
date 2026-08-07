@@ -39,13 +39,13 @@ routeup serve
 
 ## Public, same shape
 
-Add `--public` and the single-origin layout is preserved on the public URL too,
+Add `--expose` and the single-origin layout is preserved on the public URL too,
 so a deployed-style `https://example-app.try.routeup.dev/api/...` works without
-reconfiguring the frontend. This example assumes your saved token allows
-`*.mukul.routeup.dev`:
+reconfiguring the frontend. A token-less hosted address is session-only; a
+namespace token gives the route a reusable address for later runs.
 
 ```bash
-routeup serve --public
+routeup serve --expose
 ```
 
 This is the same one-URL model your app will use in production, which means

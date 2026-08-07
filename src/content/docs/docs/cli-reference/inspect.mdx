@@ -82,8 +82,8 @@ still forwarded to the upstream service unchanged.
 ## Retention
 
 Captured data is stored in the same in-memory ring buffer as request logs (last
-10,000 entries). It is cleared when the agent restarts. Each captured message is
-bounded to 256 KiB — larger bodies are captured as a prefix and marked
+1,024 entries). It is cleared when the agent restarts. Each captured request and
+response message is independently bounded to 256 KiB. Larger bodies are captured as a prefix and marked
 `partial`.
 
 ## Privacy

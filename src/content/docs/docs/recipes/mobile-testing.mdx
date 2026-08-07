@@ -9,7 +9,7 @@ dev server through it. Expose the route and the device gets a real HTTPS URL.
 ## Expose the dev server
 
 ```bash
-routeup serve example-app --port 3000 --public
+routeup serve example-app --port 3000 --expose
 ```
 
 This example assumes your saved token allows `*.mukul.routeup.dev`.
@@ -17,7 +17,7 @@ This example assumes your saved token allows `*.mukul.routeup.dev`.
 ```txt
 route: example-app
 local: https://example-app.localhost
-public: https://example-app.try.routeup.dev
+public: https://example-app.mukul.routeup.dev
 expose: all paths
 targets:
   /        http://localhost:3000
@@ -31,9 +31,10 @@ Type the public URL into Safari or Chrome on the phone, no profiles, no
 self-signed certificate warnings, because the public side uses a publicly-trusted
 certificate.
 
-Because it is a real HTTPS origin, things that only work over HTTPS, service
-workers, `getUserMedia`, secure cookies, the clipboard API, behave the same as
-production.
+Because it is a publicly trusted HTTPS origin, it exercises secure-context
+features such as service workers, `getUserMedia`, secure cookies, and the
+clipboard API. Hostname, cookie-domain, and cross-site behavior can still differ
+from production.
 
 ## Why not local for this
 

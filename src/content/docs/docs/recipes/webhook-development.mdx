@@ -11,7 +11,7 @@ service one, so you can develop against real deliveries instead of mocking them.
 Run your API (say on port `8080`) and expose it:
 
 ```bash
-routeup serve example-app --port 8080 --public
+routeup serve example-app --port 8080 --expose
 ```
 
 The examples below assume your saved token allows
@@ -22,7 +22,7 @@ routeup prints the local URL, public URL, exposure scope, and targets:
 ```txt
 route: example-app
 local: https://example-app.localhost
-public: https://example-app.try.routeup.dev
+public: https://example-app.mukul.routeup.dev
 expose: all paths
 targets:
   /        http://localhost:8080
@@ -41,7 +41,7 @@ Slack:   Your App → Event Subscriptions → Request URL
 ```
 
 Use the full path your handler listens on, e.g.
-`https://example-app.try.routeup.dev/api/webhooks/github`.
+`https://example-app.mukul.routeup.dev/api/webhooks/github`.
 
 ## 3. Watch deliveries
 
@@ -52,7 +52,7 @@ routeup logs example-app --public --follow
 ```
 
 ```txt
-12:41:03 public example-app POST /api/webhooks/github 200 38ms req_abc123
+12:41:03 public example-app POST /api/webhooks/github 200 38ms req_Ap7kQ3mN8vR2xLzC
 ```
 
 Because the route and namespace are configured, you request the same endpoint on
@@ -79,7 +79,7 @@ delivery, enable capture in `routeup.json`:
 Then grab the request id from the log line and inspect it:
 
 ```bash
-routeup inspect req_abc123
+routeup inspect req_Ap7kQ3mN8vR2xLzC
 ```
 
 ```txt

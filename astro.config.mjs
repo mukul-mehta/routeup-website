@@ -7,6 +7,9 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://routeup.dev',
+  server: {
+    "allowedHosts": ["routeup-website.try.routeup.dev"]
+  },
   integrations: [
     starlight({
       title: 'routeup',

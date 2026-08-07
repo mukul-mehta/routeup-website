@@ -9,13 +9,14 @@ Public exposure sends requests through a routeup server and back to your local a
 
 You need a public-server control URL. For the hosted service, use
 `https://edge.routeup.dev`. The server grants public URLs under `routeup.dev`,
-such as `https://example-app.routeup.dev`. A named, persistent URL also requires a
+such as `https://example-app.routeup.dev`. A reusable named URL also requires a
 token; without one, exposure works only when the server enables a token-less
 public namespace.
 
 The named examples below assume a root-tier token that allows `*.routeup.dev`.
 A personal namespace token such as `*.mukul.routeup.dev` would grant
-`https://example-app.try.routeup.dev` instead.
+`https://example-app.mukul.routeup.dev` instead. A public address is reachable
+only while its tunnel is connected.
 
 You can save both during setup:
 
@@ -26,13 +27,13 @@ routeup setup --server https://edge.routeup.dev --token sk_routeup_xxx
 Or pass them per command:
 
 ```bash
-routeup serve example-app --port 8080 --server https://edge.routeup.dev --token sk_routeup_xxx --public
+routeup serve example-app --port 8080 --server https://edge.routeup.dev --token sk_routeup_xxx --expose
 ```
 
 ## Expose a local port
 
 ```bash
-routeup serve example-app --port 8080 --public
+routeup serve example-app --port 8080 --expose
 ```
 
 The command prints the local route, the public URL, the exposed path scope, and
@@ -64,7 +65,7 @@ Do not include `https://` or the public suffix in the route name. Pass `example-
 namespace makes that claim session-only:
 
 ```bash
-routeup serve --random --port 8080 --server https://edge.routeup.dev --public
+routeup serve --random --port 8080 --server https://edge.routeup.dev --expose
 ```
 
 On the hosted server, random token-less names are under `try.routeup.dev`:
@@ -97,7 +98,7 @@ By default, public exposure forwards every path on the route. To expose only a w
 Then run:
 
 ```bash
-routeup serve --public
+routeup serve --expose
 ```
 
 Requests to `https://example-app.routeup.dev/api/webhooks/...` are public; other paths stay local-only.

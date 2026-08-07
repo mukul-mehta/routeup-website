@@ -1,14 +1,14 @@
 ---
 title: Using a token
-description: Get persistent, named public URLs by configuring a server token.
+description: Get reusable, named public URLs by configuring a server token.
 ---
 
-Tokens are minted by the public-server operator and authorize which persistent
+Tokens are minted by the public-server operator and authorize which reusable
 public names you can claim. For the hosted service, clients connect to
 `https://edge.routeup.dev`; granted public routes use names under `routeup.dev`.
 Tokens are distributed out-of-band; there is no browser signup flow in v1.
 
-You only need a token for named, persistent public URLs such as `https://example-app.routeup.dev`. Local-only routes do not need one, and token-less public names can work when the server enables a public namespace.
+You only need a token for reusable named public URLs such as `https://example-app.routeup.dev`. Local-only routes do not need one, and token-less public names can work when the server enables a public namespace. The address can be claimed again between runs, but it is reachable only while a tunnel is connected.
 
 ## Save a server and token
 
@@ -16,7 +16,7 @@ You only need a token for named, persistent public URLs such as `https://example
 routeup setup --server https://edge.routeup.dev --token sk_routeup_xxx
 ```
 
-After that, `routeup serve --public` can use the saved values.
+After that, `routeup serve --expose` can use the saved values.
 
 ## Use environment variables instead
 
@@ -28,7 +28,7 @@ export ROUTEUP_TOKEN=sk_routeup_xxx
 ## Expose with the token
 
 ```bash
-routeup serve example-app --port 8080 --public
+routeup serve example-app --port 8080 --expose
 ```
 
 If the token allows `*.routeup.dev`, the server can grant:
@@ -44,7 +44,7 @@ The token secret is not recoverable from the server after it is created. Store i
 If the server enables a token-less public namespace, use `--random` for a session-only URL:
 
 ```bash
-routeup serve --random --port 8080 --server https://edge.routeup.dev --public
+routeup serve --random --port 8080 --server https://edge.routeup.dev --expose
 ```
 
 On the hosted server, token-less names live under `try.routeup.dev`, for example:

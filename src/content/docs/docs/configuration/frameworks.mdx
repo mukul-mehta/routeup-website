@@ -1,0 +1,147 @@
+---
+title: Framework setup
+description: How to use routeup with Vite, Astro, Next.js, and other dev servers.
+---
+
+routeup assigns a free port and injects it as `PORT` into your dev server's
+environment. Frameworks that read `PORT` automatically just work. Frameworks
+that don't (Vite, Astro) need one line of config.
+
+## Environment variables injected
+
+| Variable | Value |
+|---|---|
+| `PORT` | local port your dev server should listen on |
+| `HOST` | `127.0.0.1` |
+| `ROUTEUP_LOCAL_URL` | your stable local HTTPS URL |
+| `ROUTEUP_URL` | public URL when exposed, same as `ROUTEUP_LOCAL_URL` otherwise |
+| `NODE_EXTRA_CA_CERTS` | path to the routeup CA so `fetch` and `https` trust it |
+
+These are merged into the existing environment, so your other env vars are
+preserved.
+
+## Vite
+
+Vite does not read `PORT` from the environment by default. Tell it to:
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  server: {
+    port: parseInt(process.env.PORT ?? '5173'),
+    strictPort: true,
+  },
+})
+```
+
+`strictPort: true` makes Vite fail instead of silently picking a different port
+if the one routeup assigned happens to be taken, which surfaces the conflict
+early instead of routing to the wrong process.
+
+Then your routeup config needs no port at all:
+
+```json
+{
+  "name": "my-app",
+  "command": "pnpm dev"
+}
+```
+
+routeup picks a free port, injects it as `PORT`, and Vite reads it from
+`process.env.PORT`.
+
+## Astro
+
+Astro has the same Vite-based dev server, so the same config applies:
+
+```ts
+// astro.config.mjs
+import { defineConfig } from 'astro/config'
+
+export default defineConfig({
+  server: {
+    port: parseInt(process.env.PORT ?? '4321'),
+    host: '127.0.0.1',
+  },
+})
+```
+
+```json
+{
+  "name": "my-site",
+  "command": "pnpm dev"
+}
+```
+
+## Next.js
+
+Next.js reads `PORT` natively. No vite.config needed:
+
+```json
+{
+  "name": "my-next-app",
+  "command": "pnpm dev"
+}
+```
+
+If you previously pinned a port with `next dev -p 3000`, remove `-p 3000` and
+let routeup assign one.
+
+## Nuxt
+
+Nuxt also reads `PORT` (or `NUXT_PORT`) from the environment:
+
+```json
+{
+  "name": "my-nuxt-app",
+  "command": "pnpm dev"
+}
+```
+
+## Express / Fastify / other Node servers
+
+These read `process.env.PORT` when you write your server to do so, which is the
+standard pattern:
+
+```js
+const port = parseInt(process.env.PORT ?? '3000')
+app.listen(port)
+```
+
+With that in place, the routeup config is the same minimal form — no port
+needed.
+
+## Pinning a port
+
+If you prefer a fixed port, set `port` in config and keep `--port` in the
+command:
+
+```json
+{
+  "name": "my-app",
+  "port": 5173,
+  "command": "pnpm dev --port 5173"
+}
+```
+
+routeup will check that port is available before starting and route to it.
+
+## package.json embed
+
+The same rules apply when using the `routeup` block in `package.json`. Point
+`script` at your dev script; routeup injects `PORT` before running it:
+
+```json
+{
+  "scripts": {
+    "dev": "routeup",
+    "dev:app": "vite"
+  },
+  "routeup": {
+    "name": "my-app",
+    "script": "dev:app"
+  }
+}
+```

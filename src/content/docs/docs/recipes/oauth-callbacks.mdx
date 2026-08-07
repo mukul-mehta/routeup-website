@@ -22,8 +22,8 @@ Register:
 https://example-app.localhost/oauth/callback
 ```
 
-Because routeup serves real HTTPS on `*.localhost`, secure cookies and
-`https`-only SDKs behave exactly as they will in production.
+Because routeup serves trusted HTTPS on `*.localhost`, secure cookies and
+`https`-only SDKs exercise production-like secure-origin behavior locally.
 
 ## Providers that require a public URL
 
@@ -32,11 +32,11 @@ and register the public URL. This example assumes your saved token allows
 `*.mukul.routeup.dev`:
 
 ```bash
-routeup serve example-app --port 3000 --public
+routeup serve example-app --port 3000 --expose
 ```
 
 ```txt
-https://example-app.try.routeup.dev/oauth/callback
+https://example-app.mukul.routeup.dev/oauth/callback
 ```
 
 ## Why the stable name matters

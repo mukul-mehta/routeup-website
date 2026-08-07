@@ -22,7 +22,7 @@ real, trusted HTTPS locally so those behaviors show up while you develop.
 
 No. routeup has zero telemetry, nothing is collected or sent anywhere. Local use
 needs no account and no network at all. The only outbound traffic is the tunnel
-you explicitly open with `--public`, and only to the server you point it at.
+you explicitly open with `--expose`, and only to the server you point it at.
 
 ## Can I use a custom domain instead of `routeup.dev`?
 
@@ -35,18 +35,19 @@ binary.
 
 Not for local use. `routeup setup` plus `routeup serve` gives you
 `https://<name>.localhost` with no server contact. A token is only needed for
-**persistent, named** public routes. A server with a public namespace enabled can
+**reusable, named** public routes. A server with a public namespace enabled can
 also hand out token-less, ephemeral public URLs.
 
-## What's the difference between `serve --public` and `expose`?
+## What's the difference between `serve --expose` and `expose`?
 
-`routeup serve --public` first registers and holds a local `*.localhost` route,
-then exposes the same targets publicly. `--public` is an alias for
-`serve --expose`.
+`routeup serve --expose` first registers and holds a local `*.localhost` route,
+then exposes the same targets publicly. `--public` remains an alias for
+`--expose`.
 
-Standalone [`routeup expose`](/docs/cli-reference/expose) does not create a local
-registration. Without a target override it can reuse a matching active route's
-targets; otherwise it exposes targets from flags, environment, or config.
+Standalone [`routeup expose`](/docs/cli-reference/expose) reuses a matching
+active route's targets when one exists. Otherwise it resolves targets from
+flags, environment, or config and attempts to register a local route for the
+exposure session as well.
 
 ## Why are public names a single label?
 
