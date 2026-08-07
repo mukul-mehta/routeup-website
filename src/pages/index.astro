@@ -1,8 +1,6 @@
 ---
 /**
  * routeup.dev landing page.
- * Structure: hero → problem strip → 01 daily workflow → 02 setup →
- *            03 recipes → public URL types → how it works → boundaries
  */
 ---
 
@@ -20,7 +18,7 @@
     <meta property="og:title" content="routeup | stable HTTPS names for local apps" />
     <meta
       property="og:description"
-      content="Use myapp.localhost instead of localhost:3000. Local by default, public only when you choose."
+      content="Use example-app.localhost instead of localhost:3000. Local by default, public only when you choose."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://routeup.dev/" />
@@ -32,7 +30,7 @@
     <meta name="twitter:title" content="routeup | stable HTTPS names for local apps" />
     <meta
       name="twitter:description"
-      content="Use myapp.localhost instead of localhost:3000. Local by default, public only when you choose."
+      content="Use example-app.localhost instead of localhost:3000. Local by default, public only when you choose."
     />
     <meta name="twitter:image" content="https://routeup.dev/og.png" />
     <link rel="canonical" href="https://routeup.dev/" />
@@ -51,8 +49,8 @@
           <span>routeup</span>
         </a>
         <nav class="ru-nav__links" aria-label="Primary">
-          <a href="#workflows">Use routeup</a>
-          <a href="#recipes">Recipes</a>
+          <a href="#recipes">Examples</a>
+          <a href="#install">Install</a>
           <a href="#how">How it works</a>
           <a href="/docs">Docs</a>
           <a href="https://github.com/mukul-mehta/routeup" rel="noopener noreferrer" class="ru-nav__gh">GitHub &nearr;</a>
@@ -66,192 +64,229 @@
           <div class="ru-hero__copy">
             <h1>Your local apps, by name.</h1>
             <p class="ru-hero__lede">
-              Use <code>myapp.localhost</code> instead of <code>localhost:3000</code>.
-              Keep running your app the way you already do, or let routeup start it and inject the URL.
-              The route stays local unless you choose to expose it.
+              <code>https://example-app.localhost</code> instead of <code>localhost:3000</code>.
+              Stable names, trusted TLS, and a public URL when you need one.
+              Point routeup at a port, or let it start your app.
             </p>
             <div class="ru-ctas">
-              <a href="#workflows" class="ru-btn ru-btn--primary">Choose your workflow</a>
+              <a href="#recipes" class="ru-btn ru-btn--primary">See examples</a>
               <a href="/docs/getting-started/install" class="ru-btn ru-btn--ghost">Install routeup</a>
             </div>
             <ul class="ru-proof" aria-label="Product guarantees">
-              <li>No account for local routes</li>
               <li>Trusted local HTTPS</li>
-              <li>Self-hostable server</li>
+              <li>No account for local routes</li>
               <li>Open source</li>
               <li>Zero telemetry</li>
-              <li>macOS and Linux</li>
             </ul>
           </div>
 
           <div class="ru-hero__demo">
-            <div class="ru-hero-modes" data-tabs>
-              <div class="ru-hero-mode-tabs" role="tablist" aria-label="routeup usage mode">
-                <button type="button" role="tab" aria-selected="true" aria-controls="hero-serve" id="tab-hero-serve" data-tab-target="hero-serve">routeup serve</button>
-                <button type="button" role="tab" aria-selected="false" aria-controls="hero-runner" id="tab-hero-runner" data-tab-target="hero-runner" tabindex="-1">routeup (runner)</button>
-              </div>
+            <pre translate="no" class="ru-terminal ru-hero-terminal" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup</span>
+<span class="t-dim">running: pnpm dev --port $PORT</span>
 
-              <div id="hero-serve" role="tabpanel" aria-labelledby="tab-hero-serve" data-tab-panel="hero-serve" class="ru-hero-panel">
-                <p class="ru-demo__context">Your app is already listening on port 3000</p>
-                <div class="ru-code-wrap">
-                  <pre translate="no" class="ru-terminal ru-hero-terminal" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve myapp --port 3000</span>
-
-<span class="t-label">route:</span>   myapp
-<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span>
+<span class="t-label">route:</span>   example-app
+<span class="t-label">local:</span>   <span class="t-localurl">https://example-app.localhost</span>
+<span class="t-label">public:</span>  <span class="t-publicurl">https://example-app.try.routeup.dev</span>
 <span class="t-label">targets:</span>
-  /       http://localhost:3000
-
-<span class="t-dim">press Ctrl-C to stop</span></code></pre>
-                  <button class="ru-copy" type="button" data-copy="routeup serve myapp --port 3000" aria-label="Copy routeup serve command">Copy</button>
-                </div>
-              </div>
-
-              <div id="hero-runner" role="tabpanel" aria-labelledby="tab-hero-runner" data-tab-panel="hero-runner" class="ru-hero-panel" hidden>
-                <p class="ru-demo__context">Let routeup pick the port and start your app</p>
-                <div class="ru-code-stack">
-                  <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="package.json"><code>{`{
-  "scripts": {
-    "dev": "routeup",
-    "dev:app": "node server.mjs"
-  },
-  "routeup": {
-    "name": "myapp",
-    "script": "dev:app"
-  }
-}`}</code></pre>
-                  <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">npm run dev</span>
-<span class="t-dim">running: node server.mjs</span>
-
-<span class="t-label">route:</span>   myapp
-<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span></code></pre>
-                </div>
-              </div>
-            </div>
+  /        http://localhost:59370</code></pre>
           </div>
-
 
         </section>
 
-        {/* ── 01 WORKFLOWS ── */}
-        <section class="ru-section" id="workflows">
+        {/* ── RECIPES ── */}
+        <section class="ru-section" id="recipes">
           <header class="ru-head">
-
-            <h2>Two ways to use it. Same URL either way.</h2>
-            <p>
-              Route a port your app already listens on, or let routeup start the process and manage cleanup.
-            </p>
+            <h2>Pick a recipe.</h2>
           </header>
 
-          <div class="ru-workflows" data-tabs>
-            <div class="ru-workflow-tabs" role="tablist" aria-label="Choose how routeup runs">
-              <button class="ru-workflow-tab" type="button" role="tab" aria-selected="true" aria-controls="workflow-existing" id="tab-workflow-existing" data-tab-target="workflow-existing">
-                <span class="ru-choice__label">I already run my app</span>
-                <span class="ru-choice__command">routeup serve</span>
-                <span class="ru-choice__copy">Keep your current dev command and route its port.</span>
+          <div class="ru-recipes" data-tabs>
+            <div class="ru-recipe-tabs" role="tablist" aria-label="Routeup recipes">
+              <button type="button" role="tab" aria-selected="true" aria-controls="recipe-compose" id="tab-recipe-compose" data-tab-target="recipe-compose">
+                <span>01</span><strong>Frontend + API</strong><small>One origin, two targets</small>
               </button>
-              <button class="ru-workflow-tab" type="button" role="tab" aria-selected="false" aria-controls="workflow-runner" id="tab-workflow-runner" data-tab-target="workflow-runner" tabindex="-1">
-                <span class="ru-choice__label">Let routeup run my app</span>
-                <span class="ru-choice__command">routeup</span>
-                <span class="ru-choice__copy">Assign a port, start the child process, and own cleanup.</span>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-public" id="tab-recipe-public" data-tab-target="recipe-public" tabindex="-1">
+                <span>02</span><strong>Share publicly</strong><small>Expose an active route</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-webhook" id="tab-recipe-webhook" data-tab-target="recipe-webhook" tabindex="-1">
+                <span>03</span><strong>Expose one path</strong><small>Webhooks, not the whole app</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-logs" id="tab-recipe-logs" data-tab-target="recipe-logs" tabindex="-1">
+                <span>04</span><strong>Follow traffic</strong><small>Local and public logs</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-inspect" id="tab-recipe-inspect" data-tab-target="recipe-inspect" tabindex="-1">
+                <span>05</span><strong>Inspect a request</strong><small>Opt-in capture</small>
+              </button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-diagnose" id="tab-recipe-diagnose" data-tab-target="recipe-diagnose" tabindex="-1">
+                <span>06</span><strong>Diagnose routes</strong><small>Check active routes</small>
               </button>
             </div>
 
-            <div class="ru-workflow-panel" id="workflow-existing" role="tabpanel" aria-labelledby="tab-workflow-existing" data-tab-panel="workflow-existing">
-              <div class="ru-workflow-panel__copy">
-                <p class="ru-panel-tag">Best for fixed ports and existing tooling</p>
-                <h3>Keep your app in one terminal. Route it in another.</h3>
+            <div class="ru-recipe-panel" id="recipe-compose" role="tabpanel" aria-labelledby="tab-recipe-compose" data-tab-panel="recipe-compose">
+              <div class="ru-recipe-panel__copy">
+                <h3>Put the frontend and API behind one origin.</h3>
                 <p>
-                  Nothing about your application command changes. Routeup registers the
-                  name and proxies trusted HTTPS traffic to the port you provide.
+                  Longest path prefix wins. One HTTPS origin — cookies work across both targets, no local CORS config.
                 </p>
-                <ol class="ru-steps">
-                  <li><span>1</span>Start the app as usual.</li>
-                  <li><span>2</span>Give its port a route name.</li>
-                  <li><span>3</span>Open the stable HTTPS URL.</li>
-                </ol>
-                <a href="/docs/getting-started/first-route">Run your first route &rarr;</a>
+                <dl>
+                  <div><dt><code>/</code></dt><dd>Frontend on port 5173</dd></div>
+                  <div><dt><code>/api</code></dt><dd>API on port 8080</dd></div>
+                </dl>
+                <a href="/docs/recipes/frontend-plus-api">Frontend + API recipe &rarr;</a>
               </div>
               <div class="ru-code-stack">
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal 1"><code><span class="t-prompt">$</span> <span class="t-cmd">npm run dev</span>
-<span class="t-dim">app listening on http://127.0.0.1:3000</span></code></pre>
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal 2"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve myapp --port 3000</span>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
+  "name": "example-app",
+  "targets": [
+    { "path": "/", "port": 5173 },
+    { "path": "/api", "port": 8080 }
+  ]
+}`}</code></pre>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve</span>
+<span class="t-label">route:</span>  example-app
+<span class="t-label">local:</span>  <span class="t-localurl">https://example-app.localhost</span>
+<span class="t-label">targets:</span>
+  /        http://localhost:5173
+  /api     http://localhost:8080
 
-<span class="t-label">route:</span>   myapp
-<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span></code></pre>
+<span class="t-dim">press Ctrl-C to stop</span></code></pre>
               </div>
             </div>
 
-            <div class="ru-workflow-panel" id="workflow-runner" role="tabpanel" aria-labelledby="tab-workflow-runner" data-tab-panel="workflow-runner" hidden>
-              <div class="ru-workflow-panel__copy">
-                <p class="ru-panel-tag">Best for the normal project dev command</p>
-                <h3>Add the block once. Keep running <code>npm run dev</code>.</h3>
+            <div class="ru-recipe-panel" id="recipe-public" role="tabpanel" aria-labelledby="tab-recipe-public" data-tab-panel="recipe-public" hidden>
+              <div class="ru-recipe-panel__copy">
+                <h3>Expose an already-running route from a second terminal.</h3>
                 <p>
-                  Bare <code>routeup</code> picks a free port, registers the route before
-                  launch, starts your script, and releases everything when the process exits.
+                  <code>routeup expose</code> reuses an active route without restarting your app.
+                  The public URL is session-only and reachable by anyone with it.
                 </p>
-<a href="/docs/configuration/package-json-embed">package.json configuration &rarr;</a>
+                <a href="/docs/getting-started/exposing-publicly">Public exposure guide &rarr;</a>
+              </div>
+              <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal 2"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup expose</span>
+
+<span class="t-label">route:</span>   example-app
+<span class="t-label">local:</span>   <span class="t-localurl">https://example-app.localhost</span>
+<span class="t-label">public:</span>  <span class="t-publicurl">https://example-app.try.routeup.dev</span>
+<span class="t-label">expose:</span>  all paths
+
+<span class="t-dim">press Ctrl-C to stop</span></code></pre>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-webhook" role="tabpanel" aria-labelledby="tab-recipe-webhook" data-tab-panel="recipe-webhook" hidden>
+              <div class="ru-recipe-panel__copy">
+                <h3>Make the webhook handler public, not the whole app.</h3>
+                <p>
+                  <code>expose.paths</code> limits what the public server forwards — local traffic still reaches every target.
+                  The tunnel opens before your app starts, so <code>ROUTEUP_URL</code> is available at launch.
+                </p>
+                <a href="/docs/recipes/webhook-development">Webhook recipe &rarr;</a>
               </div>
               <div class="ru-code-stack">
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="package.json"><code>{`{
-  "scripts": {
-    "dev": "routeup",
-    "dev:app": "node server.mjs"
-  },
-  "routeup": {
-    "name": "myapp",
-    "script": "dev:app"
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
+  "name": "example-app",
+  "port": 8080,
+  "expose": {
+    "enabled": true,
+    "paths": ["/api/webhooks/*"]
   }
 }`}</code></pre>
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">npm run dev</span>
-<span class="t-dim">running: node server.mjs</span>
-
-<span class="t-label">route:</span>   myapp
-<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span></code></pre>
-                <div class="ru-language-note">
-                  <strong>Not using package.json?</strong>
-                  <span>Put <code>{`"command": "go run ."`}</code> in <code>routeup.json</code>, then run <code>routeup</code>.</span>
-                  <a href="/docs/configuration/frameworks">Check framework port setup &rarr;</a>
-                </div>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal (runner mode)"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup</span>
+<span class="t-label">route:</span>   example-app
+<span class="t-label">local:</span>   <span class="t-localurl">https://example-app.localhost</span>
+<span class="t-label">public:</span>  <span class="t-publicurl">https://example-app.try.routeup.dev</span>
+<span class="t-label">targets:</span>
+  /        http://localhost:8080</code></pre>
               </div>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-logs" role="tabpanel" aria-labelledby="tab-recipe-logs" data-tab-panel="recipe-logs" hidden>
+              <div class="ru-recipe-panel__copy">
+                <h3>Follow local and public requests in one stream.</h3>
+                <p>
+                  Source, method, path, status, duration, request ID. Headers and bodies not retained unless capture is on.
+                </p>
+                <a href="/docs/cli-reference/logs">Logs reference &rarr;</a>
+              </div>
+              <pre translate="no" class="ru-terminal ru-terminal--flat ru-terminal--wide" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup logs example-app --follow</span>
+
+<span class="t-dim">TIME      SOURCE  ROUTE        METHOD  PATH                  STATUS  DURATION  ID</span>
+14:02:01  local   example-app  GET     /api/users            <span class="t-ok">200</span>     12ms      req_Kx4mT9pL2aQ7vN6cR
+14:02:03  public  example-app  POST    /api/webhooks/stripe  <span class="t-ok">204</span>     8ms       req_Jz6nR2wL8cP4sD9h</code></pre>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-inspect" role="tabpanel" aria-labelledby="tab-recipe-inspect" data-tab-panel="recipe-inspect" hidden>
+              <div class="ru-recipe-panel__copy">
+                <h3>Capture deliberately, redact secrets, then inspect.</h3>
+                <p>
+                  Off by default. Enable per route, list headers to redact. Held in-memory, cleared on restart.
+                </p>
+                <a href="/docs/cli-reference/inspect">Inspect reference &rarr;</a>
+              </div>
+              <div class="ru-code-stack">
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
+  "capture": {
+    "request": true,
+    "response": true,
+    "redact_headers": [
+      "authorization",
+      "cookie",
+      "x-webhook-signature"
+    ]
+  }
+}`}</code></pre>
+                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup inspect req_Jz6nR2wL8cP4sD9h</span>
+
+Request req_Jz6nR2wL8cP4sD9h
+
+<span class="t-dim">Metadata
+--------</span>
+Source: public
+Route: example-app
+Status: 204
+Method: POST
+Path: /api/webhooks/stripe
+
+<span class="t-dim">Request
+-------</span>
+Capture: complete
+Body bytes: 256
+Redacted: authorization, x-webhook-signature
+
+<span class="t-dim">Response
+--------</span>
+Capture: complete
+Body bytes: 0</code></pre>
+              </div>
+            </div>
+
+            <div class="ru-recipe-panel" id="recipe-diagnose" role="tabpanel" aria-labelledby="tab-recipe-diagnose" data-tab-panel="recipe-diagnose" hidden>
+              <div class="ru-recipe-panel__copy">
+                <h3>See what is active before changing anything.</h3>
+                <p>
+                  <code>routeup routes</code> lists active names, targets, owner PIDs, and working directories.
+                  <code>routeup doctor</code> checks the CA, trust store, and agent.
+                </p>
+                <a href="/docs/cli-reference/routes">Routes reference &rarr;</a>
+              </div>
+              <pre translate="no" class="ru-terminal ru-terminal--flat ru-terminal--wide" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup routes</span>
+<span class="t-dim">NAME          TARGETS  PUBLIC  PATHS  PID    AGE  CWD</span>
+example-app   /:3000   -       -      48172  5m   ~/code/example-app
+
+<span class="t-prompt">$</span> <span class="t-cmd">routeup doctor</span>
+  <span class="t-ok">[ok]</span>   local CA
+  <span class="t-ok">[ok]</span>   system trust store
+  <span class="t-ok">[ok]</span>   port 443
+  <span class="t-ok">[ok]</span>   agent</code></pre>
             </div>
           </div>
         </section>
 
-        {/* ── PROBLEM STRIP ── */}
-        <section class="ru-problems" aria-label="Why routeup exists">
-          <ul>
-            <li>
-              <span class="ru-problem__tag">[ports]</span>
-              <p>Three services. Three ports to remember. One changes and the browser goes to the wrong app.</p>
-            </li>
-            <li>
-              <span class="ru-problem__tag">[tls]</span>
-              <p>Secure cookies and HTTPS-only SDKs behave differently on <code>http://localhost</code>. The bugs show up after deploy.</p>
-            </li>
-            <li>
-              <span class="ru-problem__tag">[tunnel urls]</span>
-              <p>Every ngrok session hands you a new random URL. Re-register it with Stripe or GitHub every morning.</p>
-            </li>
-            <li>
-              <span class="ru-problem__tag">[callbacks]</span>
-              <p>OAuth providers want one redirect URI. Yours includes <code>localhost:3000</code> and breaks when the port changes.</p>
-            </li>
-          </ul>
-        </section>
-
-        {/* ── 02 INSTALL ── */}
+        {/* ── INSTALL ── */}
         <section class="ru-section ru-section--split" id="install">
           <header class="ru-section__intro">
-
             <h2>Trust the local CA once.</h2>
             <p>
-              Install the single routeup binary, then run setup. It creates a local
-              certificate authority, trusts it in your OS, prepares port 443, and
-              starts the local agent.
-            </p>
-            <p class="ru-aside">
-              Setup asks about a public server. Accept <code>https://edge.routeup.dev</code>
-              if you want public routes later, or enter <code>none</code> for local-only use.
+              Install the single routeup binary, then run setup. It creates a local CA,
+              trusts it in your OS, prepares port 443, and starts the local agent.
             </p>
           </header>
 
@@ -283,262 +318,54 @@
               <a href="https://github.com/mukul-mehta/routeup/releases" rel="noopener noreferrer">Open releases &nearr;</a>
             </div>
 
-            <div class="ru-setup-result">
-              <span>After setup</span>
-              <ul>
-                <li><strong>CA</strong> trusted by your OS</li>
-                <li><strong>443</strong> ready for local HTTPS</li>
-                <li><strong>Agent</strong> starts automatically when needed</li>
-              </ul>
-              <a href="/docs/getting-started/install">Installation details &rarr;</a>
-            </div>
+            <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup setup</span>
+<span class="t-dim">Public server URL [https://edge.routeup.dev]: </span>
+<span class="t-dim">Token (blank to keep current): </span>
+certificate authority: already set up
+trusting the certificate system-wide (asks for your password)...
+certificate: <span class="t-ok">trusted</span>
+setting up port 443 (asks for your password)...
+port 443: <span class="t-ok">ready</span>
+server: <span class="t-ok">saved</span> (https://edge.routeup.dev)
+agent: <span class="t-ok">already running</span></code></pre>
+            <a href="/docs/getting-started/install" class="ru-install-link">Installation details &rarr;</a>
           </div>
         </section>
 
-        {/* ── 03 RECIPES ── */}
-        <section class="ru-section" id="recipes">
-          <header class="ru-head">
-
-            <h2>Common tasks.</h2>
-            <p>
-              After your first route is running.
-            </p>
-          </header>
-
-          <div class="ru-recipes" data-tabs>
-            <div class="ru-recipe-tabs" role="tablist" aria-label="Routeup recipes">
-              <button type="button" role="tab" aria-selected="true" aria-controls="recipe-compose" id="tab-recipe-compose" data-tab-target="recipe-compose">
-                <span>01</span><strong>Frontend + API</strong><small>One origin, two targets</small>
-              </button>
-              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-public" id="tab-recipe-public" data-tab-target="recipe-public" tabindex="-1">
-                <span>02</span><strong>Share publicly</strong><small>Reuse an active route</small>
-              </button>
-              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-webhook" id="tab-recipe-webhook" data-tab-target="recipe-webhook" tabindex="-1">
-                <span>03</span><strong>Expose one path</strong><small>Keep the rest local</small>
-              </button>
-              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-logs" id="tab-recipe-logs" data-tab-target="recipe-logs" tabindex="-1">
-                <span>04</span><strong>Follow traffic</strong><small>Local and public logs</small>
-              </button>
-              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-inspect" id="tab-recipe-inspect" data-tab-target="recipe-inspect" tabindex="-1">
-                <span>05</span><strong>Inspect a request</strong><small>Opt-in capture</small>
-              </button>
-              <button type="button" role="tab" aria-selected="false" aria-controls="recipe-diagnose" id="tab-recipe-diagnose" data-tab-target="recipe-diagnose" tabindex="-1">
-                <span>06</span><strong>Diagnose routes</strong><small>See owners and health</small>
-              </button>
-            </div>
-
-            <div class="ru-recipe-panel" id="recipe-compose" role="tabpanel" aria-labelledby="tab-recipe-compose" data-tab-panel="recipe-compose">
-              <div class="ru-recipe-panel__copy">
-                <p class="ru-panel-tag">Compose local services</p>
-                <h3>Put the frontend and API behind one origin.</h3>
-                <p>
-                  Longest path prefix wins. The browser sees one HTTPS origin, so cookies
-                  work across both targets and local CORS configuration disappears.
-                </p>
-                <dl>
-                  <div><dt><code>/</code></dt><dd>Frontend on port 5173</dd></div>
-                  <div><dt><code>/api</code></dt><dd>API on port 8080</dd></div>
-                </dl>
-                <a href="/docs/recipes/frontend-plus-api">Frontend + API recipe &rarr;</a>
-              </div>
-              <div class="ru-code-stack">
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
-  "name": "myapp",
-  "targets": [
-    { "path": "/", "port": 5173 },
-    { "path": "/api", "port": 8080 }
-  ]
-}`}</code></pre>
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup serve</span>
-<span class="t-localurl">https://myapp.localhost/</span>       &rarr; :5173
-<span class="t-localurl">https://myapp.localhost/api</span>    &rarr; :8080</code></pre>
-              </div>
-            </div>
-
-            <div class="ru-recipe-panel" id="recipe-public" role="tabpanel" aria-labelledby="tab-recipe-public" data-tab-panel="recipe-public" hidden>
-              <div class="ru-recipe-panel__copy">
-                <p class="ru-panel-tag">Mobile testing and previews</p>
-                <h3>Expose an already-running route from a second terminal.</h3>
-                <p>
-                  <code>routeup expose</code> reuses a route that is already active in another terminal —
-                  your app keeps running unchanged. It exposes all paths. Use recipe 03 if you want to
-                  limit which paths the public server forwards.
-                </p>
-                <p class="ru-warning">
-                  A <code>try.routeup.dev</code> address is session-only and reachable by anyone who has
-                  the URL. Routeup does not add viewer authentication in v1.
-                </p>
-                <a href="/docs/getting-started/exposing-publicly">Public exposure guide &rarr;</a>
-              </div>
-              <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal 2"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup expose</span>
-
-<span class="t-label">route:</span>   myapp
-<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span>
-<span class="t-label">public:</span>  <span class="t-publicurl">https://myapp.try.routeup.dev</span>
-<span class="t-label">expose:</span>  all paths
-
-<span class="t-dim">press Ctrl-C to stop</span></code></pre>
-            </div>
-
-            <div class="ru-recipe-panel" id="recipe-webhook" role="tabpanel" aria-labelledby="tab-recipe-webhook" data-tab-panel="recipe-webhook" hidden>
-              <div class="ru-recipe-panel__copy">
-                <p class="ru-panel-tag">Webhook development</p>
-                <h3>Make the webhook handler public, not the whole app.</h3>
-                <p>
-                  <code>expose.paths</code> limits which paths the public server forwards. Local traffic
-                  still reaches every target. Requests from the internet receive a 404 unless they match
-                  the allowed prefix.
-                </p>
-                <p>
-                  Setting <code>"enabled": true</code> in <code>expose</code> lets bare <code>routeup</code> (runner mode)
-                  open the public tunnel automatically before your app starts, injecting the live public URL
-                  into <code>ROUTEUP_URL</code>. For <code>routeup serve</code>, pass <code>--expose</code> instead and skip <code>enabled</code>.
-                </p>
-                <a href="/docs/recipes/webhook-development">Webhook recipe &rarr;</a>
-              </div>
-              <div class="ru-code-stack">
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
-  "name": "myapp",
-  "port": 8080,
-  "expose": {
-    "enabled": true,
-    "paths": ["/api/webhooks/*"]
-  }
-}`}</code></pre>
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal (runner mode)"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup</span>
-<span class="t-label">route:</span>   myapp
-<span class="t-label">local:</span>   <span class="t-localurl">https://myapp.localhost</span>
-<span class="t-label">public:</span>  <span class="t-publicurl">https://myapp.try.routeup.dev</span>
-<span class="t-label">expose:</span>  /api/webhooks/*</code></pre>
-              </div>
-            </div>
-
-            <div class="ru-recipe-panel" id="recipe-logs" role="tabpanel" aria-labelledby="tab-recipe-logs" data-tab-panel="recipe-logs" hidden>
-              <div class="ru-recipe-panel__copy">
-                <p class="ru-panel-tag">Request visibility</p>
-                <h3>Follow local and public requests in one stream.</h3>
-                <p>
-                  Request logs include source, route, method, path, status, duration, and a
-                  request ID. Headers and bodies are not retained unless capture is enabled.
-                </p>
-                <a href="/docs/cli-reference/logs">Logs reference &rarr;</a>
-              </div>
-              <pre translate="no" class="ru-terminal ru-terminal--flat ru-terminal--wide" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup logs myapp --follow</span>
-
-<span class="t-dim">TIME      SOURCE  METHOD  PATH                  STATUS  ID</span>
-14:02:01  local   GET     /api/users            <span class="t-ok">200</span>  req_Kx4mT9pL2aQ7vN6cR
-14:02:03  public  POST    /api/webhooks/stripe  <span class="t-ok">204</span>  req_Jz6nR2wL8cP4sD9h</code></pre>
-            </div>
-
-            <div class="ru-recipe-panel" id="recipe-inspect" role="tabpanel" aria-labelledby="tab-recipe-inspect" data-tab-panel="recipe-inspect" hidden>
-              <div class="ru-recipe-panel__copy">
-                <p class="ru-panel-tag">Opt-in request capture</p>
-                <h3>Capture deliberately, redact secrets, then inspect.</h3>
-                <p>
-                  Capture is off by default. Enable request or response capture per route and
-                  list every sensitive header that should not be retained.
-                </p>
-                <p class="ru-warning">Captured data stays in the local agent's bounded in-memory buffer and is cleared on restart.</p>
-                <a href="/docs/cli-reference/inspect">Inspect reference &rarr;</a>
-              </div>
-              <div class="ru-code-stack">
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="routeup.json"><code>{`{
-  "capture": {
-    "request": true,
-    "response": true,
-    "redact_headers": [
-      "authorization",
-      "cookie",
-      "x-webhook-signature"
-    ]
-  }
-}`}</code></pre>
-                <pre translate="no" class="ru-terminal ru-terminal--flat" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup inspect req_Jz6nR2wL8cP4sD9h</span>
-<span class="t-label">Source:</span>  public
-<span class="t-label">Method:</span>  POST
-<span class="t-label">Path:</span>    /api/webhooks/stripe
-<span class="t-label">Capture:</span> complete</code></pre>
-              </div>
-            </div>
-
-            <div class="ru-recipe-panel" id="recipe-diagnose" role="tabpanel" aria-labelledby="tab-recipe-diagnose" data-tab-panel="recipe-diagnose" hidden>
-              <div class="ru-recipe-panel__copy">
-                <p class="ru-panel-tag">Route ownership and setup health</p>
-                <h3>See what is active before changing anything.</h3>
-                <p>
-                  <code>routeup routes</code> identifies every active name, target, public URL,
-                  owner PID, age, and working directory. <code>routeup doctor</code> checks the
-                  CA, trust store, port 443, and agent.
-                </p>
-                <a href="/docs/cli-reference/routes">Routes reference &rarr;</a>
-              </div>
-              <pre translate="no" class="ru-terminal ru-terminal--flat ru-terminal--wide" data-title="terminal"><code><span class="t-prompt">$</span> <span class="t-cmd">routeup routes</span>
-<span class="t-dim">NAME    TARGETS  PUBLIC  PID    CWD</span>
-myapp   /:3000   -       48172  ~/code/myapp
-
-<span class="t-prompt">$</span> <span class="t-cmd">routeup doctor</span>
-<span class="t-ok">ok</span>  certificate authority
-<span class="t-ok">ok</span>  system trust
-<span class="t-ok">ok</span>  port 443</code></pre>
-            </div>
-          </div>
-        </section>
-
-        {/* ── PUBLIC URL TYPES ── */}
-        <section class="ru-section" id="public">
-          <header class="ru-head ru-head--narrow">
-            <p class="ru-kicker">URL types</p>
-            <h2>Local and public routes have different lifetimes.</h2>
-            <p>
-              A route name, a public address, and a running process expire independently.
-            </p>
-          </header>
-
-          <div class="ru-lifetimes">
-            <article>
-              <p class="ru-lifetime__label ru-lifetime__label--local">Local</p>
-              <h3><code>myapp.localhost</code></h3>
-              <p>Stable on your machine. No account, token, public server, DNS, or network connection.</p>
-              <strong>Available while the owning command runs</strong>
-            </article>
-            <article>
-              <p class="ru-lifetime__label ru-lifetime__label--try">Try public</p>
-              <h3><code>myapp.try.routeup.dev</code></h3>
-              <p>Token-less and internet-accessible. The claim is session-only and can be taken again after disconnect.</p>
-              <strong>For previews, webhooks, and mobile tests</strong>
-            </article>
-            <article>
-              <p class="ru-lifetime__label ru-lifetime__label--named">Named public</p>
-              <h3><code>myapp.mukul.routeup.dev</code></h3>
-              <p>A reusable address authorized by an operator-issued namespace token. The app is still offline when no tunnel is connected.</p>
-              <strong>For OAuth callbacks and repeat integrations</strong>
-            </article>
-            <article>
-              <p class="ru-lifetime__label ru-lifetime__label--self">Self-hosted</p>
-              <h3><code>myapp.dev.example.com</code></h3>
-              <p>Run the same routeup binary as your public server and control the domain, TLS, tokens, and namespace policy.</p>
-              <a href="/docs/self-hosting/running-the-server">Self-hosting guide &rarr;</a>
-            </article>
-          </div>
+        {/* ── PROBLEM STRIP ── */}
+        <section class="ru-problems" aria-label="Why routeup exists">
+          <div class="ru-problems__head">Why this exists</div>
+          <ul>
+            <li>
+              <span class="ru-problem__tag">[ports]</span>
+              <p>Three services. Three ports to remember. One changes and the browser goes to the wrong app.</p>
+            </li>
+            <li>
+              <span class="ru-problem__tag">[tls]</span>
+              <p>Secure cookies and HTTPS-only SDKs behave differently on <code>http://localhost</code>. The bugs show up after deploy.</p>
+            </li>
+            <li>
+              <span class="ru-problem__tag">[tunnel urls]</span>
+              <p>Every ngrok session hands you a new random URL. Re-register it with Stripe or GitHub every morning.</p>
+            </li>
+            <li>
+              <span class="ru-problem__tag">[callbacks]</span>
+              <p>OAuth providers want one redirect URI. Yours includes <code>localhost:3000</code> and breaks when the port changes.</p>
+            </li>
+          </ul>
         </section>
 
         {/* ── HOW IT WORKS ── */}
         <section class="ru-section" id="how">
           <header class="ru-head ru-head--narrow">
-            <p class="ru-kicker">How it works</p>
             <h2>The same local target, two paths to reach it.</h2>
-            <p>
-              Local requests never leave your machine. Public requests reach a routeup
-              server first, then travel through an outbound encrypted tunnel. Your app
-              keeps listening on loopback in both cases.
-            </p>
           </header>
 
           <div class="ru-flows">
             <article class="ru-flow">
               <div class="ru-flow__header"><span class="ru-status ru-status--local"></span><strong>Local request</strong><small>No server contact</small></div>
               <ol>
-                <li><span>Browser</span><code>https://myapp.localhost</code></li>
+                <li><span>Browser</span><code>https://example-app.localhost</code></li>
                 <li><span>Local agent</span><small>terminates trusted TLS</small></li>
                 <li><span>Your app</span><code>127.0.0.1:3000</code></li>
               </ol>
@@ -546,7 +373,7 @@ myapp   /:3000   -       48172  ~/code/myapp
             <article class="ru-flow ru-flow--public">
               <div class="ru-flow__header"><span class="ru-status ru-status--public"></span><strong>Public request</strong><small>Only when exposed</small></div>
               <ol>
-                <li><span>Internet client</span><code>https://myapp.try.routeup.dev</code></li>
+                <li><span>Internet client</span><code>https://example-app.try.routeup.dev</code></li>
                 <li><span>Routeup server</span><small>terminates public TLS</small></li>
                 <li><span>Outbound tunnel</span><small>encrypted back to your agent</small></li>
                 <li><span>Your app</span><code>127.0.0.1:3000</code></li>
@@ -559,11 +386,11 @@ myapp   /:3000   -       48172  ~/code/myapp
         <section class="ru-section ru-section--split ru-section--last">
           <header class="ru-section__intro">
             <p class="ru-kicker">The boundaries</p>
-            <h2>One binary. No hidden platform.</h2>
+            <h2>The full stack in one Go binary.</h2>
             <p>
-              The CLI, local agent, and public server are one Go binary. Local use is
-              offline-capable and sends no telemetry. Public exposure is optional and
-              can point at the hosted server or your own deployment.
+              CLI, local agent, and server. MIT licensed. Zero telemetry. Local use
+              works offline. Public exposure is optional and points at the hosted server
+              or your own.
             </p>
             <div class="ru-ctas">
               <a href="/docs" class="ru-btn ru-btn--primary">Read the docs</a>
@@ -574,7 +401,7 @@ myapp   /:3000   -       48172  ~/code/myapp
             <li><strong>Local means local</strong><span>No account, token, DNS, or server request for <code>*.localhost</code>.</span></li>
             <li><strong>Capture is opt-in</strong><span>Request bodies are not retained unless a route explicitly enables capture.</span></li>
             <li><strong>Foreground owns lifetime</strong><span>Ctrl-C releases the route, child process, and tunnel owned by that command.</span></li>
-            <li><strong>No hidden platform</strong><span>MIT licensed, zero telemetry, and self-hostable with documented server operations.</span></li>
+            <li><strong>MIT licensed</strong><span>Zero telemetry, self-hostable server, documented operations.</span></li>
           </ul>
         </section>
 
@@ -617,7 +444,7 @@ myapp   /:3000   -       48172  ~/code/myapp
               panel.hidden = panel.getAttribute('data-tab-panel') !== target;
             });
             if (moveFocus) tab.focus();
-            if (updateHash && target && !target.startsWith('install-') && !target.startsWith('hero-')) {
+            if (updateHash && target && !target.startsWith('install-') && !target.startsWith('recipe-')) {
               history.replaceState(null, '', '#' + target);
             }
           }
@@ -780,9 +607,9 @@ myapp   /:3000   -       48172  ~/code/myapp
         grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
         gap: clamp(2.5rem, 6vw, 5rem);
         align-items: center;
-        padding: clamp(3rem, 6vw, 5rem) 0 0;
+        padding: clamp(2rem, 4vw, 3.5rem) 0 0;
       }
-      .ru-eyebrow, .ru-kicker, .ru-panel-tag {
+      .ru-kicker, .ru-panel-tag {
         margin: 0 0 1rem;
         color: var(--teal-dark);
         font-family: var(--mono);
@@ -791,8 +618,6 @@ myapp   /:3000   -       48172  ~/code/myapp
         letter-spacing: 0.07em;
         text-transform: uppercase;
       }
-      .ru-eyebrow { display: flex; align-items: center; gap: 0.6rem; }
-      .ru-eyebrow span { width: 0.55rem; height: 0.55rem; background: var(--teal); flex-shrink: 0; }
 
       .ru-hero h1, .ru-head h2, .ru-section__intro h2 {
         margin: 0;
@@ -802,8 +627,7 @@ myapp   /:3000   -       48172  ~/code/myapp
         line-height: 1.1;
         text-wrap: balance;
       }
-      /* Reduced font sizes — previous values were 5.6rem and 3.7rem max */
-      .ru-hero h1 { max-width: 16ch; font-size: clamp(1.9rem, 3.2vw, 2.85rem); }
+      .ru-hero h1 { max-width: 22ch; font-size: clamp(2.1rem, 3.6vw, 3.1rem); }
       .ru-hero__lede { max-width: 59ch; margin: 1.5rem 0 1.8rem; color: var(--ink-soft); font-size: clamp(0.98rem, 1.4vw, 1.08rem); line-height: 1.72; }
       .ru-hero__lede code { color: var(--teal-dark); }
       .ru-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
@@ -824,53 +648,26 @@ myapp   /:3000   -       48172  ~/code/myapp
       .ru-btn--ghost { background: var(--surface); }
       .ru-btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
       .ru-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
-      .ru-proof { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; padding: 0; margin: 1.5rem 0 0; list-style: none; color: var(--ink-faint); font-family: var(--mono); font-size: 0.72rem; font-weight: 650; }
+      .ru-proof { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem 1.4rem; padding: 0; margin: 1.5rem 0 0; list-style: none; color: var(--ink-faint); font-family: var(--mono); font-size: 0.72rem; font-weight: 650; }
       .ru-proof li::before { content: ""; display: inline-block; width: 0.42rem; height: 0.42rem; margin-right: 0.5rem; background: var(--teal); vertical-align: 0.08rem; }
 
       /* ── HERO DEMO ── */
       .ru-hero__demo { min-width: 0; }
-      .ru-hero-mode-tabs {
-        display: flex;
-        gap: 0.4rem;
-        margin-bottom: 0.6rem;
-      }
-      .ru-hero-mode-tabs button {
-        padding: 0.36rem 0.65rem;
-        border: 1px solid var(--ink);
-        background: transparent;
-        font-family: var(--mono);
-        font-size: 0.68rem;
-        font-weight: 750;
-        cursor: pointer;
-        transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
-      }
-      .ru-hero-mode-tabs button[aria-selected="true"] { background: var(--ink); color: var(--surface); }
-      .ru-hero-mode-tabs button:hover:not([aria-selected="true"]) { background: var(--paper-deep); }
-      .ru-demo__context { margin: 0 0 0.6rem; font-family: var(--mono); font-size: 0.7rem; color: var(--ink-faint); }
       .ru-hero-terminal { box-shadow: 8px 8px 0 var(--ink); }
-
-      /* ── LEDGER ── */
-      .ru-ledger {
-        grid-column: 1 / -1;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        margin-top: clamp(3rem, 6vw, 5rem);
-        border: 1px solid var(--rule);
-        border-bottom: 0;
-        background: var(--surface);
-      }
-      .ru-ledger a { display: flex; align-items: center; gap: 1rem; min-width: 0; padding: 1.2rem 1.4rem; border-right: 1px solid var(--rule); transition: background-color var(--fast) var(--ease); }
-      .ru-ledger a:last-child { border-right: 0; }
-      .ru-ledger a:hover { background: var(--surface-cool); }
-      .ru-ledger__number { color: var(--teal-dark); font-family: var(--mono); font-size: 0.75rem; font-weight: 850; flex-shrink: 0; }
-      .ru-ledger strong, .ru-ledger small { display: block; }
-      .ru-ledger strong { font-family: var(--mono); font-size: 0.88rem; }
-      .ru-ledger small { margin-top: 0.1rem; color: var(--ink-faint); font-size: 0.76rem; }
 
       /* ── PROBLEM STRIP ── */
       .ru-problems {
         border-top: 1px solid var(--rule);
         background: var(--surface);
+      }
+      .ru-problems__head {
+        padding: 1rem 1.5rem 0.6rem;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: var(--teal-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
       }
       .ru-problems ul {
         display: grid;
@@ -902,13 +699,13 @@ myapp   /:3000   -       48172  ~/code/myapp
       }
 
       /* ── SECTIONS ── */
-      .ru-section { padding: clamp(4rem, 7vw, 6.5rem) 0; border-top: 1px solid var(--rule); scroll-margin-top: 2rem; }
+      .ru-section { padding: clamp(2.5rem, 5vw, 4.5rem) 0; border-top: 1px solid var(--rule); scroll-margin-top: 2rem; }
       .ru-section--last { border-bottom: 1px solid var(--rule); }
       .ru-section--split { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: clamp(2.5rem, 7vw, 6rem); align-items: start; }
       .ru-section__intro { position: sticky; top: 2rem; }
       .ru-section__intro h2, .ru-head h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
       .ru-section__intro > p:not(.ru-kicker), .ru-head > p:not(.ru-kicker) { max-width: 69ch; margin: 1.1rem 0 0; color: var(--ink-soft); }
-      .ru-head { margin-bottom: 2.4rem; }
+      .ru-head { margin-bottom: 2rem; }
       .ru-head--narrow { max-width: 780px; }
       .ru-aside, .ru-warning {
         padding: 0.85rem 1rem;
@@ -1002,33 +799,19 @@ myapp   /:3000   -       48172  ~/code/myapp
       .ru-tabs button[aria-selected="true"] { background: var(--ink); color: var(--surface); }
       .ru-release { padding: 1.5rem; border: 2px solid var(--ink); background: var(--surface); }
       .ru-release p { margin: 0 0 0.6rem; }
-      .ru-release a, .ru-setup-result a, .ru-workflow-panel a, .ru-recipe-panel a, .ru-lifetimes a { color: var(--teal-dark); font-family: var(--mono); font-size: 0.78rem; font-weight: 800; text-decoration: underline; text-underline-offset: 0.25rem; }
+      .ru-release a, .ru-setup-result a, .ru-recipe-panel a, .ru-install-link { color: var(--teal-dark); font-family: var(--mono); font-size: 0.78rem; font-weight: 800; text-decoration: underline; text-underline-offset: 0.25rem; }
       .ru-setup-result { display: grid; grid-template-columns: auto 1fr; gap: 0.8rem 1.5rem; padding: 1.25rem 1.4rem; border: 1px solid var(--rule); border-top: 0; background: var(--surface); }
       .ru-setup-result > span { grid-row: 1 / 3; color: var(--teal-dark); font-family: var(--mono); font-size: 0.72rem; font-weight: 850; text-transform: uppercase; }
       .ru-setup-result ul { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; padding: 0; margin: 0; list-style: none; font-size: 0.84rem; }
       .ru-setup-result strong { font-family: var(--mono); }
 
-      /* ── WORKFLOW TABS ── */
-      .ru-workflow-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; padding: 1px; background: var(--ink); }
-      .ru-workflow-tab { display: grid; grid-template-columns: 1fr auto; gap: 0.35rem 1.5rem; padding: 1.3rem 1.4rem; border: 0; background: var(--surface); text-align: left; cursor: pointer; }
-      .ru-workflow-tab[aria-selected="true"] { background: var(--teal-dark); color: var(--surface); }
-      .ru-choice__label { font-family: var(--mono); font-size: clamp(0.9rem, 1.5vw, 1.1rem); font-weight: 850; }
-      .ru-choice__command { align-self: center; grid-row: 1 / 3; grid-column: 2; padding: 0.28rem 0.48rem; border: 1px solid currentColor; font-family: var(--mono); font-size: 0.7rem; font-weight: 750; }
-      .ru-choice__copy { color: var(--ink-faint); font-size: 0.84rem; }
-      .ru-workflow-tab[aria-selected="true"] .ru-choice__copy { color: rgba(255, 250, 240, 0.74); }
-      .ru-workflow-panel, .ru-recipe-panel { display: grid; grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr); gap: clamp(2rem, 5vw, 4.5rem); padding: clamp(1.5rem, 3.5vw, 2.8rem); border: 1px solid var(--rule); border-top: 0; background: var(--surface); }
-      .ru-workflow-panel__copy h3, .ru-recipe-panel__copy h3 { margin: 0; font-family: var(--mono); font-size: clamp(1.1rem, 2vw, 1.55rem); line-height: 1.28; letter-spacing: -0.02em; }
-      .ru-workflow-panel__copy > p:not(.ru-panel-tag), .ru-recipe-panel__copy > p:not(.ru-panel-tag) { color: var(--ink-soft); }
-      .ru-workflow-panel__copy > a, .ru-recipe-panel__copy > a { display: inline-block; margin-top: 0.6rem; }
-      .ru-steps { padding: 0; margin: 1.2rem 0; list-style: none; }
-      .ru-steps li { display: flex; align-items: center; gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); font-size: 0.9rem; }
-      .ru-steps li span { color: var(--teal-dark); font-family: var(--mono); font-size: 0.68rem; font-weight: 850; }
-      .ru-env { font-size: 0.84rem; }
-      .ru-code-stack { display: grid; gap: 1rem; min-width: 0; align-content: start; }
-      .ru-language-note { display: grid; gap: 0.35rem; padding: 0.9rem 1rem; border: 1px solid var(--rule); background: var(--surface-cool); font-size: 0.82rem; }
-      .ru-language-note strong { font-family: var(--mono); }
-
       /* ── RECIPE TABS ── */
+      .ru-recipe-panel { display: grid; grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr); gap: clamp(2rem, 5vw, 4.5rem); padding: clamp(1.5rem, 3.5vw, 2.8rem); border: 1px solid var(--rule); border-top: 0; background: var(--surface); }
+      .ru-recipe-panel__copy h3 { margin: 0; font-family: var(--mono); font-size: clamp(1.1rem, 2vw, 1.55rem); line-height: 1.28; letter-spacing: -0.02em; }
+      .ru-recipe-panel__copy > p:not(.ru-panel-tag) { color: var(--ink-soft); }
+      .ru-recipe-panel__copy > a { display: inline-block; margin-top: 0.6rem; }
+      .ru-code-stack { display: grid; gap: 1rem; min-width: 0; align-content: start; }
+
       .ru-recipe-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; padding: 1px; background: var(--rule); border: 1px solid var(--rule); }
       .ru-recipe-tabs button { display: grid; grid-template-columns: auto 1fr; gap: 0.1rem 0.75rem; min-height: 6.2rem; padding: 1rem 1.1rem; border: 0; background: var(--surface); text-align: left; cursor: pointer; transition: background-color var(--fast) var(--ease); }
       .ru-recipe-tabs button:hover { background: var(--surface-cool); }
@@ -1043,20 +826,6 @@ myapp   /:3000   -       48172  ~/code/myapp
       .ru-recipe-panel dl div { display: grid; grid-template-columns: 5rem 1fr; gap: 0.8rem; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); }
       .ru-recipe-panel dt, .ru-recipe-panel dd { margin: 0; font-size: 0.86rem; }
       .ru-recipe-panel dd { color: var(--ink-soft); }
-
-      /* ── PUBLIC LIFETIMES ── */
-      .ru-lifetimes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; padding: 1px; background: var(--rule); border: 1px solid var(--rule); }
-      .ru-lifetimes article { min-width: 0; padding: clamp(1.3rem, 2.8vw, 1.9rem); background: var(--surface); }
-      .ru-lifetime__label { margin: 0 0 0.8rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
-      .ru-lifetime__label::before { content: ""; display: inline-block; width: 0.52rem; height: 0.52rem; margin-right: 0.48rem; background: currentColor; }
-      .ru-lifetime__label--local { color: var(--teal-dark); }
-      .ru-lifetime__label--try { color: var(--public); }
-      .ru-lifetime__label--named { color: var(--named); }
-      .ru-lifetime__label--self { color: var(--ink-soft); }
-      .ru-lifetimes h3 { margin: 0; font-size: 1rem; }
-      .ru-lifetimes h3 code { overflow-wrap: anywhere; }
-      .ru-lifetimes article > p:not(.ru-lifetime__label) { color: var(--ink-soft); font-size: 0.91rem; }
-      .ru-lifetimes article > strong { display: block; margin-top: 1rem; font-family: var(--mono); font-size: 0.72rem; }
 
       /* ── HOW IT WORKS ── */
       .ru-flows { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; }
@@ -1093,10 +862,10 @@ myapp   /:3000   -       48172  ~/code/myapp
       /* ── RESPONSIVE ── */
       @media (max-width: 920px) {
         .ru-hero { grid-template-columns: 1fr; }
-        .ru-hero h1 { max-width: 22ch; }
+        .ru-hero h1 { max-width: 30ch; }
         .ru-section--split { grid-template-columns: 1fr; }
         .ru-section__intro { position: static; }
-        .ru-workflow-panel, .ru-recipe-panel { grid-template-columns: 1fr; }
+        .ru-recipe-panel { grid-template-columns: 1fr; }
         .ru-flows { grid-template-columns: 1fr; }
         .ru-problems ul { grid-template-columns: repeat(2, 1fr); }
       }
@@ -1106,13 +875,7 @@ myapp   /:3000   -       48172  ~/code/myapp
         .ru-nav { align-items: flex-start; }
         .ru-nav__links { justify-content: flex-end; gap: 0.5rem 0.9rem; }
         .ru-nav__links a:nth-child(3) { display: none; }
-        .ru-ledger { grid-template-columns: 1fr; }
-        .ru-ledger a { border-right: 0; border-bottom: 1px solid var(--rule); }
-        .ru-ledger a:last-child { border-bottom: 0; }
-        .ru-workflow-tabs { grid-template-columns: 1fr; }
-        .ru-workflow-tab { min-height: 7rem; }
         .ru-recipe-tabs { grid-template-columns: 1fr 1fr; }
-        .ru-lifetimes { grid-template-columns: 1fr; }
         .ru-boundaries { grid-template-columns: 1fr; }
         .ru-setup-result { grid-template-columns: 1fr; }
         .ru-setup-result > span { grid-row: auto; }
@@ -1127,13 +890,13 @@ myapp   /:3000   -       48172  ~/code/myapp
         .ru-nav { display: block; }
         .ru-nav__links { justify-content: flex-start; margin-top: 0.9rem; }
         .ru-nav__links a:nth-child(1), .ru-nav__links a:nth-child(3) { display: none; }
-        .ru-hero { padding-top: 2.5rem; }
-        .ru-proof { display: grid; }
+        .ru-hero { padding-top: 2rem; }
+        .ru-proof { grid-template-columns: 1fr; }
         .ru-recipe-tabs { grid-template-columns: 1fr; }
         .ru-recipe-tabs button { min-height: 5rem; }
         .ru-tabs { overflow-x: auto; padding-bottom: 0.2rem; }
         .ru-tabs button { flex: 0 0 auto; }
-        .ru-workflow-panel, .ru-recipe-panel { padding: 1.1rem; }
+        .ru-recipe-panel { padding: 1.1rem; }
         .ru-terminal { font-size: 0.74rem; }
         .ru-footer__top { align-items: flex-start; flex-direction: column; }
       }

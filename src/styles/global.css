@@ -245,7 +245,10 @@ h1#_top {
 
 /* ──────────────────────────────── Header ──────────────────────────────── */
 
-.header {
+/* Target only the outer <header> element, not the inner <div class="header">
+   inside Header.astro — both share the class, so .header would double-render
+   the border-bottom. */
+header.header {
   background: var(--ru-bg) !important;
   border-bottom: 1px solid var(--ru-border) !important;
   backdrop-filter: none !important;
