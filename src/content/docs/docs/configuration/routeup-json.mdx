@@ -3,15 +3,16 @@ title: routeup.json
 description: The standalone config file for any project.
 ---
 
-`routeup.json` lives in your project directory and gives routeup a default name
-and port, so you can run `routeup serve` with no arguments. It works for any
-language, use it whenever your project is not a Node project (for Node, you can
-embed the same settings in [`package.json`](/docs/configuration/package-json-embed)).
+`routeup.json` works for any project and gives routeup a default route, targets,
+and optional command. Node projects may instead embed the same routing settings
+in [`package.json`](/docs/configuration/package-json-embed); when both exist,
+`routeup.json` wins.
 
 ## Minimal config
 
-```json
+```json title="routeup.json"
 {
+  "$schema": "https://raw.githubusercontent.com/mukul-mehta/routeup/main/routeup.schema.json",
   "name": "example-app",
   "port": 8080
 }
@@ -23,33 +24,39 @@ With this present, run:
 routeup serve
 ```
 
-The configured name and port are used directly. A positional bare name is a
-sub-route, so `routeup serve api` resolves to `api.example-app`.
+The configured name and port are used directly when no explicit name is passed.
+An explicit name is always literal, so `routeup serve api` serves route `api`.
 
 ## Fields
 
 ```txt
-name     default project / route name used for bare-name resolution
-port     the local port to proxy to (optional when using command)
-command  the shell command to run in script-runner mode
-targets  optional list of path-routed targets for one-origin frontend + API setups
-expose   optional public exposure settings, including paths
-capture  optional request/response capture settings for routeup inspect
+$schema       JSON Schema URL for editor validation and completion
+name          optional default route name
+port          the local port to proxy to (optional when using command)
+command       the shell command to run in script-runner mode
+port_env_var  additional environment variable that receives the assigned port
+targets       optional list of path-routed targets for one-origin frontend + API setups
+expose        optional public exposure settings, including paths
+capture       optional request/response capture settings for routeup inspect
 ```
 
-The `name` field doubles as the project name: a bare argument like
-`routeup serve api` resolves to `api.example-app`, while a dotted argument is used
-literally. See [Name resolution](/docs/configuration/name-resolution).
+The repository's [`routeup.schema.json`](https://github.com/mukul-mehta/routeup/blob/main/routeup.schema.json)
+provides editor completion and catches unknown or invalid fields before routeup
+runs.
+
+The `name` field is a literal default used only when no positional name or
+`ROUTEUP_NAME` is supplied. If it is omitted too, routeup uses the
+working-directory basename. See [Name resolution](/docs/configuration/name-resolution).
 
 ## Running a command
 
-When `command` is set, routeup starts your dev server and manages its lifetime.
-It assigns a free port, injects it as `PORT`, and routes to it automatically —
-you do not need to set `port` explicitly:
+When `command` is set and you run bare `routeup`, routeup starts your dev server
+and manages its lifetime. It assigns a free port, injects it as `PORT`, and
+routes to it automatically; you do not need to set `port` explicitly:
 
-```json
+```json title="routeup.json"
 {
-  "name": "my-app",
+  "name": "example-app",
   "command": "pnpm dev"
 }
 ```
@@ -60,11 +67,22 @@ with no further changes. Vite and Astro need one line of config to forward
 [Framework setup](/docs/configuration/frameworks) guide for per-framework
 instructions.
 
+If a process expects another variable, `port_env_var` receives the same assigned
+port in addition to `PORT`:
+
+```json title="routeup.json"
+{
+  "name": "webhook-consumer",
+  "command": "go run ./cmd/dev",
+  "port_env_var": "WEBHOOK_CONSUMER_PORT"
+}
+```
+
 ## Path routing
 
 Use `targets` when one hostname should proxy different path prefixes to different local ports:
 
-```json
+```json title="routeup.json"
 {
   "name": "example-app",
   "targets": [
@@ -76,11 +94,26 @@ Use `targets` when one hostname should proxy different path prefixes to differen
 
 This keeps the browser on one origin, for example `https://example-app.localhost/api/users`, while routeup sends `/api/*` to the API port.
 
+## Config-driven exposure
+
+Set `expose.enabled` when bare `routeup` or `routeup serve` should expose the
+route without an explicit `--expose` flag:
+
+```json title="routeup.json"
+{
+  "name": "example-app",
+  "port": 8080,
+  "expose": {
+    "enabled": true
+  }
+}
+```
+
 ## Path-limited exposure
 
-By default, `--public` exposes every path on the route. Limit public exposure with `expose.paths`:
+By default, `--expose` opens every path on the route. Limit public exposure with `expose.paths`:
 
-```json
+```json title="routeup.json"
 {
   "name": "example-app",
   "port": 8080,
@@ -90,7 +123,7 @@ By default, `--public` exposes every path on the route. Limit public exposure wi
 }
 ```
 
-The route still works locally at every path, but only matching paths are reachable through the public URL.
+The route still works locally at every path, but only matching paths are reachable through the public URL. Other public requests receive an intentionally ambiguous `404` response: `path does not exist or is not exposed`.
 
 ## Request and response capture
 
@@ -98,7 +131,7 @@ routeup can retain request and response data so you can inspect it later with
 `routeup inspect <request-id>`. Capture is off by default because retained data
 may contain secrets.
 
-```json
+```json title="routeup.json"
 {
   "name": "example-app",
   "port": 8080,
@@ -116,16 +149,22 @@ may contain secrets.
 | `response` | Retain upstream response headers and body |
 | `redact_headers` | Headers to omit from capture (case-insensitive); they are still forwarded to the upstream |
 
-Each captured message is bounded to 256 KiB. If a body exceeds that, `routeup inspect`
-shows a partial prefix and marks the capture as incomplete.
+Each captured message is bounded to 256 KiB. If a body exceeds that,
+`routeup inspect` shows a retained prefix and marks the capture as `partial`.
 
 Get the request id from `routeup logs`, then inspect it:
 
 ```bash
-routeup logs example-app --follow
-# 12:41:03 public example-app POST /api/webhooks/github 200 38ms req_abc123
+routeup logs example-app --limit 1
+```
 
-routeup inspect req_abc123
+```txt frame="terminal" title="terminal"
+TIME      ROUTE                         SOURCE  STATUS  ID                    METHOD   DURATION  PATH
+12:41:03  example-app                   public  200     req_Ap7kQ3mN8vR2xLzC  POST     38ms      /api/webhooks/github
+```
+
+```bash
+routeup inspect req_Ap7kQ3mN8vR2xLzC
 ```
 
 ## Discovery
@@ -136,3 +175,6 @@ walk-up to parent directories. If both `routeup.json` and a `package.json`
 
 Per-language manifests beyond `package.json` (such as `pyproject.toml` or
 `Cargo.toml`) are not read; non-JS projects use `routeup.json` directly.
+
+Run [`routeup config`](/docs/cli-reference/config) to see the discovered source
+and resolved route, targets, runner, exposure, capture, server, and token state.

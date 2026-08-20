@@ -1,0 +1,37 @@
+---
+title: routeup stop
+description: Stop a foreground or detached routeup serve owner.
+---
+
+`routeup stop` asks a live `routeup serve` owner to exit, then waits for its
+local route and optional public exposure to be released.
+
+```bash
+routeup stop [name]
+```
+
+An explicit name is literal. When the name is omitted, routeup uses the first
+available source:
+
+1. `ROUTEUP_NAME`.
+2. The `name` in `routeup.json` or the `package.json` `routeup` block.
+3. The working-directory basename.
+
+```bash
+routeup stop example-app
+routeup stop                  # use env, config, or directory fallback
+```
+
+`stop` works for foreground and detached `serve` owners. It releases the route
+and any public exposure owned by that serve process, but it does not stop the
+external application listening on the target port.
+
+Bare runner mode and standalone [`routeup expose`](/docs/cli-reference/expose)
+are not controlled by this command. Stop those commands from their owning
+terminal or let the runner's child process exit.
+
+The stop request is cooperative: the owner acknowledges it through the local
+agent, performs owner-conditional cleanup, and exits. routeup never sends a
+signal to a PID copied from the route registry. If the agent is restarting,
+`stop` waits for a live serve owner to restore its control stream. A missing
+route is treated as already stopped.

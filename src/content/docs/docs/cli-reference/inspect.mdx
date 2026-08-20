@@ -13,16 +13,22 @@ routeup inspect <request-id>
 Get the request id from `routeup logs`:
 
 ```bash
-routeup logs example-app --follow
-# 12:41:03 public example-app POST /api/webhooks/github 200 38ms req_abc123
+routeup logs example-app --limit 1
+```
 
-routeup inspect req_abc123
+```txt frame="terminal" title="terminal"
+TIME      ROUTE                         SOURCE  STATUS  ID                    METHOD   DURATION  PATH
+12:41:03  example-app                   public  200     req_Ap7kQ3mN8vR2xLzC  POST     38ms      /api/webhooks/github
+```
+
+```bash
+routeup inspect req_Ap7kQ3mN8vR2xLzC
 ```
 
 ## Example output
 
-```txt
-Request req_abc123
+```txt frame="terminal" title="terminal"
+Request req_Ap7kQ3mN8vR2xLzC
 
 Metadata
 --------
@@ -38,43 +44,51 @@ Host: example-app.try.routeup.dev
 Request
 -------
 Capture: complete
-Body bytes: 842
+Body bytes: 63
+Redacted: authorization, cookie, x-hub-signature-256
 X-Github-Event: push
-X-Hub-Signature-256: sha256=abc...
 
 Body
 ----
-{"ref":"refs/heads/main","repository":{"full_name":"..."},...}
+{
+  "ref": "refs/heads/main",
+  "repository": {
+    "full_name": "acme/api"
+  }
+}
 
 Response
 --------
 Capture: complete
-Body bytes: 14
-Content-Type: text/plain; charset=utf-8
+Body bytes: 11
+Redacted: authorization, cookie, x-hub-signature-256
+Content-Type: application/json
 
 Body
 ----
-{"ok":true}
+{
+  "ok": true
+}
 ```
 
 ## Enabling capture
 
 Capture is disabled by default. Enable it per-route in `routeup.json`:
 
-```json
+```json title="routeup.json"
 {
   "name": "example-app",
   "port": 8080,
   "capture": {
     "request": true,
     "response": true,
-    "redact_headers": ["authorization", "cookie"]
+    "redact_headers": ["authorization", "cookie", "x-hub-signature-256"]
   }
 }
 ```
 
 `request` captures incoming headers and body. `response` captures the upstream's
-headers and body. Both are independent — you can enable either or both.
+headers and body. Both are independent; you can enable either or both.
 
 Headers listed in `redact_headers` are omitted from the captured copy but are
 still forwarded to the upstream service unchanged.
@@ -90,3 +104,9 @@ response message is independently bounded to 256 KiB. Larger bodies are captured
 
 `routeup inspect` is only accessible over the local Unix socket (mode 0600).
 It is not reachable from the network.
+
+By default, captured bytes and header values are escaped before they reach the
+terminal, so a captured payload cannot emit terminal control sequences. Use
+`--raw` only when you intentionally need the original bytes, usually with
+redirection. `--json` emits the complete structured exchange; captured byte
+slices use JSON's base64 encoding. `--raw` and `--json` are mutually exclusive.

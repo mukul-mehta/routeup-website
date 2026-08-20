@@ -29,6 +29,9 @@ Key flags:
 --tls-key <path>            PEM private key for cert mode
 ```
 
+Run `routeup server --help` for listen, ACME, logging, metrics, and rate-limit
+options.
+
 In `acme` mode the server obtains and renews wildcard certificates through Let's
 Encrypt using the Cloudflare DNS-01 challenge (`CLOUDFLARE_API_TOKEN`). In `cert`
 mode you provide a certificate and key. See [TLS](/docs/self-hosting/tls).
@@ -48,11 +51,11 @@ routeup token revoke <token-id> --db /var/lib/routeup/server.db
 Run token commands on the server host. They open SQLite directly, so use the same
 `--db` or `--config` value as the running server.
 
-The allow pattern is the only authority, the server rejects any claim whose host
+The allow pattern is the only authority; the server rejects any claim whose host
 falls outside it. Tiers fall out of the pattern shape:
 
 ```txt
-*.tunnel.example.com          # whole suffix (admin / co-maintainer)
+*.tunnel.example.com          # root tier; one label under the suffix
 *.alice.tunnel.example.com    # a personal namespace
 *.team-x.tunnel.example.com   # a shared team namespace
 ```

@@ -20,7 +20,7 @@ brew upgrade routeup
 ## curl installer
 
 ```bash
-curl -fsSL https://get.routeup.dev/install.sh | sh
+curl -fsSL https://get.routeup.dev | sh
 ```
 
 The installer downloads the latest GitHub release for your OS and architecture, verifies `checksums.txt`, and installs `routeup` into `/usr/local/bin` when writable or `~/.local/bin` otherwise. Override the destination with `ROUTEUP_INSTALL_DIR`.
@@ -50,6 +50,9 @@ Run setup once:
 ```bash
 routeup setup
 ```
+
+For a strictly local setup, enter `none` at the optional public-server prompt.
+No server is contacted unless you later expose a route.
 
 Then serve your first local HTTPS route:
 

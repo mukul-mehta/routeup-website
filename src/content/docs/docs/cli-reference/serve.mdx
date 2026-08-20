@@ -5,23 +5,24 @@ description: Register a local route and reverse-proxy it to a local port.
 
 `routeup serve` registers a route with the local agent and reverse-proxies it to
 one or more targets you are already running. The route is local by default; add
-`--expose` to expose the same targets through a routeup
+`--expose`, or set `expose.enabled`, to expose the same targets through a routeup
 server.
 
 ```bash
 routeup serve example-app --port 8080
 ```
 
-Opens `https://example-app.localhost`. The command holds the route until you press
-`Ctrl-C`.
+Opens `https://example-app.localhost`. In foreground mode the command holds the
+route until Ctrl-C and prints new local and public request rows for this route.
 
 ## Usage
 
 ```bash
-routeup serve                       # use the name + port from config
-routeup serve example-app --port 8080     # bare name, scoped by the project name
+routeup serve                             # use env/config/directory name + configured targets
+routeup serve example-app --port 8080     # explicit names are literal
 routeup serve api.example-app --port 8080 # literal dotted route
-routeup serve example-app --port 8080 --expose   # also expose publicly
+routeup serve example-app --port 8080 --expose
+routeup serve example-app --port 8080 --detach   # shorthand: -d
 ```
 
 ## Name resolution
@@ -31,12 +32,12 @@ The route name comes from the first source that is set:
 1. The positional argument (`routeup serve example-app`).
 2. `ROUTEUP_NAME`.
 3. The `name` field in `routeup.json` or the `package.json` `routeup` block.
+4. The working-directory basename.
 
-For a positional argument, a name **containing a dot is taken literally**
-(`api.example-app` → route `api.example-app`). A positional **bare** name is prefixed with
-the project name from config (project `example-app` + `api` → `api.example-app`). With no
-project in scope, a bare positional name is used as-is. Environment and config
-names are literal. See [Name resolution](/docs/configuration/name-resolution).
+Every explicit positional name is taken literally. Config name `example-app`
+does not change `routeup serve api`: that command serves route `api`. Omit the
+argument to use the remaining sources. See
+[Name resolution](/docs/configuration/name-resolution).
 
 ## Flags
 
@@ -48,7 +49,46 @@ names are literal. See [Name resolution](/docs/configuration/name-resolution).
 --server <url>         public-server control URL
 --token <secret>       server token
 --random               generate a random route name
+-d, --detach           keep the route running in the background
+--json                 write one ready event as JSON
+--qr                   print a terminal QR code for the route URL
 ```
+
+`--json` and `--qr` are mutually exclusive. When exposure is enabled, `--qr`
+uses the public URL; otherwise it uses the local URL.
+`--random` cannot be combined with a positional route name.
+
+## Foreground and detached lifecycle
+
+Foreground human output ends with:
+
+```txt frame="terminal" title="terminal"
+requests: live
+press Ctrl-C to stop
+```
+
+New completed requests are printed with the same columns as
+[`routeup logs`](/docs/cli-reference/logs). The owner restores its local claim
+and optional public exposure if the agent restarts.
+
+With `-d/--detach`, routeup starts the same owner in a detached process and
+returns only after the local claim, optional exposure, and stop control are
+ready:
+
+```txt frame="terminal" title="terminal"
+route: example-app
+local: https://example-app.localhost
+targets:
+  /        http://localhost:8080
+
+status: running in background (pid 48172)
+stop: routeup stop example-app
+logs: routeup logs example-app --follow
+```
+
+Stop foreground or detached serve owners with [`routeup stop [name]`](/docs/cli-reference/stop).
+Detached mode does not write request rows to its lifecycle log; use the printed
+`routeup logs` command.
 
 ## Local vs public
 
@@ -59,12 +99,33 @@ same targets.
 
 Standalone [`routeup expose`](/docs/cli-reference/expose) reuses a matching
 active route when available. If there is no active route, it resolves targets
-from flags, environment, or config and attempts to register a local route for
-the exposure session as well.
+from flags, environment, or config and opens a public-only exposure without
+registering a local route.
 
 Dotted local names are normalized to one public label: `api.example-app` remains
 `https://api.example-app.localhost` locally and is requested as public label
 `api-example-app`. See [Exposing publicly](/docs/getting-started/exposing-publicly).
+
+## Automation output
+
+Use `--json` when another process needs to wait for the route and read its
+resolved URL and targets:
+
+```json title="ready event"
+{"event":"ready","route":"example-app","local_url":"https://example-app.localhost","targets":[{"path":"/","port":8080}],"owner_pid":48172}
+```
+
+`serve --json` writes exactly one ready object to stdout after the claim,
+optional public exposure, and owner-control stream are established. It does not
+probe whether the external target is listening. Human status and live request
+rows are suppressed; reconciliation diagnostics remain on stderr. Foreground
+mode still owns the route until stopped.
+
+Detached JSON also reports that the owner was detached, then returns:
+
+```json title="ready event"
+{"event":"ready","route":"example-app","local_url":"https://example-app.localhost","targets":[{"path":"/","port":8080}],"detached":true,"owner_pid":48172}
+```
 
 ## Conflicts
 

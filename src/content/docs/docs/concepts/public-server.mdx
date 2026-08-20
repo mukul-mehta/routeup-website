@@ -11,7 +11,7 @@ It is self-hostable and included in the same `routeup` binary as the CLI and loc
 
 - Token-scoped public route claims.
 - Optional token-less public namespace.
-- SQLite persistence for tokens and active claims.
+- SQLite persistence for tokens and token-backed route holds.
 - Reserved subdomain enforcement.
 - HTTPS termination.
 - WebSocket + yamux tunnel transport back to the local agent.
@@ -22,7 +22,10 @@ The server always serves HTTPS. In `acme` mode it obtains wildcard certificates 
 
 ## Client usage
 
+The control host, such as `edge.example.com`, must resolve to the server and
+should be reserved from root-tier route claims.
+
 ```bash
 routeup setup --server https://edge.example.com --token sk_routeup_xxx
-routeup serve example-app --port 8080 --public
+routeup serve example-app --port 8080 --expose
 ```

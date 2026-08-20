@@ -1,0 +1,41 @@
+---
+title: routeup dashboard
+description: Open a read-only terminal dashboard for routes, exposures, and live requests.
+---
+
+`routeup dashboard` opens a full-screen terminal view of the local routeup
+agent:
+
+```bash
+routeup dashboard
+```
+
+It shows active local routes, every managed public exposure, tunnel state, and
+a live bounded list of requests. Select a captured request and press `Enter` to
+open the same safely escaped request and response details available through
+[`routeup inspect`](/docs/cli-reference/inspect).
+
+## Controls
+
+```txt
+Tab / Shift-Tab   move between routes, exposures, and requests
+Up / Down, j / k  navigate the focused section
+g / G             jump to the first or last item
+Enter             inspect the selected captured request
+Esc / Backspace   return from request details
+q / Ctrl-C        quit
+```
+
+On short terminals, route and exposure sections collapse so the live request
+list remains usable. Columns also adapt to the terminal width.
+
+## Read-only behavior
+
+The dashboard never starts, stops, or changes the agent, routes, or tunnels. If
+the agent is not running, it remains open with an offline state and reconnects
+when the agent becomes available. Request history resets when the agent
+restarts because logs and captures are held only in memory.
+
+The command requires an interactive terminal. For scripts and redirected
+output, use [`routeup routes --json`](/docs/cli-reference/routes) and
+[`routeup logs --json`](/docs/cli-reference/logs) instead.

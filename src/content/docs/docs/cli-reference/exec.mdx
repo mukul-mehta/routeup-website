@@ -1,0 +1,76 @@
+---
+title: routeup exec
+description: Run one command with Routeup project URLs and local CA trust without owning a route.
+---
+
+`routeup exec` runs one command with the Routeup project environment. It does
+not start the agent, register or expose a route, allocate a port, or wait for a
+service to become ready.
+
+Use it when [`routeup serve`](/docs/cli-reference/serve) owns the route and
+other processes need the same URLs or local CA trust:
+
+```bash
+# Terminal 1: own the route
+routeup serve
+
+# Other terminals: run independent processes with the project environment
+routeup exec -- yarn start:dev
+routeup exec -- yarn start:consumer:sync
+routeup exec -- yarn start:consumer:webhook
+```
+
+Stopping an `exec` command does not remove the route. The route remains active
+until the separate `routeup serve` process stops.
+
+## Environment
+
+`exec` preserves the existing environment and adds Routeup's project context:
+
+```txt
+HOST=127.0.0.1
+PORT=<configured target port, when present>
+ROUTEUP_LOCAL_URL=https://example-app.localhost
+ROUTEUP_URL=https://example-app.localhost
+NODE_EXTRA_CA_CERTS=/Users/me/.routeup/ca.crt
+```
+
+The project-local `node_modules/.bin` directory is also prepended to `PATH`.
+When the route already has an active public exposure, `ROUTEUP_URL` contains
+that public URL instead. `ROUTEUP_LOCAL_URL` always stays local.
+
+These values are a snapshot taken when the process starts. A later exposure
+change does not modify the environment of a running process.
+
+## Command resolution
+
+With an explicit command, put every command argument after `--`:
+
+```bash
+routeup exec -- yarn test
+routeup exec -- node scripts/seed.js
+```
+
+The explicit argument vector is executed without shell interpolation. It takes
+precedence over a configured runner command.
+
+With no arguments, `exec` uses the same configured command as bare `routeup`:
+
+```bash
+routeup exec
+```
+
+- A `package.json` `routeup.script` resolves the named package script.
+- A `routeup.json` `command` runs as a shell command.
+- If neither is configured, pass a command after `--`.
+
+## Process behavior
+
+`exec` owns only the process it starts. It forwards terminal input and signals,
+stops remaining descendants when the command exits, and returns the child's
+exit code. It does not restart the command or coordinate it with other
+processes.
+
+The injected URL describes the project route but does not guarantee it is
+active. Run `routeup serve` separately when the command needs to reach that
+route.

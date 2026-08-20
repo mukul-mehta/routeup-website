@@ -20,7 +20,19 @@ routeup doctor
 - **Agent**: the background agent is running and reachable over its local
   socket.
 
-Each check prints `ok` or a specific failure with the command that fixes it.
+Each check prints `ok`, `warn`, or a specific failure with the command that
+fixes it:
+
+```txt frame="terminal" title="terminal"
+  [ok]   local CA at /Users/me/.routeup/ca.crt (expires 2027-08-11)
+  [ok]   local CA trusted in OS trust store
+  [ok]   port 443: helper installed
+  [ok]   agent running (version 0.4.2, uptime 5127s)
+```
+
+The command exits successfully when every check is `ok` or `warn`, and fails
+when any check is `fail`. Use `routeup doctor --json` for structured check IDs,
+levels, messages, and an overall `healthy` boolean.
 
 ## Common failures
 
@@ -30,14 +42,17 @@ Each check prints `ok` or a specific failure with the command that fixes it.
 - **CA not trusted**: the trust store was reset or the CA was removed. Re-run
   `routeup setup`.
 - **Agent unreachable**: restart it with `routeup agent restart`, or run
-  `routeup setup` if autostart was removed.
+  `routeup setup` if setup state is missing or damaged.
 
 ## Non-browser clients
 
-Browsers, Safari, and `curl` use the system trust store automatically. Some
-runtimes ship their own CA bundle, point them at the routeup CA:
+Browsers and `curl` usually use the system trust store automatically. Some
+runtimes ship their own CA bundle; point them at the routeup CA:
 
 ```bash
 export NODE_EXTRA_CA_CERTS=~/.routeup/ca.crt   # Node.js
 export REQUESTS_CA_BUNDLE=~/.routeup/ca.crt     # Python (requests / urllib3)
 ```
+
+For apps with their own certificate settings, including Hoppscotch, see
+[Custom CA certificates](/docs/configuration/custom-ca-certificates).

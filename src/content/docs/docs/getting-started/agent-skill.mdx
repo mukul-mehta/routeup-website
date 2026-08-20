@@ -1,0 +1,108 @@
+---
+title: Agent Skill
+description: Teach coding agents how to install, set up, configure, and use routeup safely.
+---
+
+Routeup publishes an official [Agent Skill](https://agentskills.io) for coding
+agents that support the open `SKILL.md` format. The skill teaches an agent how
+to install the CLI, perform one-time machine setup, configure a project, choose
+between runner and serve modes, expose a route deliberately, and inspect traffic
+without leaking credentials.
+
+## Install the skill
+
+Install it globally when you want Routeup available to your agent in every
+project:
+
+```bash
+npx skills add mukul-mehta/routeup --skill routeup -g
+```
+
+The Skills CLI detects installed agents and offers compatible destinations,
+including OpenCode, Claude Code, Codex, Cursor, and GitHub Copilot.
+
+To install it only for the current project, omit `-g`:
+
+```bash
+npx skills add mukul-mehta/routeup --skill routeup
+```
+
+A project installation can be committed when everyone working in the repository
+should receive the same guidance. Review the generated agent-specific files
+before committing them.
+
+The canonical source is
+[`skills/routeup/SKILL.md`](https://github.com/mukul-mehta/routeup/blob/main/skills/routeup/SKILL.md).
+
+## Let the agent set up Routeup
+
+After installing the skill, give the agent a direct request:
+
+```txt
+Use the Routeup skill to install and set up Routeup on this machine. Verify it
+with routeup doctor, then give this project a stable local HTTPS route.
+```
+
+That request authorizes the skill's installation and setup workflow. The agent
+will:
+
+1. Check whether `routeup` is already installed.
+2. Install it with Homebrew or the official installer when necessary.
+3. Run `routeup setup` for the local CA and port 443.
+4. Leave Touch ID or administrator-password approval to you.
+5. Verify the machine with `routeup doctor --json`.
+6. Inspect existing project configuration before changing anything.
+7. Start a local `.localhost` route without exposing it publicly.
+
+Machine setup changes the OS trust store and privileged port handling. If you
+did not explicitly request setup, the skill tells the agent to explain those
+changes and ask first. It never instructs an agent to bypass an interactive
+privilege prompt or disable TLS verification.
+
+## Common prompts
+
+Route an application that is already listening:
+
+```txt
+Use Routeup to serve the app currently listening on port 3000 as
+https://dashboard.localhost. Keep it local only.
+```
+
+Configure runner mode for the current project:
+
+```txt
+Use the Routeup skill to inspect this project and add the smallest valid runner
+configuration. The app must honor the HOST and PORT supplied by Routeup.
+```
+
+Create a public webhook endpoint:
+
+```txt
+Use Routeup to expose this project's webhook endpoint publicly. Limit exposure
+to /api/webhooks/* and redact authorization, cookie, and signature headers from
+capture. Ask before changing any existing config.
+```
+
+Prepare a local service for an off-machine browser agent:
+
+```txt
+Use the Routeup skill to make this dev server reachable by a remote browser
+agent. Explain the public exposure before starting it and return the granted URL.
+```
+
+## Safety defaults
+
+The skill instructs agents to:
+
+- Prefer trusted local `.localhost` routes over public tunnels.
+- Ask before setup or exposure unless the request already authorizes it.
+- Keep tokens out of prompts, command output, and project configuration.
+- Enable request or response capture only when requested.
+- Redact sensitive headers from retained traffic.
+- Use structured CLI output instead of parsing terminal styling.
+- Stop foreground or detached owners through Routeup's normal lifecycle.
+- Treat the installed CLI's `--help` output as the version-specific authority.
+
+The skill is instruction-only. It contains no executable scripts and grants no
+tools or shell commands permission in advance; the selected agent still applies
+its normal permission and sandbox rules.

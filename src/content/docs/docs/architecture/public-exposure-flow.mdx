@@ -9,11 +9,13 @@ to the internet.
 
 ## The path
 
+The example below assumes a root-tier token allowing `*.routeup.dev`.
+
 ```txt
 external browser / webhook provider
   -> https://example-app.routeup.dev
   -> public DNS -> routeup server
-  -> token / claim lookup
+  -> authorization and active-claim lookup
   -> tunnel stream (WebSocket + yamux)
   -> local agent
   -> 127.0.0.1:8080  (your service)
@@ -39,8 +41,10 @@ external browser / webhook provider
 ## Why a tunnel
 
 The outbound connection means your service never needs an inbound port, a public
-IP, or a firewall change. Cancellation and timeouts propagate end-to-end, and the
-client reconnects with backoff if the connection drops.
+IP, or a firewall change. Cancellation and timeouts propagate end-to-end, and
+the agent's tunnel client reconnects with backoff for transient drops. If the
+agent restarts or a tunnel terminates permanently, the live CLI owner restores
+the exposure from its retained desired state.
 
 See [Public server](/docs/concepts/public-server) and the
 [tunnel transport](/docs/concepts/public-server#what-it-handles) for the

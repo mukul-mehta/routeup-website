@@ -11,27 +11,34 @@ routeup routes
 
 Example output:
 
-```txt
-NAME       TARGETS  PUBLIC                      PATHS      PID    AGE  CWD
-example-app      /:8080   https://example-app.routeup.dev   all paths  41021  12s  /Users/me/example-app
-api.example-app  /:9080   -                           -          41044  8s   /Users/me/example-app
+The public URL below assumes a root-tier token allowing `*.routeup.dev`.
+
+```txt frame="terminal" title="terminal"
+routes  2 active
+
+api.example-app
+  local    https://api.example-app.localhost
+  targets  / -> localhost:9080
+  public   -
+  process  pid 41044 | 8s
+  cwd      ~/example-app
+
+example-app
+  local    https://example-app.localhost
+  targets  / -> localhost:8080
+  public   https://example-app.routeup.dev
+  paths    all paths
+  process  pid 41021 | 12s
+  cwd      ~/example-app
 ```
 
-Columns:
+Each route block shows:
 
-- **Name**: the active dotted route name.
-- **Targets**: path and port pairs such as `/:8080`; multiple targets are
-  comma-separated.
-- **Public**: the public URL associated with the process that owns this local
-  claim, or `-` when none is associated.
-- **Paths**: that owner's publicly exposed path scope, or `-` when none is
-  associated.
-- **PID**: the process holding the local route.
-- **Age**: how long the current claim has been active.
-- **CWD**: the holding process's working directory.
-
-The command does not print a `LOCAL` column. Derive the local URL mechanically as
-`https://<name>.localhost`.
+- the stable local URL,
+- every path target in `path -> localhost:port` form,
+- the public URL and path scope when the route owner also exposes it,
+- the process ID and claim age, and
+- the holding process's working directory, shortened with `~` when possible.
 
 A standalone `routeup expose` may reuse this route's targets while running under
 a different process. That separate tunnel is not annotated on the local claim's
@@ -41,5 +48,10 @@ row.
 
 If the agent is not running, there are no active routes and the command says so.
 Routes exist only while the process that registered them is alive, the agent
-keeps its registry in memory, and each live `serve` re-asserts its claim if the
-agent restarts.
+keeps its registry in memory, and live serve and runner owners re-assert their
+claims if the agent restarts. Owners with public exposure restore that exposure
+too; standalone expose owners restore only their tunnel and are not local route
+rows.
+
+Use `routeup routes --json` for automation. If the agent is not running, JSON
+output is an empty array.

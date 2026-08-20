@@ -1,292 +1,292 @@
 /*
- * Starlight overrides: paper-and-mono, restrained.
+ * Starlight skin: routeup's paper and forest-ink identity.
  *
- * Draws palette + flavor from /Users/mukul-mehta/Personal/DESIGN.md but tones
- * the system down for a docs site: no Press Start 2P (the pixel font is baked
- * into the favicon only), no heavy pixel shadows on every surface, no
- * window-title-band motif. The goal is a calm, readable cream-paper docs page
- * that clearly belongs to the same project as the landing, not a game manual.
+ * Warm forest-ink canvas, Space Grotesk for prose/display, JetBrains Mono for
+ * everything the machine says (nav, labels, commands, hosts, eyebrows).
+ * Color rule: mint = local/trusted, amber = public/exposed. Nothing else gets
+ * color. Terminal and editor frames use the same carbon surfaces as the
+ * landing page; the surrounding docs UI stays flat and hairline-driven.
  *
- * We override targeted Starlight CSS variables rather than replacing rules, so
- * Starlight updates keep working.
+ * Tokens match src/pages/index.astro (dark on :root, light on
+ * :root[data-theme='light']); Starlight --sl-* variables are mapped per theme
+ * so Starlight updates keep working.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+/* Self-hosted fonts (no third-party requests; the site is zero-telemetry). */
+@import '@fontsource/space-grotesk/400.css';
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/700.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/700.css';
+
+/* ─────────────────────────────── Tokens: dark ─────────────────────────── */
+
+:root,
+:root[data-theme='dark'] {
+  --bg: #101512;
+  --panel: #171d19;
+  --panel2: #131a16;
+  --txt: #f5efe1;
+  --sec: #c6c0b2;
+  --gray: #a09a8f;
+  --dim: #938d82;
+  --mint: #79e2cb;
+  --mint-hover: #a4f0de;
+  --amb: #ffb76b;
+  --termdot: #4c554f;
+
+  --hair-strong: rgba(245, 239, 225, 0.22);
+  --hair-mid: rgba(245, 239, 225, 0.18);
+  --hair: rgba(245, 239, 225, 0.14);
+  --hair-soft: rgba(245, 239, 225, 0.1);
+  --hair-faint: rgba(245, 239, 225, 0.08);
+  --line-neutral: rgba(245, 239, 225, 0.32);
+
+  --mint-bd-strong: rgba(121, 226, 203, 0.58);
+  --mint-bd2: rgba(121, 226, 203, 0.42);
+  --mint-bd: rgba(121, 226, 203, 0.34);
+  --mint-bd-soft: rgba(121, 226, 203, 0.28);
+  --mint-bg: rgba(121, 226, 203, 0.11);
+  --mint-bg2: rgba(121, 226, 203, 0.09);
+  --mint-bg3: rgba(121, 226, 203, 0.07);
+  --mint-bg4: rgba(121, 226, 203, 0.06);
+
+  --amb-grad: rgba(255, 183, 107, 0.5);
+  --amb-bd2: rgba(255, 183, 107, 0.42);
+  --amb-bd: rgba(255, 183, 107, 0.34);
+  --amb-bd-soft: rgba(255, 183, 107, 0.28);
+  --amb-bg: rgba(255, 183, 107, 0.09);
+  --amb-bg2: rgba(255, 183, 107, 0.07);
+
+  /* Skin-internal derived values */
+  --ru-prose: #d1cbbd;
+  --ru-code: #ded8ca;
+  --ru-header-bg: rgba(16, 21, 18, 0.92);
+
+  --terminal-bg: #090c0b;
+  --terminal-bar: #20241f;
+  --terminal-border: #50564c;
+  --terminal-text: #fff8e8;
+  --terminal-muted: #beb5a4;
+  --terminal-dim: #a29a8c;
+  --terminal-local: #82e8d2;
+  --terminal-public: #ffc078;
+  --terminal-red: #ff6b5f;
+  --terminal-yellow: #f0c96c;
+  --terminal-green: #70cf72;
+  --editor-bg: #101713;
+  --editor-bar: #18211c;
+  --editor-border: #42534a;
+}
+
+/* ─────────────────────────────── Tokens: light ────────────────────────── */
+
+:root[data-theme='light'] {
+  --bg: #e9e3d2;
+  --panel: #fffaf0;
+  --panel2: #f7eee3;
+  --txt: #1b1812;
+  --sec: #464034;
+  --gray: #595247;
+  --dim: #665e51;
+  --mint: #075d59;
+  --mint-hover: #044946;
+  --amb: #a44a16;
+  --termdot: #bcb19e;
+
+  --hair-strong: rgba(27, 24, 18, 0.3);
+  --hair-mid: rgba(27, 24, 18, 0.24);
+  --hair: rgba(27, 24, 18, 0.18);
+  --hair-soft: rgba(27, 24, 18, 0.12);
+  --hair-faint: rgba(27, 24, 18, 0.09);
+  --line-neutral: rgba(27, 24, 18, 0.38);
+
+  --mint-bd-strong: rgba(7, 93, 89, 0.62);
+  --mint-bd2: rgba(7, 93, 89, 0.48);
+  --mint-bd: rgba(7, 93, 89, 0.4);
+  --mint-bd-soft: rgba(7, 93, 89, 0.34);
+  --mint-bg: rgba(7, 93, 89, 0.11);
+  --mint-bg2: rgba(7, 93, 89, 0.09);
+  --mint-bg3: rgba(7, 93, 89, 0.08);
+  --mint-bg4: rgba(7, 93, 89, 0.07);
+
+  --amb-grad: rgba(164, 74, 22, 0.56);
+  --amb-bd2: rgba(164, 74, 22, 0.46);
+  --amb-bd: rgba(164, 74, 22, 0.4);
+  --amb-bd-soft: rgba(164, 74, 22, 0.34);
+  --amb-bg: rgba(164, 74, 22, 0.09);
+  --amb-bg2: rgba(164, 74, 22, 0.07);
+
+  --ru-prose: #464034;
+  --ru-code: #2d2922;
+  --ru-header-bg: rgba(233, 227, 210, 0.92);
+}
+
+/* ─────────────────────── Starlight variable mapping ───────────────────── */
 
 :root {
-  --ru-bg:        #e8e2d0;
-  --ru-bg-elev:   #faf6e8;
-  --ru-bg-soft:   #ddd5be;
-  --ru-fg:        #1c160c;
-  --ru-fg-dim:    #3b3221;
-  --ru-fg-faint:  #5f5640;
-  --ru-border:    #2a2418;
-  --ru-rule:      rgba(42, 36, 24, 0.18);
-  --ru-accent:    #0e9999;
-  --ru-accent-fg: #0a6a6a;
-  --ru-dg:        #b8860b;
-  --ru-dn:        #b91c1c;
-
+  --ru-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
   --ru-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  --sl-font:      var(--ru-mono);
+  --sl-font: var(--ru-sans);
   --sl-font-mono: var(--ru-mono);
+
+  --sl-content-width: 52.5rem;   /* 840px article */
+  --sl-sidebar-width: 15.625rem; /* 250px sidebar */
+
+  /* No shadows anywhere. */
+  --sl-shadow-sm: none;
+  --sl-shadow-md: none;
+  --sl-shadow-lg: none;
 }
 
-/* Single light theme. Paper has no dark variant. */
 :root,
-:root[data-theme='light'],
 :root[data-theme='dark'] {
-  --sl-color-accent-low:   #c5e8e8;
-  --sl-color-accent:       var(--ru-accent);
-  --sl-color-accent-high:  var(--ru-accent-fg);
+  color-scheme: dark;
 
-  --sl-color-white:  var(--ru-fg);
-  --sl-color-gray-1: var(--ru-fg);
-  --sl-color-gray-2: var(--ru-fg-dim);
-  --sl-color-gray-3: var(--ru-fg-faint);
-  --sl-color-gray-4: #8a7f64;
-  --sl-color-gray-5: var(--ru-bg-soft);
-  --sl-color-gray-6: var(--ru-bg);
-  --sl-color-gray-7: var(--ru-bg-elev);
-  --sl-color-black:  var(--ru-fg);
+  --sl-color-accent-low: var(--mint-bg);
+  --sl-color-accent: var(--mint);
+  --sl-color-accent-high: var(--mint-hover);
 
-  --sl-color-bg:             var(--ru-bg);
-  --sl-color-bg-nav:         var(--ru-bg);
-  --sl-color-bg-sidebar:     var(--ru-bg);
-  --sl-color-bg-inline-code: var(--ru-bg-elev);
-  --sl-color-bg-accent:      var(--ru-accent);
+  --sl-color-white: var(--txt);
+  --sl-color-gray-1: var(--ru-prose);
+  --sl-color-gray-2: var(--sec);
+  --sl-color-gray-3: var(--gray);
+  --sl-color-gray-4: var(--dim);
+  --sl-color-gray-5: #38413b;
+  --sl-color-gray-6: var(--panel);
+  --sl-color-gray-7: var(--panel2);
+  --sl-color-black: var(--bg);
 
-  --sl-color-text:        var(--ru-fg-dim);
-  --sl-color-text-accent: var(--ru-accent-fg);
-  --sl-color-text-invert: var(--ru-bg-elev);
+  --sl-color-bg: var(--bg);
+  --sl-color-bg-nav: var(--bg);
+  --sl-color-bg-sidebar: var(--bg);
+  --sl-color-bg-inline-code: var(--mint-bg);
+  --sl-color-bg-accent: var(--mint);
 
-  --sl-color-hairline:       var(--ru-rule);
-  --sl-color-hairline-light: var(--ru-rule);
-  --sl-color-hairline-shade: var(--ru-rule);
+  --sl-color-text: var(--ru-prose);
+  --sl-color-text-accent: var(--mint);
+  --sl-color-text-invert: var(--bg);
 
-  --sl-shadow-md: 3px 3px 0 0 var(--ru-border);
-
-  color-scheme: light;
+  --sl-color-hairline-light: var(--hair-faint);
+  --sl-color-hairline: var(--hair);
+  --sl-color-hairline-shade: var(--hair-soft);
 }
 
-/* ───────────────────────────────── Base ───────────────────────────────── */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --sl-color-accent-low: var(--mint-bg);
+  --sl-color-accent: var(--mint);
+  --sl-color-accent-high: var(--mint-hover);
+
+  --sl-color-white: var(--txt);
+  --sl-color-gray-1: var(--ru-prose);
+  --sl-color-gray-2: var(--sec);
+  --sl-color-gray-3: var(--gray);
+  --sl-color-gray-4: var(--dim);
+  --sl-color-gray-5: #d1c8b5;
+  --sl-color-gray-6: var(--panel);
+  --sl-color-gray-7: var(--panel2);
+  --sl-color-black: var(--bg);
+
+  --sl-color-bg: var(--bg);
+  --sl-color-bg-nav: var(--bg);
+  --sl-color-bg-sidebar: var(--bg);
+  --sl-color-bg-inline-code: var(--mint-bg);
+  --sl-color-bg-accent: var(--mint);
+
+  --sl-color-text: var(--ru-prose);
+  --sl-color-text-accent: var(--mint);
+  --sl-color-text-invert: var(--bg);
+
+  --sl-color-hairline-light: var(--hair-faint);
+  --sl-color-hairline: var(--hair);
+  --sl-color-hairline-shade: var(--hair-soft);
+}
+
+/* ─────────────────────────────────── Base ─────────────────────────────── */
 
 body {
-  font-family: var(--ru-mono);
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  background: var(--ru-bg);
-  color: var(--ru-fg-dim);
+  font-family: var(--ru-sans);
+  background: var(--bg);
+  color: var(--ru-prose);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-::selection { background: var(--ru-accent); color: var(--ru-bg-elev); }
-:focus-visible { outline: 2px solid var(--ru-accent); outline-offset: 2px; }
 
-/* Square corners on the elements that ship rounded. Calm, not aggressive. */
-.sl-markdown-content :is(pre, blockquote, table, .starlight-aside),
-site-search button[data-open-modal],
-site-search button[data-open-modal] kbd,
-.pagination-links a {
-  border-radius: 0;
+::selection {
+  background: var(--mint);
+  color: var(--bg);
 }
 
-/* ───────────────────────────────── Type ───────────────────────────────── */
-
-.sl-markdown-content h1 {
-  font-size: clamp(1.7rem, 3.4vw, 2.2rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  color: var(--ru-fg);
-  margin-bottom: 0.8em;
-}
-/* Starlight renders the page title (an <h1 id="_top">) outside
-   .sl-markdown-content, so the rule above misses it. Match the same type
-   scale so the docs voice holds — heavy ink headline, tight tracking —
-   instead of Starlight's unstyled 42px/600 default. */
-h1#_top {
-  font-size: clamp(1.7rem, 3.4vw, 2.2rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.02em !important;
-  line-height: 1.2 !important;
-  color: var(--ru-fg) !important;
-  margin-bottom: 0.8em !important;
-}
-.sl-markdown-content h2 {
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  color: var(--ru-fg);
-  margin-top: 2em;
-  padding-top: 1.4em;
-  border-top: 1px solid var(--ru-rule);
-}
-.sl-markdown-content :is(h3, h4) {
-  font-weight: 700;
-  letter-spacing: -0.005em;
-  color: var(--ru-fg);
+:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
 }
 
-.sl-markdown-content :is(p, li) { line-height: 1.65; }
-
-/* ──────────────────────────────── Inline code ─────────────────────────── */
-
-.sl-markdown-content :not(pre) > code {
-  font-family: var(--ru-mono);
-  font-size: 0.88em;
-  font-weight: 600;
-  padding: 0.06em 0.34em;
-  background: var(--ru-bg-elev);
-  color: var(--ru-fg);
-  border: 1px solid var(--ru-rule);
-}
-
-/* ──────────────────────────────── Code blocks ─────────────────────────── */
-
-/* Style the frame only; the inner <pre> must not inherit a second border
-   and shadow, or every code block renders with doubled lines. */
-.expressive-code .frame,
-.sl-markdown-content > pre {
-  border: 2px solid var(--ru-border) !important;
-  box-shadow: 3px 3px 0 0 var(--ru-border);
-  border-radius: 0 !important;
-  overflow: hidden;
-}
-.expressive-code .frame pre {
-  border: 0 !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-}
-/* All code frames: dark warm background, consistent with the marketing-page terminal */
-.expressive-code .frame,
-.expressive-code .frame pre {
-  background: #191410 !important;
-  color: #c8c0a8 !important;
-}
-/* Terminal frames get the slightly-darker title bar */
-.expressive-code .frame.is-terminal .header {
-  background: #211a13 !important;
-  border-bottom: 1px solid #302418 !important;
-}
-
-/* macOS traffic-light dots on terminal code frames.
- * EC uses background-color + mask-image (single color). Override with a
- * pre-colored SVG background-image so each circle can be a distinct color. */
-.expressive-code .frame.is-terminal .header::before {
-  background-color: transparent !important;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 16'%3E%3Ccircle cx='8' cy='8' r='8' fill='%23ff5f57'/%3E%3Ccircle cx='30' cy='8' r='8' fill='%23ffbd2e'/%3E%3Ccircle cx='52' cy='8' r='8' fill='%2328c841'/%3E%3C/svg%3E") !important;
-  background-size: 2.1rem 0.56rem !important;
-  background-repeat: no-repeat !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-  opacity: 1 !important;
-}
-
-/* ──────────────────────────────── Links ───────────────────────────────── */
-
-.sl-markdown-content a:not(.sl-link-button) {
-  color: var(--ru-fg);
-  text-decoration: underline;
-  text-decoration-color: var(--ru-accent);
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 3px;
-  font-weight: 600;
-  transition: color 140ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.sl-markdown-content a:not(.sl-link-button):hover { color: var(--ru-accent-fg); }
-
-/* ──────────────────────────────── Blockquote ──────────────────────────── */
-
-.sl-markdown-content blockquote {
-  border: 1px solid var(--ru-rule);
-  border-left: 3px solid var(--ru-accent);
-  background: var(--ru-bg-elev);
-  padding: 0.9em 1.2em;
-  color: var(--ru-fg-dim);
-  font-style: normal;
-}
-
-/* ──────────────────────────────── Asides ──────────────────────────────── */
-
-.starlight-aside {
-  border: 1px solid var(--ru-rule) !important;
-  border-left: 3px solid var(--ru-accent) !important;
-  background: var(--ru-bg-elev) !important;
-  padding: 0.9em 1.2em !important;
-}
-.starlight-aside--caution { border-left-color: var(--ru-dg) !important; }
-.starlight-aside--danger  { border-left-color: var(--ru-dn) !important; }
-.starlight-aside__title {
-  font-weight: 800 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 0.8rem !important;
-  color: var(--ru-fg) !important;
-}
-
-/* ──────────────────────────────── Tables ──────────────────────────────── */
-
-.sl-markdown-content table {
-  border: 1px solid var(--ru-border);
-  font-size: 0.9rem;
-}
-.sl-markdown-content thead th {
-  background: var(--ru-bg);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 0.78rem;
-  border-bottom: 2px solid var(--ru-border);
-}
-.sl-markdown-content :is(td, tbody th) { border-bottom: 1px solid var(--ru-rule); }
-
-/* ──────────────────────────────── Header ──────────────────────────────── */
+/* ────────────────────────────────── Header ────────────────────────────── */
 
 /* Target only the outer <header> element, not the inner <div class="header">
    inside Header.astro — both share the class, so .header would double-render
    the border-bottom. */
 header.header {
-  background: var(--ru-bg) !important;
-  border-bottom: 1px solid var(--ru-border) !important;
-  backdrop-filter: none !important;
-}
-.site-title {
-  font-weight: 700 !important;
-  letter-spacing: -0.005em !important;
-  color: var(--ru-fg) !important;
-  gap: 0.55rem;
-}
-.site-title img {
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
+  background: var(--ru-header-bg) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--hair-soft) !important;
+  box-shadow: none !important;
 }
 
-/* Search button: square, subtle. The keycap is a single outer <kbd> that
-   wraps two inner <kbd> tokens (⌘ and K); only the outer one should read
-   as a keycap, or you get a box inside a box inside a box. */
-site-search button[data-open-modal] {
-  background: var(--ru-bg-elev) !important;
-  border: 1.5px solid var(--ru-border) !important;
-  color: var(--ru-fg-faint) !important;
+.site-title {
   font-family: var(--ru-mono) !important;
-  font-weight: 600;
-  border-radius: 0 !important;
+  font-size: 0.875rem !important; /* 14px */
+  font-weight: 700 !important;
+  color: var(--txt) !important;
+  gap: 0.625rem;
 }
-site-search button[data-open-modal] > kbd {
-  background: var(--ru-bg) !important;
-  border: 1px solid var(--ru-rule) !important;
-  border-radius: 0 !important;
+
+/* "docs" chip after the wordmark */
+.site-title::after {
+  content: 'docs';
+  font-family: var(--ru-mono);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 400;
+  color: var(--dim);
+  border: 1px solid var(--hair-mid);
+  padding: 2px 6px;
+  border-radius: 2px;
+  line-height: 1;
+}
+
+/* Search button: hairline field with a keycap hint. The keycap is a single
+   outer <kbd> wrapping two inner <kbd> tokens (⌘ and K); only the outer one
+   should read as a keycap. */
+site-search button[data-open-modal] {
+  height: 2rem; /* 32px */
+  background: transparent !important;
+  border: 1px solid var(--hair-mid) !important;
+  border-radius: 3px !important;
+  color: var(--gray) !important;
   font-family: var(--ru-mono) !important;
-  font-weight: 700;
-  color: var(--ru-fg-dim) !important;
-  padding: 0.08rem 0.4rem;
+  font-size: 0.75rem; /* 12px */
+  box-shadow: none !important;
+}
+
+site-search button[data-open-modal] > kbd {
+  background: transparent !important;
+  border: 1px solid var(--hair-mid) !important;
+  border-radius: 2px !important;
+  font-family: var(--ru-mono) !important;
+  font-size: 0.65625rem; /* 10.5px */
+  color: var(--gray) !important;
+  padding: 1px 5px;
   gap: 0.15rem;
   display: inline-flex;
   align-items: center;
 }
+
 site-search button[data-open-modal] > kbd > kbd {
   background: transparent !important;
   border: 0 !important;
@@ -295,124 +295,467 @@ site-search button[data-open-modal] > kbd > kbd {
 }
 
 button[aria-label='Menu'][aria-controls='starlight__sidebar'] {
-  width: 2.5rem;
-  height: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  background: var(--ru-bg-elev) !important;
-  color: var(--ru-fg) !important;
-  border: 1.5px solid var(--ru-border) !important;
-  border-radius: 0 !important;
-  box-shadow: 2px 2px 0 0 var(--ru-border);
+  background: transparent !important;
+  color: var(--txt) !important;
+  border: 1px solid var(--hair-strong) !important;
+  border-radius: 3px !important;
+  box-shadow: none !important;
 }
 
-/* ──────────────────────────────── Sidebar ─────────────────────────────── */
-
-.sidebar-content { background: var(--ru-bg) !important; }
-
-.sidebar-content :is(summary, .group-label) {
-  font-weight: 800 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.78rem !important;
-  color: var(--ru-fg-faint) !important;
-}
-.sidebar-content a {
+/* Theme switcher: keep it, quiet it down. */
+starlight-theme-select select {
   font-family: var(--ru-mono) !important;
-  font-weight: 500;
-  font-size: 0.88rem;
-  color: var(--ru-fg-dim) !important;
-  border-inline-start: 1.5px solid transparent;
+  font-size: 0.75rem; /* 12px */
+  color: var(--sec) !important;
+}
+
+starlight-theme-select select:hover {
+  color: var(--txt) !important;
+}
+
+/* ────────────────────────────────── Sidebar ───────────────────────────── */
+
+.sidebar-content {
+  background: var(--bg) !important;
+}
+
+.sidebar-content :is(summary, .group-label),
+.sidebar-content :is(summary, .group-label) .large {
+  font-family: var(--ru-mono) !important;
+  font-size: 0.65625rem !important; /* 10.5px */
+  font-weight: 400 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim) !important;
+}
+
+.sidebar-content a {
+  font-family: var(--ru-sans) !important;
+  font-size: 0.875rem; /* 14px */
+  font-weight: 400;
+  color: var(--sec) !important;
+  padding: 0.375rem 0.625rem; /* 6px 10px */
+  border-inline-start: 2px solid transparent;
+  border-radius: 0 3px 3px 0;
   transition: color 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .sidebar-content a:hover {
-  color: var(--ru-accent-fg) !important;
-  background: var(--ru-bg-elev) !important;
+  color: var(--txt) !important;
+  background: transparent !important;
 }
+
 .sidebar-content a[aria-current='page'] {
-  color: var(--ru-accent-fg) !important;
-  background: var(--ru-bg-elev) !important;
+  color: var(--mint) !important;
+  background: var(--mint-bg) !important;
+  font-weight: 400 !important;
+  border-inline-start: 2px solid var(--mint) !important;
+}
+
+/* ────────────────────────────────── Type ──────────────────────────────── */
+
+/* Starlight renders the page title (an <h1 id="_top">) outside
+   .sl-markdown-content, so both selectors are needed for one voice. */
+h1#_top,
+.sl-markdown-content h1 {
+  font-family: var(--ru-sans) !important;
+  font-size: 2.5rem !important; /* 40px */
   font-weight: 700 !important;
-  border-inline-start: 3px solid var(--ru-accent) !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.08 !important;
+  color: var(--txt) !important;
+}
+
+.sl-markdown-content h2 {
+  font-size: 1.5625rem; /* 25px */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--txt);
+  margin-top: 2.75rem;
+}
+
+.sl-markdown-content h3 {
+  font-size: 1.1875rem; /* 19px */
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--txt);
+}
+
+.sl-markdown-content h4 {
+  font-size: 1.03125rem; /* 16.5px */
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--txt);
+}
+
+.sl-markdown-content :is(p, li) {
+  font-size: 1.03125rem; /* 16.5px */
+  line-height: 1.7;
+  max-width: 64ch;
+}
+
+/* ─────────────────────────────── Inline code ──────────────────────────── */
+
+.sl-markdown-content :not(pre) > code {
+  font-family: var(--ru-mono);
+  font-size: 0.9em;
+  color: var(--mint);
+  background: var(--mint-bg);
+  padding: 1px 5px;
+  border-radius: 2px;
+  border: 0;
+}
+
+/* ─────────────────────────────── Code blocks ──────────────────────────── */
+
+/* Match the landing page's carbon terminal and editor surfaces. */
+.expressive-code .frame,
+.sl-markdown-content > pre {
+  background: var(--editor-bg) !important;
+  border: 1px solid var(--editor-border) !important;
+  border-radius: 5px !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.expressive-code .frame pre {
+  background: var(--editor-bg) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.expressive-code .frame pre,
+.sl-markdown-content > pre {
+  font-family: var(--ru-mono);
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.8;
+  color: var(--terminal-muted);
+}
+
+/* Terminal output is restrained; JSON and source files keep syntax color. */
+.expressive-code .frame.is-terminal pre span[style] {
+  color: var(--terminal-muted) !important;
+  background-color: transparent !important;
+  font-style: normal !important;
+}
+
+.expressive-code .frame .header,
+.expressive-code .frame.is-terminal .header {
+  background: var(--editor-bar) !important;
+  border-bottom: 1px solid var(--editor-border) !important;
+  font-family: var(--ru-mono) !important;
+  font-size: 0.6875rem !important; /* 11px */
+  font-weight: 400 !important;
+  color: var(--terminal-dim) !important;
+  box-shadow: none !important;
+}
+
+.expressive-code .frame .header .title,
+.expressive-code .frame.has-title:not(.is-terminal) .header .title {
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--terminal-dim) !important;
+}
+
+.expressive-code .frame.is-terminal {
+  background: var(--terminal-bg) !important;
+  border-color: var(--terminal-border) !important;
+}
+
+.expressive-code .frame.is-terminal pre {
+  background: var(--terminal-bg) !important;
+}
+
+.expressive-code .frame.is-terminal pre[data-language='bash'] .ec-line:first-child .code::before,
+.expressive-code .frame.is-terminal pre[data-language='sh'] .ec-line:first-child .code::before,
+.expressive-code .frame.is-terminal pre[data-language='zsh'] .ec-line:first-child .code::before {
+  content: '$ ';
+  color: var(--terminal-local);
+  user-select: none;
+}
+
+.expressive-code .frame.is-terminal .header {
+  justify-content: flex-start !important;
+  padding-inline-start: 3.625rem !important;
+  background: var(--terminal-bar) !important;
+  border-bottom-color: var(--terminal-border) !important;
+}
+
+.expressive-code .frame.is-terminal .header::before {
+  left: 1rem !important;
+  width: 30px !important;
+  height: 8px !important;
+  background:
+    radial-gradient(circle at 4px 50%, var(--terminal-red) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 15px 50%, var(--terminal-yellow) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 26px 50%, var(--terminal-green) 0 3px, transparent 3.5px) !important;
+  opacity: 1 !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+.expressive-code .frame:has(pre[data-language='json']) {
+  border-color: var(--editor-border) !important;
+}
+
+.expressive-code .frame:has(pre[data-language='json']) .header .title::before {
+  content: '{}';
+  margin-right: 0.625rem;
+  color: var(--terminal-local);
+  font-size: 0.625rem;
+  font-weight: 700;
+}
+
+.expressive-code .frame pre[data-language='json'] {
+  counter-reset: ru-json-line;
+}
+
+.expressive-code .frame pre[data-language='json'] .ec-line {
+  counter-increment: ru-json-line;
+}
+
+.expressive-code .frame pre[data-language='json'] .ec-line::before {
+  content: counter(ru-json-line);
+  display: inline-block;
+  width: 2rem;
+  padding-right: 0.625rem;
+  color: #87958d;
+  text-align: right;
+  user-select: none;
+}
+
+.expressive-code .copy button {
+  width: 2rem !important;
+  height: 2rem !important;
+  border: 1px solid var(--terminal-border) !important;
+  border-radius: 3px !important;
+  background: var(--terminal-bar) !important;
+  color: var(--terminal-text) !important;
+  opacity: 0.72 !important;
+}
+
+.expressive-code .copy button:hover,
+.expressive-code .copy button:focus-visible {
+  opacity: 1 !important;
+}
+
+/* ──────────────────────────────── Links ───────────────────────────────── */
+
+.sl-markdown-content a:not(.sl-link-button) {
+  color: var(--mint);
+  text-decoration: underline;
+  text-decoration-color: var(--mint-bd-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sl-markdown-content a:not(.sl-link-button):hover {
+  color: var(--mint-hover);
+  text-decoration-color: currentColor;
+}
+
+/* ─────────────────────────────── Blockquote ───────────────────────────── */
+
+.sl-markdown-content blockquote {
+  border: 1px solid var(--hair-faint);
+  border-left: 2px solid var(--hair-strong);
+  background: var(--panel2);
+  border-radius: 0 4px 4px 0;
+  padding: 0.9em 1.2em;
+  color: var(--sec);
+  font-style: normal;
+}
+
+/* ──────────────────────────────── Asides ──────────────────────────────── */
+
+/* Amber by default: an aside is the docs voice flagging exposure/caution. */
+.starlight-aside {
+  border: 1px solid var(--amb-bd-soft) !important;
+  border-left: 2px solid var(--amb) !important;
+  background: var(--amb-bg2) !important;
+  border-radius: 0 4px 4px 0;
+  padding: 14px 18px !important;
+  color: var(--ru-prose) !important;
+}
+
+.starlight-aside__title {
+  font-family: var(--ru-mono) !important;
+  font-size: 0.6875rem !important; /* 11px */
+  font-weight: 400 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amb) !important;
+}
+
+.starlight-aside__icon {
+  color: var(--amb) !important;
+}
+
+/* Tips are trusted-path guidance → mint. */
+.starlight-aside--tip {
+  border-color: var(--mint-bd-soft) !important;
+  border-left-color: var(--mint) !important;
+  background: var(--mint-bg2) !important;
+}
+
+.starlight-aside--tip .starlight-aside__title,
+.starlight-aside--tip .starlight-aside__icon {
+  color: var(--mint) !important;
+}
+
+/* ──────────────────────────────── Tables ──────────────────────────────── */
+
+/* Hairline rules only — no heavy borders, no zebra fill. */
+.sl-markdown-content table {
+  border: 0;
+  font-size: 0.90625rem; /* 14.5px */
+}
+
+.sl-markdown-content thead th {
+  background: transparent;
+  font-family: var(--ru-mono);
+  font-size: 0.65625rem; /* 10.5px */
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: 0;
+  border-bottom: 1px solid var(--hair-faint);
+}
+
+.sl-markdown-content :is(td, tbody th) {
+  border: 0;
+  border-bottom: 1px solid var(--hair-faint);
+  font-size: 0.90625rem; /* 14.5px */
+  color: var(--sec);
+}
+
+.sl-markdown-content tr:nth-child(2n) :is(td, tbody th) {
+  background: transparent;
+}
+
+/* Flag tables: first-column code cells are the flag itself — plain, bright. */
+.sl-markdown-content :is(td, tbody th):first-child code {
+  font-size: 0.8125rem; /* 13px */
+  color: var(--txt);
+  background: transparent;
+  padding: 0;
+}
+
+/* ─────────────────────────────── Prev / next ──────────────────────────── */
+
+.pagination-links a {
+  border: 1px solid var(--hair) !important;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none !important;
+  color: var(--dim);
+  font-family: var(--ru-mono);
+  font-size: 0.6875rem; /* 11px — the "← previous / next →" label */
+  transition: border-color 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pagination-links a:hover {
+  border-color: var(--mint-bd) !important;
+  background: transparent;
+}
+
+.pagination-links a .link-title {
+  font-family: var(--ru-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--txt);
+}
+
+.pagination-links a svg {
+  color: var(--dim);
 }
 
 /* ─────────────────────────────── On this page ─────────────────────────── */
 
-starlight-toc nav a {
-  font-family: var(--ru-mono) !important;
-  font-size: 0.82rem;
-  color: var(--ru-fg-faint) !important;
-  border-inline-start: 1.5px solid transparent;
-}
-starlight-toc nav a:hover { color: var(--ru-fg-dim) !important; }
-starlight-toc nav a[aria-current='true'] {
-  color: var(--ru-accent-fg) !important;
-  font-weight: 700 !important;
-  border-inline-start: 3px solid var(--ru-accent) !important;
-}
 starlight-toc :is(h2, summary) {
-  font-weight: 800 !important;
+  font-family: var(--ru-mono) !important;
+  font-size: 0.65625rem !important; /* 10.5px */
+  font-weight: 400 !important;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 0.78rem !important;
-  color: var(--ru-fg-faint) !important;
+  color: var(--dim) !important;
 }
 
-/* ──────────────────────────────── Pagination ──────────────────────────── */
-
-.pagination-links a {
-  border: 1.5px solid var(--ru-border) !important;
-  background: var(--ru-bg-elev);
-  font-family: var(--ru-mono);
-  font-weight: 600;
-  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 140ms cubic-bezier(0.22, 1, 0.36, 1);
+starlight-toc nav a {
+  font-family: var(--ru-sans) !important;
+  font-size: 0.8125rem; /* 13px */
+  color: var(--gray) !important;
+  border-inline-start: 2px solid transparent;
+  padding-inline-start: 0.625rem;
 }
-.pagination-links a:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 0 var(--ru-border);
-  background: var(--ru-bg-soft);
+
+starlight-toc nav a:hover {
+  color: var(--txt) !important;
+}
+
+starlight-toc nav a[aria-current='true'] {
+  color: var(--mint) !important;
+  background: transparent !important;
+  border-inline-start: 2px solid var(--mint) !important;
+}
+
+/* Mobile "On this page" TOC (shown below ~1100px). */
+mobile-starlight-toc .toggle {
+  background: var(--panel) !important;
+  color: var(--sec) !important;
+  border: 1px solid var(--hair-mid) !important;
+  border-radius: 3px !important;
+  font-family: var(--ru-mono) !important;
+  font-size: 0.75rem;
+  box-shadow: none !important;
+}
+
+mobile-starlight-toc .toggle:hover {
+  border-color: var(--mint-bd) !important;
+  color: var(--txt) !important;
+}
+
+mobile-starlight-toc .dropdown {
+  background: var(--panel) !important;
+  border: 1px solid var(--hair-mid) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+mobile-starlight-toc a {
+  font-family: var(--ru-mono) !important;
+  font-size: 0.8125rem;
+  color: var(--sec) !important;
+}
+
+mobile-starlight-toc a[aria-current='true'] {
+  color: var(--mint) !important;
 }
 
 /* ──────────────────────────────── Edit link ───────────────────────────── */
 
-a[href*='edit/main'] { font-family: var(--ru-mono); font-weight: 600; }
-
-/* Mobile "On this page" TOC (shown below ~1100px). Starlight backs the toggle
- * with --sl-color-black, which we mapped to espresso ink → dark-on-dark.
- * Re-skin it to a paper surface. */
-mobile-starlight-toc .toggle {
-  background: var(--ru-bg-elev) !important;
-  color: var(--ru-fg-dim) !important;
-  border: 1.5px solid var(--ru-border) !important;
-  font-family: var(--ru-mono) !important;
-  font-weight: 600;
-  border-radius: 0 !important;
-}
-mobile-starlight-toc .toggle:hover { border-color: var(--ru-accent) !important; }
-mobile-starlight-toc .dropdown {
-  background: var(--ru-bg-elev) !important;
-  border: 1.5px solid var(--ru-border) !important;
-  border-radius: 0 !important;
-}
-mobile-starlight-toc a {
-  font-family: var(--ru-mono) !important;
-  color: var(--ru-fg-dim) !important;
-}
-mobile-starlight-toc a[aria-current='true'] {
-  color: var(--ru-accent-fg) !important;
-  font-weight: 700;
+a[href*='edit/main'] {
+  font-family: var(--ru-mono);
+  font-size: 0.71875rem; /* 11.5px */
+  color: var(--gray);
 }
 
-/* Single theme. Hide the switcher. */
-starlight-theme-select { display: none !important; }
+a[href*='edit/main']:hover {
+  color: var(--txt);
+}
+
+/* ────────────────────────────── Reduced motion ────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     transition-duration: 1ms !important;
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
   }
 }
-

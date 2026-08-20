@@ -16,11 +16,13 @@ default:   fail closed; the CLI prints the owning pid and cwd
 orphans:   the agent reaps stale claims when the owning pid is gone
 ```
 
-Stop the holding process before retrying, or choose a different route name.
+For foreground or detached `routeup serve`, run `routeup stop [name]`. Runner
+and standalone exposure owners must be stopped from their owning terminal. You
+can also choose a different route name.
 
-Routes are owned by the foreground process that registered them. When that
-process exits, the agent releases its claims and tears down any matching tunnels;
-other claims are untouched.
+Routes are owned by a live CLI process, which may be foreground or a detached
+serve owner. When that process exits, owner-conditional cleanup releases its
+claims and tears down matching tunnels; other claims are untouched.
 
 ## Public conflicts
 

@@ -3,9 +3,9 @@ title: Framework setup
 description: How to use routeup with Vite, Astro, Next.js, and other dev servers.
 ---
 
-routeup assigns a free port and injects it as `PORT` into your dev server's
-environment. Frameworks that read `PORT` automatically just work. Frameworks
-that don't (Vite, Astro) need one line of config.
+In bare runner mode, routeup resolves or assigns a port and injects it into the
+child process. Frameworks that read `PORT` automatically just work. Frameworks
+that do not, including Vite and Astro, need one line of config.
 
 ## Environment variables injected
 
@@ -42,9 +42,9 @@ early instead of routing to the wrong process.
 
 Then your routeup config needs no port at all:
 
-```json
+```json title="routeup.json"
 {
-  "name": "my-app",
+  "name": "example-app",
   "command": "pnpm dev"
 }
 ```
@@ -64,13 +64,14 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.PORT ?? '4321'),
     host: '127.0.0.1',
+    strictPort: true,
   },
 })
 ```
 
-```json
+```json title="routeup.json"
 {
-  "name": "my-site",
+  "name": "example-site",
   "command": "pnpm dev"
 }
 ```
@@ -79,9 +80,9 @@ export default defineConfig({
 
 Next.js reads `PORT` natively. No vite.config needed:
 
-```json
+```json title="routeup.json"
 {
-  "name": "my-next-app",
+  "name": "example-next-app",
   "command": "pnpm dev"
 }
 ```
@@ -93,9 +94,9 @@ let routeup assign one.
 
 Nuxt also reads `PORT` (or `NUXT_PORT`) from the environment:
 
-```json
+```json title="routeup.json"
 {
-  "name": "my-nuxt-app",
+  "name": "example-nuxt-app",
   "command": "pnpm dev"
 }
 ```
@@ -115,12 +116,12 @@ needed.
 
 ## Pinning a port
 
-If you prefer a fixed port, set `port` in config and keep `--port` in the
-command:
+If you prefer a fixed port, set `port` in routeup config and pass that same port
+to your framework's dev command:
 
-```json
+```json title="routeup.json"
 {
-  "name": "my-app",
+  "name": "example-app",
   "port": 5173,
   "command": "pnpm dev --port 5173"
 }
@@ -133,14 +134,14 @@ routeup will check that port is available before starting and route to it.
 The same rules apply when using the `routeup` block in `package.json`. Point
 `script` at your dev script; routeup injects `PORT` before running it:
 
-```json
+```json title="package.json"
 {
   "scripts": {
     "dev": "routeup",
     "dev:app": "vite"
   },
   "routeup": {
-    "name": "my-app",
+    "name": "example-app",
     "script": "dev:app"
   }
 }

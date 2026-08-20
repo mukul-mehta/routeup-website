@@ -10,6 +10,9 @@ service one, so you can develop against real deliveries instead of mocking them.
 
 Run your API (say on port `8080`) and expose it:
 
+Configure a public server first using
+[Exposing publicly](/docs/getting-started/exposing-publicly).
+
 ```bash
 routeup serve example-app --port 8080 --expose
 ```
@@ -19,7 +22,7 @@ The examples below assume your saved token allows
 
 routeup prints the local URL, public URL, exposure scope, and targets:
 
-```txt
+```txt frame="terminal" title="terminal"
 route: example-app
 local: https://example-app.localhost
 public: https://example-app.mukul.routeup.dev
@@ -27,6 +30,7 @@ expose: all paths
 targets:
   /        http://localhost:8080
 
+requests: live
 press Ctrl-C to stop
 ```
 
@@ -34,7 +38,7 @@ press Ctrl-C to stop
 
 Register the public URL as the webhook endpoint in the provider's dashboard:
 
-```txt
+```txt frame="terminal" title="terminal"
 GitHub:  Settings → Webhooks → Payload URL
 Stripe:  Developers → Webhooks → Add endpoint
 Slack:   Your App → Event Subscriptions → Request URL
@@ -51,8 +55,9 @@ Tail public traffic as it arrives:
 routeup logs example-app --public --follow
 ```
 
-```txt
-12:41:03 public example-app POST /api/webhooks/github 200 38ms req_Ap7kQ3mN8vR2xLzC
+```txt frame="terminal" title="terminal"
+TIME      ROUTE                         SOURCE  STATUS  ID                    METHOD   DURATION  PATH
+12:41:03  example-app                   public  200     req_Ap7kQ3mN8vR2xLzC  POST     38ms      /api/webhooks/github
 ```
 
 Because the route and namespace are configured, you request the same endpoint on
@@ -64,7 +69,10 @@ to the server's normal conflict rules.
 `routeup logs` shows metadata only. To see the full payload and response for a
 delivery, enable capture in `routeup.json`:
 
-```json
+Stop the current route owner, add this config, then restart
+`routeup serve --expose` before sending the delivery you want to inspect.
+
+```json title="routeup.json"
 {
   "name": "example-app",
   "port": 8080,
@@ -76,31 +84,55 @@ delivery, enable capture in `routeup.json`:
 }
 ```
 
-Then grab the request id from the log line and inspect it:
+In another terminal, or after stopping the follow command, grab the request id
+from the log line and inspect it:
 
 ```bash
 routeup inspect req_Ap7kQ3mN8vR2xLzC
 ```
 
-```txt
+```txt frame="terminal" title="terminal"
+Request req_Ap7kQ3mN8vR2xLzC
+
+Metadata
+--------
+Source: public
+Route: example-app
+Target: /:8080
+Status: 200
+Duration: 38ms
+Method: POST
+Path: /api/webhooks/github
+Host: example-app.mukul.routeup.dev
+
 Request
 -------
 Capture: complete
-Body bytes: 842
+Body bytes: 63
+Redacted: authorization, x-hub-signature-256
 X-Github-Event: push
 
 Body
 ----
-{"ref":"refs/heads/main","repository":{"full_name":"acme/api"},...}
+{
+  "ref": "refs/heads/main",
+  "repository": {
+    "full_name": "acme/api"
+  }
+}
 
 Response
 --------
 Capture: complete
-Body bytes: 4
+Body bytes: 11
+Redacted: authorization, x-hub-signature-256
+Content-Type: application/json
 
 Body
 ----
-{"ok":true}
+{
+  "ok": true
+}
 ```
 
 ## Scoping exposure
@@ -109,7 +141,9 @@ If you only want the webhook path reachable and the rest of the app private, you
 can limit public exposure to a path prefix (for example `/api/webhooks/*`) so the
 rest of the service stays local-only:
 
-```json
+Restart the route owner after changing this setting.
+
+```json title="routeup.json"
 {
   "name": "example-app",
   "port": 8080,

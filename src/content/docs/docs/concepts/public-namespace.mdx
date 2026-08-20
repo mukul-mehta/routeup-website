@@ -16,17 +16,20 @@ https://random.try.example.com
 Generate a random name locally and claim it through the public namespace:
 
 ```bash
-routeup serve --random --port 8080 --server https://edge.example.com --public
+routeup serve --random --port 8080 --server https://edge.example.com --expose
 ```
 
 Or request a specific single-label name if the server allows it:
 
 ```bash
-routeup serve demo --port 8080 --server https://edge.example.com --public
+routeup serve demo --port 8080 --server https://edge.example.com --expose
 ```
 
 ## Operator behavior
 
 The public namespace is disabled by default on self-hosted servers. Enable it with `--public-namespace` when running `routeup server`.
 
-The hosted `routeup.dev` server uses `try` for token-less names, so `--random` grants URLs like `https://lively-otter-4f2.try.routeup.dev`. Reusable named URLs under `*.routeup.dev` still require a token and are reachable only while a tunnel is connected.
+The hosted `routeup.dev` server uses `try` for token-less names, so `--random`
+grants two-word URLs like `https://happy-fox.try.routeup.dev`. Reusable named
+URLs under `*.routeup.dev` still require a token and are reachable only while a
+tunnel is connected.

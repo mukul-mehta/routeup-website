@@ -32,14 +32,17 @@ routeup-website/
 ├── astro.config.mjs              # Starlight + sitemap integrations, sidebar
 ├── package.json
 ├── tsconfig.json
+├── scripts/
+│   └── gen-og.mjs                # regenerates public/og.png (1200×630 social card)
 ├── public/
 │   ├── CNAME
-│   ├── favicon.svg
+│   ├── favicon.svg               # fork mark; adapts to browser UI color scheme
 │   ├── og.png
 │   └── robots.txt
 └── src/
     ├── assets/
-    │   └── logo.svg
+    │   ├── logo-dark.svg         # fork mark on dark backgrounds
+    │   └── logo-light.svg        # ink + deep teal variant for light
     ├── content.config.ts         # Starlight docs collection
     ├── content/
     │   └── docs/
@@ -55,11 +58,22 @@ routeup-website/
     │           └── faq.mdx
     ├── pages/
     │   ├── index.astro           # marketing landing
+    │   ├── 404.astro             # branded 404 (Starlight's default is disabled)
     │   ├── llms.txt.ts           # /llms.txt endpoint
     │   └── llms-full.txt.ts      # /llms-full.txt endpoint
     └── styles/
-        └── global.css            # Starlight CSS overrides
+        └── global.css            # Starlight skin (paper + forest-ink themes)
 ```
+
+Design system: paper light theme and forest-ink dark theme, Space Grotesk +
+JetBrains Mono (self-hosted via @fontsource), mint = local/trusted, amber =
+public/exposed. Theme follows the OS by default; a user override persists in
+`localStorage` (`routeup-theme`, kept in sync with Starlight's
+`starlight-theme` so landing and docs agree).
+Plain terminal output shown on the landing page mirrors the real CLI's text,
+order, spacing, and blank lines. Full-screen TUI samples state the terminal
+width and focus used for the shown frame. See "Content boundaries" below before
+editing snippets.
 
 Why docs are nested at `src/content/docs/docs/`: Starlight maps content-collection paths 1:1 to URLs. Putting docs files under a `docs/` subdirectory inside the collection makes them render at `/docs/*`, leaving `/` free for the marketing landing.
 

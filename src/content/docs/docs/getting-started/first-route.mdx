@@ -13,6 +13,8 @@ routeup setup
 
 Setup creates a local certificate authority, adds it to your OS trust store, lets routeup answer on port 443, and starts the background agent. You may be asked for Touch ID or your password once.
 
+Enter `none` at the optional public-server prompt when you only want local routes.
+
 ## 2. Start any local app
 
 Use whatever you already run in development. If you just want something to test against, start a throwaway static server on port `8080`:
@@ -21,7 +23,7 @@ Use whatever you already run in development. If you just want something to test 
 python3 -m http.server 8080
 ```
 
-Your real dev server works the same way, Vite, Next, Rails, a Go service, anything that listens on a local port.
+Your real dev server works the same way: Vite, Next.js, Rails, a Go service, or anything else that listens on a local port.
 
 ## 3. Serve it through routeup
 
@@ -31,14 +33,19 @@ routeup serve example-app --port 8080
 
 routeup prints the route it claimed and the targets it is proxying to:
 
-```txt
+```txt frame="terminal" title="terminal"
 route: example-app
 local: https://example-app.localhost
 targets:
   /        http://localhost:8080
 
+requests: live
 press Ctrl-C to stop
 ```
+
+New completed requests appear below this preamble. Use `-d/--detach` when you
+want the route owner to continue in the background, then stop it with
+`routeup stop example-app`.
 
 Open:
 
@@ -46,7 +53,8 @@ Open:
 https://example-app.localhost
 ```
 
-The route stays stable even if you later move the app to another local port.
+The URL stays stable when the app moves to another port; update the target port
+when you restart `routeup serve`.
 
 ## Useful checks
 

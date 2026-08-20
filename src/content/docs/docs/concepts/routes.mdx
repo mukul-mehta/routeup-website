@@ -44,14 +44,22 @@ The `.localhost` suffix is not part of the route name.
 Every public hostname is one label under the namespace granted by the server:
 
 ```txt
-example-app     -> https://example-app.routeup.dev
-api-example-app -> https://api-example-app.routeup.dev
+example-app      -> example-app
+api.example-app  -> api-example-app
 ```
 
 Dotted route names remain valid locally. When a dotted route is exposed, routeup
 replaces dots with hyphens for the public label: `api.example-app` stays
-`https://api.example-app.localhost` locally and becomes
-`https://api-example-app.routeup.dev` publicly.
+`https://api.example-app.localhost` locally and requests public label
+`api-example-app` automatically.
+
+The server places that label under the granted namespace base:
+
+```txt
+no token       https://api-example-app.try.routeup.dev
+root token     https://api-example-app.routeup.dev
+namespace      https://api-example-app.mukul.routeup.dev
+```
 
 ## Name resolution
 
@@ -60,5 +68,8 @@ replaces dots with hyphens for the public label: `api.example-app` stays
 1. Positional argument, such as `routeup serve example-app`.
 2. `ROUTEUP_NAME`.
 3. `name` from `routeup.json` or the `package.json` `routeup` block.
+4. The working-directory basename.
 
-If you pass a bare positional name while config has a project name, routeup appends the project name as a suffix. A dotted positional name is used literally.
+Every explicit positional name is literal. With config name `example-app`,
+`routeup serve api` serves route `api`; use `routeup serve api.example-app` when
+that exact dotted route is wanted.

@@ -24,10 +24,10 @@ certificate must also cover `*.try.tunnel.example.com`.
 Now clients can claim under `try.tunnel.example.com` without a token:
 
 ```bash
-routeup serve --random --port 8080 --server https://edge.tunnel.example.com --public
-# -> https://lively-otter-4f2.try.tunnel.example.com
+routeup serve --random --port 8080 --server https://edge.tunnel.example.com --expose
+# -> https://happy-fox.try.tunnel.example.com
 
-routeup serve demo --port 8080 --server https://edge.tunnel.example.com --public
+routeup serve demo --port 8080 --server https://edge.tunnel.example.com --expose
 # -> https://demo.try.tunnel.example.com
 ```
 
@@ -47,12 +47,13 @@ first-come        a held name returns 409; --random generates a client-side name
 
 ## Disable it
 
-Omit `--public-namespace` (or set it empty) to turn the feature off. With it
-disabled, every public claim requires a [token](/docs/self-hosting/minting-tokens),
-and token-less claims are refused.
+Omit the flag when no config enables it, or remove/set `public_namespace` to an
+empty string in `routeup-server.json`. With it disabled, every public claim
+requires a [token](/docs/self-hosting/minting-tokens), and token-less claims are
+refused.
 
 ## Abuse considerations
 
-With no token to attribute claims to, source IP is the only handle for abuse
-prevention. If you enable the public namespace on an internet-facing server,
-consider per-IP rate limiting on claim creation.
+With no token to attribute claims to, anonymous limits protect claim creation.
+Configure `rate_limit.anon_rate` and `rate_limit.anon_burst` in
+`routeup-server.json` before enabling the namespace on an internet-facing server.

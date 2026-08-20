@@ -11,7 +11,7 @@ while standalone `routeup.json` uses `command`.
 
 ## Example
 
-```json
+```json title="package.json"
 {
   "name": "example-app-web",
   "scripts": {
@@ -33,19 +33,22 @@ Here `npm run dev` launches `routeup`, which runs your real dev server
 ## The routeup block
 
 ```txt
-name     route / project name (separate from the package's own name)
-port     local port to proxy to
-script   package script to run in script-runner mode
-targets  optional list of path-routed targets for one-origin frontend + API setups
-expose   optional public exposure settings, including paths
-capture  optional request/response capture settings for routeup inspect
+name          optional default route name (separate from the package's own name)
+port          local port to proxy to
+script        package script to run in script-runner mode
+port_env_var  additional environment variable that receives the assigned port
+targets       optional list of path-routed targets for one-origin frontend + API setups
+expose        optional public exposure settings, including paths
+capture       optional request/response capture settings for routeup inspect
 ```
 
 `command` is not valid inside the `package.json` `routeup` block. Define the
 command in `scripts` and reference that script by name with `routeup.script`.
 
 The `routeup.name` is independent of the package's `name` field, the package can
-be `example-app-web` while the route is `example-app`.
+be `example-app-web` while the route is `example-app`. If `routeup.name` is
+omitted, bare runner mode uses `ROUTEUP_NAME` and then the working-directory
+basename.
 
 ## Precedence
 

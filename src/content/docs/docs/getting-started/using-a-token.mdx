@@ -3,12 +3,25 @@ title: Using a token
 description: Get reusable, named public URLs by configuring a server token.
 ---
 
-Tokens are minted by the public-server operator and authorize which reusable
-public names you can claim. For the hosted service, clients connect to
-`https://edge.routeup.dev`; granted public routes use names under `routeup.dev`.
-Tokens are distributed out-of-band; there is no browser signup flow in v1.
+Tokens authorize reusable public names. For the hosted service, clients connect
+to `https://edge.routeup.dev` and receive a namespace under `routeup.dev`.
 
-You only need a token for reusable named public URLs such as `https://example-app.routeup.dev`. Local-only routes do not need one, and token-less public names can work when the server enables a public namespace. The address can be claimed again between runs, but it is reachable only while a tunnel is connected.
+You only need a token for reusable named public URLs such as
+`https://example-app.your-name.routeup.dev`. Local-only routes do not need one.
+The public address can be claimed again between runs, but it is reachable only
+while a tunnel is connected.
+
+## Request a hosted token
+
+Hosted tokens are currently issued manually. Email
+[tokens@routeup.dev](mailto:tokens@routeup.dev?subject=Routeup%20hosted%20token%20request&body=Preferred%20namespace%3A%0AWhat%20you%20are%20building%3A%0A)
+with:
+
+- the namespace you would like, such as `your-name.routeup.dev`, and
+- a short note about what you are building.
+
+The token will be returned privately. Store it in a password manager: the
+server keeps only its hash and cannot show the secret again.
 
 ## Save a server and token
 
@@ -17,6 +30,15 @@ routeup setup --server https://edge.routeup.dev --token sk_routeup_xxx
 ```
 
 After that, `routeup serve --expose` can use the saved values.
+
+On an interactive re-run, setup represents the saved token with a masked value.
+Press Enter to keep it,
+or clear credentials explicitly:
+
+```bash
+routeup setup --token none   # keep the server, clear only the token
+routeup setup --server none  # clear both
+```
 
 ## Use environment variables instead
 
@@ -31,24 +53,15 @@ export ROUTEUP_TOKEN=sk_routeup_xxx
 routeup serve example-app --port 8080 --expose
 ```
 
-If the token allows `*.routeup.dev`, the server can grant:
+If the token allows `*.mukul.routeup.dev`, the server can grant:
 
 ```txt
-https://example-app.routeup.dev
+https://example-app.mukul.routeup.dev
 ```
 
-The token secret is not recoverable from the server after it is created. Store it in your password manager or secret store.
+The token secret is not recoverable from the server after it is created.
 
 ## Without a token
 
-If the server enables a token-less public namespace, use `--random` for a session-only URL:
-
-```bash
-routeup serve --random --port 8080 --server https://edge.routeup.dev --expose
-```
-
-On the hosted server, token-less names live under `try.routeup.dev`, for example:
-
-```txt
-https://lively-otter-4f2.try.routeup.dev
-```
+For token-less temporary URLs, see
+[Exposing publicly](/docs/getting-started/exposing-publicly#token-less-random-names).

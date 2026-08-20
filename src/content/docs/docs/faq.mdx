@@ -20,9 +20,9 @@ real, trusted HTTPS locally so those behaviors show up while you develop.
 
 ## Does routeup phone home?
 
-No. routeup has zero telemetry, nothing is collected or sent anywhere. Local use
-needs no account and no network at all. The only outbound traffic is the tunnel
-you explicitly open with `--expose`, and only to the server you point it at.
+routeup has no telemetry. Local routing makes no outbound connection. Exposure
+connects only to the routeup server you select, and `routeup update` commands
+contact GitHub to check releases.
 
 ## Can I use a custom domain instead of `routeup.dev`?
 
@@ -38,16 +38,17 @@ Not for local use. `routeup setup` plus `routeup serve` gives you
 **reusable, named** public routes. A server with a public namespace enabled can
 also hand out token-less, ephemeral public URLs.
 
+For a reusable URL on the hosted service, [request a token](/docs/getting-started/using-a-token#request-a-hosted-token).
+
 ## What's the difference between `serve --expose` and `expose`?
 
 `routeup serve --expose` first registers and holds a local `*.localhost` route,
-then exposes the same targets publicly. `--public` remains an alias for
-`--expose`.
+then exposes the same targets publicly.
 
 Standalone [`routeup expose`](/docs/cli-reference/expose) reuses a matching
 active route's targets when one exists. Otherwise it resolves targets from
-flags, environment, or config and attempts to register a local route for the
-exposure session as well.
+flags, environment, or config and opens a public-only exposure without
+registering a local route.
 
 ## Why are public names a single label?
 
@@ -58,9 +59,9 @@ public label `api-example-app`. See [Routes](/docs/concepts/routes).
 
 ## What happens to exposed routes when my laptop sleeps?
 
-The outbound tunnel drops. The server holds the claim for a 30-second grace
-window, and the client reconnects with backoff when the machine wakes, if it
-resumes within the window, the same name is kept. Public-namespace claims have no
+The outbound tunnel drops. The server holds a token-backed claim for a 30-second
+grace window while the client reconnects with backoff. If it resumes within that
+window, the same name is kept. Public-namespace claims have no
 grace window and are released immediately.
 
 ## Which operating systems are supported?

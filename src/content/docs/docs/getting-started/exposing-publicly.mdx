@@ -8,19 +8,17 @@ Public exposure sends requests through a routeup server and back to your local a
 ## Requirements
 
 You need a public-server control URL. For the hosted service, use
-`https://edge.routeup.dev`. The server grants public URLs under `routeup.dev`,
-such as `https://example-app.routeup.dev`. A reusable named URL also requires a
-token; without one, exposure works only when the server enables a token-less
-public namespace.
+`https://edge.routeup.dev`. You can start immediately with a temporary URL under
+`try.routeup.dev`. For a reusable named URL, [request a hosted token](/docs/getting-started/using-a-token#request-a-hosted-token).
 
-The named examples below assume a root-tier token that allows `*.routeup.dev`.
-A personal namespace token such as `*.mukul.routeup.dev` would grant
-`https://example-app.mukul.routeup.dev` instead. A public address is reachable
-only while its tunnel is connected.
+The named examples below assume a token for `*.mukul.routeup.dev`, which grants
+URLs such as `https://example-app.mukul.routeup.dev`. A public address is
+reachable only while its tunnel is connected.
 
-You can save both during setup:
+Save the hosted server during setup. Add a token when you have one:
 
 ```bash
+routeup setup --server https://edge.routeup.dev
 routeup setup --server https://edge.routeup.dev --token sk_routeup_xxx
 ```
 
@@ -40,14 +38,15 @@ The command prints the local route, the public URL, the exposed path scope, and
 the resolved targets. It holds both the local route and public tunnel until you
 press `Ctrl-C`.
 
-```txt
+```txt frame="terminal" title="terminal"
 route: example-app
 local: https://example-app.localhost
-public: https://example-app.routeup.dev
+public: https://example-app.mukul.routeup.dev
 expose: all paths
 targets:
   /        http://localhost:8080
 
+requests: live
 press Ctrl-C to stop
 ```
 
@@ -70,14 +69,15 @@ routeup serve --random --port 8080 --server https://edge.routeup.dev --expose
 
 On the hosted server, random token-less names are under `try.routeup.dev`:
 
-```txt
-route: lively-otter-4f2
-local: https://lively-otter-4f2.localhost
-public: https://lively-otter-4f2.try.routeup.dev
+```txt frame="terminal" title="terminal"
+route: happy-fox
+local: https://happy-fox.localhost
+public: https://happy-fox.try.routeup.dev
 expose: all paths
 targets:
   /        http://localhost:8080
 
+requests: live
 press Ctrl-C to stop
 ```
 
@@ -85,7 +85,7 @@ press Ctrl-C to stop
 
 By default, public exposure forwards every path on the route. To expose only a webhook prefix, set `expose.paths` in project config:
 
-```json
+```json title="routeup.json"
 {
   "name": "example-app",
   "port": 8080,
@@ -101,4 +101,4 @@ Then run:
 routeup serve --expose
 ```
 
-Requests to `https://example-app.routeup.dev/api/webhooks/...` are public; other paths stay local-only.
+Requests to `https://example-app.mukul.routeup.dev/api/webhooks/...` are public; other paths stay local-only.

@@ -1,0 +1,124 @@
+---
+/**
+ * 404 — "no route claimed that name".
+ * Shares the landing page's token system and theme behavior.
+ */
+
+// Self-hosted fonts (no third-party requests; the site is zero-telemetry).
+import '@fontsource/space-grotesk/400.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>404 | routeup</title>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#101512" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#E9E3D2" />
+    <meta name="color-scheme" content="dark light" />
+    <script is:inline>
+      (function () {
+        var theme = 'dark';
+        try {
+          theme =
+            localStorage.getItem('routeup-theme') ||
+            (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        } catch (_e) {}
+        document.documentElement.dataset.theme = theme;
+        var bg = theme === 'light' ? '#E9E3D2' : '#101512';
+        document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+          m.setAttribute('content', bg);
+        });
+      })();
+    </script>
+  </head>
+
+  <body>
+    <header class="ru-404__bar">
+      <a href="/" class="ru-404__brand" aria-label="routeup home">
+        <span class="ru-404__mark" aria-hidden="true">
+          <span class="ru-404__mark-a"></span>
+          <span class="ru-404__mark-b"></span>
+          <span class="ru-404__mark-stem"></span>
+        </span>
+        <span class="ru-404__word">routeup</span>
+      </a>
+    </header>
+
+    <main class="ru-404__main">
+      <p class="ru-404__eyebrow">404 · no route claimed that name</p>
+      <h1 class="ru-404__h1">Nothing is listening here.</h1>
+      <p class="ru-404__copy">Either the page moved, or somebody Ctrl-C'd it. Both are fixable.</p>
+      <div class="ru-404__ctas">
+        <a href="/" class="ru-404__btn">Home</a>
+        <a href="/docs" class="ru-404__btn ru-404__btn--ghost">Docs</a>
+      </div>
+    </main>
+
+    <style is:global>
+      :root{--hair-strong:rgba(245,239,225,.22);--hair-soft:rgba(245,239,225,.1);--bg:#101512;--panel:#171D19;--txt:#F5EFE1;--sec:#C6C0B2;--mint-hover:#A4F0DE;--mint:#79E2CB;--amb:#FFB76B;--mint-bd-strong:rgba(121,226,203,.58)}
+      :root[data-theme="light"]{--hair-strong:rgba(27,24,18,.3);--hair-soft:rgba(27,24,18,.12);--bg:#E9E3D2;--panel:#FFFAF0;--txt:#1B1812;--sec:#464034;--mint-hover:#044946;--mint:#075D59;--amb:#A44A16;--mint-bd-strong:rgba(7,93,89,.62)}
+      @media (prefers-color-scheme: light){:root:not([data-theme]){--hair-strong:rgba(27,24,18,.3);--hair-soft:rgba(27,24,18,.12);--bg:#E9E3D2;--panel:#FFFAF0;--txt:#1B1812;--sec:#464034;--mint-hover:#044946;--mint:#075D59;--amb:#A44A16;--mint-bd-strong:rgba(7,93,89,.62)}}
+
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--txt);
+        font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      a { color: var(--mint); text-decoration: none; }
+      a:hover { color: var(--mint-hover); }
+      ::selection { background: var(--mint); color: var(--bg); }
+      :focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+
+      .ru-404__bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 22px;
+        border-bottom: 1px solid var(--hair-soft);
+      }
+      .ru-404__brand { display: flex; align-items: center; gap: 10px; }
+      .ru-404__brand, .ru-404__brand:hover { color: var(--txt); }
+      .ru-404__mark { display: block; width: 18px; height: 18px; position: relative; }
+      .ru-404__mark-a { position: absolute; left: 0; top: 0; width: 6px; height: 6px; background: var(--txt); }
+      .ru-404__mark-b { position: absolute; right: 0; top: 0; width: 6px; height: 6px; background: var(--mint); }
+      .ru-404__mark-stem { position: absolute; left: 8px; top: 6px; width: 2px; height: 12px; background: var(--txt); }
+      .ru-404__word { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
+
+      .ru-404__main { padding: 88px 40px 96px; text-align: center; }
+      .ru-404__eyebrow { margin: 0 0 22px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--amb); }
+      .ru-404__h1 { margin: 0; font-size: 46px; letter-spacing: -.035em; font-weight: 700; line-height: 1.1; }
+      .ru-404__copy { margin: 16px auto 32px; max-width: 44ch; font-size: 16px; color: var(--sec); line-height: 1.6; }
+      .ru-404__ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+      .ru-404__btn {
+        display: inline-flex;
+        align-items: center;
+        height: 44px;
+        padding: 0 20px;
+        background: var(--mint);
+        color: var(--bg);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: 3px;
+      }
+      .ru-404__btn:hover { background: var(--mint-hover); color: var(--bg); }
+      .ru-404__btn--ghost {
+        background: transparent;
+        border: 1px solid var(--hair-strong);
+        color: var(--txt);
+        font-weight: 400;
+      }
+      .ru-404__btn--ghost:hover { background: transparent; border-color: var(--mint-bd-strong); color: var(--txt); }
+    </style>
+  </body>
+</html>

@@ -28,7 +28,8 @@ Because routeup serves trusted HTTPS on `*.localhost`, secure cookies and
 ## Providers that require a public URL
 
 Some providers reject `localhost` or need to reach you directly. Expose the route
-and register the public URL. This example assumes your saved token allows
+and register the public URL. Configure public exposure first using
+[Exposing publicly](/docs/getting-started/exposing-publicly). This example assumes your saved token allows
 `*.mukul.routeup.dev`:
 
 ```bash
@@ -41,6 +42,6 @@ https://example-app.mukul.routeup.dev/oauth/callback
 
 ## Why the stable name matters
 
-The route and namespace are configured independently of the underlying dev port,
-so you can request the same redirect URI on each run. Public claims remain
+The route name and token namespace do not depend on the underlying dev port, so
+you can request the same redirect URI on each run. Public claims remain
 subject to the server's normal conflict rules. See [Routes](/docs/concepts/routes).

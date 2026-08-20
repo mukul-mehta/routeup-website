@@ -10,6 +10,7 @@ once and tab-complete subcommands, flags, and live data from the agent.
 
 - **Subcommands and flags** — always available, generated statically.
 - **`routeup logs [route]`** — completes active route names when the local agent is running.
+- **`routeup stop [route]`** — completes active route names; unsupported owner kinds still fail closed when invoked.
 - **`routeup inspect <request-id>`** — completes captured request IDs when the local agent is running.
 
 If the agent is not running, positional completions return empty silently.
@@ -35,7 +36,7 @@ autoload -U compinit && compinit
 routeup completion bash > ~/.local/share/bash-completion/completions/routeup
 
 # System-wide:
-sudo routeup completion bash > /etc/bash_completion.d/routeup
+routeup completion bash | sudo tee /etc/bash_completion.d/routeup >/dev/null
 ```
 
 Requires `bash-completion` v2. On macOS: `brew install bash-completion@2`.
@@ -47,6 +48,9 @@ routeup completion fish > ~/.config/fish/completions/routeup.fish
 ```
 
 ### PowerShell
+
+This applies to PowerShell on supported macOS or Linux systems. routeup v1 does
+not support Windows.
 
 ```powershell
 routeup completion powershell | Out-String | Invoke-Expression

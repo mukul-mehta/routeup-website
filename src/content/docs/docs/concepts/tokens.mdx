@@ -5,6 +5,8 @@ description: How routeup authorizes reusable, scoped claims outside the public n
 
 Tokens authorize reusable public route claims on a routeup server. They are created by the server operator and handed to clients out-of-band. A token lets a client request the same address again, but the address serves traffic only while a tunnel is connected.
 
+For the hosted `routeup.dev` server, [request a token by email](/docs/getting-started/using-a-token#request-a-hosted-token). Self-hosted operators create tokens with the [`routeup token` commands](/docs/self-hosting/minting-tokens).
+
 ## Token shape
 
 Token secrets use the `sk_routeup_` prefix and are shown once when created. The server stores a hash, not the plaintext secret.
@@ -15,8 +17,12 @@ An allow pattern grants exactly one public label under a suffix:
 
 ```txt
 *.routeup.dev
+*.alice.routeup.dev
 ```
 
-That matches `example-app.routeup.dev`. It does not match `routeup.dev` or `api.example-app.routeup.dev`.
+The first pattern matches `example-app.routeup.dev`; the second matches
+`example-app.alice.routeup.dev`. A `*` grants exactly one label, not the suffix
+itself or a deeper hostname.
 
-This is why public route names are single labels. Use `api-example-app` instead of `api.example-app` for a public route.
+Pass the dotted route `api.example-app` normally. routeup automatically requests
+the public label `api-example-app` when exposing it.

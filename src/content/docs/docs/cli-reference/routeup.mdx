@@ -16,36 +16,71 @@ routeup
 
 1. Loads config from `routeup.json` or the `package.json` `routeup` block in the
    current directory.
-2. Picks a free local port for your app.
-3. Starts the configured script as a child process with routeup's environment
+2. Resolves the route from `ROUTEUP_NAME`, config `name`, or the working-directory
+   basename. It uses a configured root target when present and otherwise picks a
+   free local port.
+3. Registers the route with the local agent and, when `expose.enabled` is set,
+   claims the public route before starting the app.
+4. Starts the configured script as a child process with routeup's environment
    variables set.
-4. Registers the route with the local agent so `https://<name>.localhost`
-   resolves while the child runs.
-5. Tears the route down and exits with the child's exit code when the process
-   stops or you press `Ctrl-C`.
+5. Waits for the assigned port to accept connections, then prints the ready URL.
+6. Tears down the route, public tunnel, and complete child process group when
+   the process stops or you press `Ctrl-C`.
+
+The runner is a live desired-state owner. If the agent restarts, it restores its
+local claim and any configured public exposure. Stop runner mode from its owning
+terminal or by letting the child process exit; `routeup stop` controls only
+`routeup serve` owners.
+
+## Runner output
+
+routeup prints the resolved command and route before child output starts. When
+no root port is configured, the assigned port may change on each run:
+
+```txt frame="terminal" title="terminal"
+routeup
+  command pnpm dev --port ${PORT}
+  route   example-app
+  local   https://example-app.localhost
+  target  / -> localhost:59370
+  status  waiting for localhost:59370
+
+```
+
+After the child starts listening, routeup prints:
+
+```txt frame="terminal" title="terminal"
+
+ready: https://example-app.localhost
+
+```
+
+Child output can appear between the preamble and the ready line.
 
 ## Environment passed to the child
 
-```txt
+```txt frame="terminal" title="terminal"
 PORT=<assigned-port>
 HOST=127.0.0.1
 ROUTEUP_LOCAL_URL=https://example-app.localhost
 ROUTEUP_URL=https://example-app.localhost
-NODE_EXTRA_CA_CERTS=~/.routeup/ca.crt
+NODE_EXTRA_CA_CERTS=/Users/me/.routeup/ca.crt
 ```
 
 Your app should bind the port from `PORT` instead of a hard-coded one. `ROUTEUP_LOCAL_URL` is always the local HTTPS URL. `ROUTEUP_URL` is the URL your app should advertise: it is local for local-only runs and becomes the public URL when the route is exposed.
 
 With public exposure enabled, the environment changes to:
 
-```txt
+This example shows a token-less hosted URL under `try.routeup.dev`.
+
+```txt frame="terminal" title="terminal"
 ROUTEUP_LOCAL_URL=https://example-app.localhost
 ROUTEUP_URL=https://example-app.try.routeup.dev
 ```
 
 ## Config
 
-```json
+```json title="package.json"
 {
   "scripts": {
     "dev": "routeup",
@@ -67,7 +102,7 @@ Add `expose.enabled` to automatically open a public tunnel when the runner
 starts. `ROUTEUP_URL` is updated to the granted public URL before the child
 process launches:
 
-```json
+```json title="package.json"
 {
   "routeup": {
     "name": "example-app",
@@ -82,6 +117,18 @@ process launches:
 Requires a server configured via `routeup setup --server`. See
 [Exposing publicly](/docs/getting-started/exposing-publicly) for setup steps.
 
+## Command groups and terminal output
+
+`routeup --help` groups commands by workflow instead of presenting one long
+list: **Start** contains `exec`, `expose`, `serve`, and `stop`; **Observe** contains `config`,
+`dashboard`, `doctor`, `inspect`, `logs`, and `routes`; and **Manage** contains
+machine lifecycle commands such as `setup`, `update`, `uninstall`, and `version`.
+
+Human-readable output uses color and emphasis in an interactive terminal.
+Redirected output stays plain, and `NO_COLOR` or `TERM=dumb` disables styling.
+JSON and NDJSON output never contains terminal styling.
+
 See [Configuration](/docs/configuration/routeup-json) for the full field
-reference, and [serve](/docs/cli-reference/serve) when you want to register a
-route for an app you start yourself.
+reference, [serve](/docs/cli-reference/serve) when you want to register a route
+for an app you start yourself, and [exec](/docs/cli-reference/exec) when a
+separate process only needs the Routeup environment.

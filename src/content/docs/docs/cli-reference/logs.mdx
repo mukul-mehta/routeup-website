@@ -4,7 +4,9 @@ description: Tail local and public request logs from the agent.
 ---
 
 `routeup logs` shows request logs recorded by the local agent. The agent is the
-authoritative log for both local and public traffic.
+authoritative log for traffic that reaches a local route or live tunnel.
+Requests rejected by the public server before reaching the tunnel are not
+present.
 
 ```bash
 routeup logs
@@ -12,29 +14,58 @@ routeup logs example-app
 routeup logs api.example-app --follow
 ```
 
-Default log line:
+Default output:
 
-```txt
-12:41:03 public example-app POST /api/webhooks/github 200 38ms req_abc123
-12:41:07 local  example-app     GET  /settings             200 12ms req_def456
+```txt frame="terminal" title="terminal"
+TIME      ROUTE                         SOURCE  STATUS  ID                    METHOD   DURATION  PATH
+12:41:03  example-app                   public  200     req_Ap7kQ3mN8vR2xLzC  POST     38ms      /api/webhooks/github
+12:41:07  example-app                   local   200     req_9fKq2LmXw8rT4Yb1  GET      432us     /settings
 ```
 
-Each line shows the time, source (`local` or `public`), route, method, path,
-status, latency, and a request id.
+Each line shows the time, route, source (`local` or `public`), status, request
+id, method, latency, and path.
+
+## Follow mode
+
+`--follow` streams new matching requests as they arrive, one line per request.
+If that stream ends because the agent stops or restarts, rerun the command. The
+full-screen [`routeup dashboard`](/docs/cli-reference/dashboard) and foreground
+[`routeup serve`](/docs/cli-reference/serve) use reconnecting live-log models.
+
+```bash
+routeup logs example-app --public --follow
+```
+
+Output is composable: pipe to `grep`, `jq`, or `tee` freely. Use `--json` for
+machine-readable NDJSON.
+
+Human rows use fixed-width columns and clip overlong values so `PATH` remains
+aligned. Positive durations below one microsecond display as `<1us`; durations
+below one millisecond retain integer microsecond precision such as `432us` or
+`999us`; durations at or above one millisecond are rounded to the nearest
+millisecond. A nonpositive duration displays as `0ms`.
 
 ## Flags
 
 ```txt
---follow   stream new entries as they arrive
---public   only public (tunnelled) requests
---local    only local requests
---json     emit structured JSON instead of the text format
+--follow          stream new matching requests
+--public          only public tunnel requests
+--local           only local .localhost requests
+--since <value>   requests since a duration such as 10m or an RFC3339 time
+--method <verb>   only this HTTP method
+--status <code>   only this HTTP status code
+--limit <n>       at most the newest N matching requests
+--json            emit one JSON request record per line
 ```
 
 ```bash
 # Watch incoming webhooks in real time
 routeup logs example-app --follow --public
 ```
+
+`--public` and `--local` are mutually exclusive. `--json` emits NDJSON and can
+be combined with `--follow`; it produces no placeholder record when there are
+no matches or the agent is not running.
 
 ## Retention
 

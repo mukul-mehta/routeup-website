@@ -29,7 +29,7 @@ replace the nested `*.try.tunnel.example.com` or
 
 In the default `acme` TLS mode, the server proves domain control with the
 **DNS-01** challenge, which writes temporary `TXT` records under
-`_acme-challenge`. That requires API access to your DNS provider, routeup uses
+`_acme-challenge`. That requires API access to your DNS provider. routeup uses
 Cloudflare by default (`CLOUDFLARE_API_TOKEN` with `Zone.DNS:Edit` on the zone).
 Cloudflare address records must be **DNS only** (grey cloud). A proxied record
 terminates TLS at Cloudflare instead of passing the routeup wildcard certificate

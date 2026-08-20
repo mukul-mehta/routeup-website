@@ -3,9 +3,9 @@ title: Name resolution
 description: How routeup turns a CLI argument, env var, or config value into a route name.
 ---
 
-routeup resolves the route name from the first source that is set. Positional
-arguments have one additional project-scoping rule; environment and config names
-are used literally.
+routeup resolves the route name from the first source that is set. Every source
+is used literally; routeup never appends a project or config name to an explicit
+argument.
 
 ## Source precedence
 
@@ -21,23 +21,22 @@ above are set, routeup uses the basename of the current working directory as the
 route name — so running from `~/projects/example-app` gives `https://example-app.localhost`
 automatically without any config.
 
-## Positional-name scoping
+## Literal names
 
-A positional name **containing a dot** is taken literally. A positional **bare**
-name (no dots) is prefixed with the project name from config. With no project in
-scope, a bare positional name is used as-is. `ROUTEUP_NAME` and the config's own
-`name` are always literal.
+An explicit positional name is always the complete route name, whether it is
+bare or dotted. Omit the argument when you want the environment, config, or
+directory fallback.
 
 ```txt
-project = example-app (from config)
+config name = example-app
 
-routeup serve              -> example-app  (uses the project name)
-routeup serve api          -> api.example-app      (bare name, scoped under the project)
-routeup serve api.example-app    -> api.example-app      (dotted, literal)
-routeup serve api.other    -> api.other      (dotted, literal, not scoped to example-app)
+routeup serve                    -> example-app
+routeup serve api                -> api
+routeup serve api.example-app    -> api.example-app
+routeup serve api.other          -> api.other
 
-no project in scope:
-routeup serve foo          -> foo            (bare name used as-is)
+no env or config name, working directory = example-app:
+routeup serve                    -> example-app
 
 ROUTEUP_NAME=api routeup serve -> api        (environment name is literal)
 ```

@@ -16,7 +16,7 @@ Path:        ~/.routeup/agent.sock
 Permissions: 0700 directory, 0600 socket
 Wire format: JSON over HTTP/1.1
 Auth:        filesystem permissions only (no token on the local socket)
-Versioning:  /v1/ URL prefix; a version endpoint enables friendly mismatch errors
+Versioning:  /v1/ URL prefix; GET /v1/status reports version and boot id
 ```
 
 Filesystem permissions are the entire auth model here: only your user can read or
@@ -28,20 +28,30 @@ write the socket, so no token is needed for local control.
 POST   /v1/routes              register a route claim
 DELETE /v1/routes/{name}       release a claim
 GET    /v1/routes              list active routes
+GET    /v1/owners/{name}       attach a serve-owner control stream
+POST   /v1/owners/{name}/stop  request cooperative owner shutdown
+POST   /v1/owners/{name}/ack   acknowledge stop receipt
 GET    /v1/status              agent status, version, uptime, boot id
 POST   /v1/shutdown            graceful shutdown
 GET    /v1/logs?route=&follow= stream access logs (SSE)
+GET    /v1/requests/{id}       inspect a retained request/response exchange
 POST   /v1/expose              start public exposure for a claimed route
 POST   /v1/unexpose            stop public exposure
 ```
 
 ## Why the registry can be in-memory
 
-The status response carries a `boot_id` generated once per agent process. A
-foreground `serve` registers its claim, remembers that boot id, and re-registers
-if the id changes (the agent restarted) or the agent becomes unreachable. The
-live `serve` processes are the source of truth and re-assert their claims after
-any restart, so the agent never needs to persist the route registry to disk.
+The status response carries a `boot_id` generated once per agent process. Live
+CLI owners retain their exact desired state: serve and runner owners re-register
+local claims; any owner with public exposure restores it; standalone expose
+owners restore only their exposure. Foreground and detached owner processes are
+the source of truth, so the agent never persists the route registry or tunnel
+configuration to disk.
+
+`routeup stop` uses the owner stream and acknowledgment endpoints. It never
+signals a PID copied from the registry. Small non-secret runtime records contain
+only record ID, route, owner kind, and PID so lifecycle commands can fail closed
+while the in-memory agent is restarting; targets and credentials are not stored.
 
 See [Local agent](/docs/concepts/local-agent) for the daemon side and
 [Conflict resolution](/docs/architecture/conflict-resolution) for ownership

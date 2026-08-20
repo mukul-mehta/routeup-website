@@ -1,0 +1,115 @@
+---
+title: Custom CA certificates
+description: Trust routeup local HTTPS in apps that use their own certificate store.
+---
+
+`routeup setup` adds the routeup local certificate authority (CA) to your
+operating system trust store. Browsers, `curl`, and most native apps use that
+store automatically.
+
+Some apps use a bundled trust store or send requests through their own local
+agent. Those apps need the routeup CA added separately before they will accept
+`https://<name>.localhost`.
+
+## Certificate to add
+
+The default routeup CA certificate is:
+
+```txt
+~/.routeup/ca.crt
+```
+
+This is a PEM-encoded public CA certificate. An app may call the setting
+**Custom CA**, **CA certificates**, **Root certificates**, or **Certificate
+bundle**.
+
+> **Never import `~/.routeup/ca.key`.** That is the private signing key. You also
+> do not need a client certificate: routeup uses the CA to prove the local
+> server's identity, not to authenticate the client with mutual TLS.
+
+Keep hostname and peer/certificate verification enabled. Adding the CA is safer
+than selecting an option such as "Disable SSL verification."
+
+Public routeup URLs use publicly trusted certificates and do not need this
+configuration.
+
+## Node.js
+
+Node.js uses its bundled CA roots by default instead of the operating system
+trust store. Run Node-based commands through Routeup when another process owns
+the route:
+
+```bash
+# Terminal 1
+routeup serve
+
+# Terminal 2
+routeup exec -- yarn start:dev
+```
+
+`routeup exec` sets `NODE_EXTRA_CA_CERTS` before Node starts, so `fetch`, Axios,
+and `https` trust the routeup local CA. It also injects `ROUTEUP_LOCAL_URL` and
+`ROUTEUP_URL`. See [`routeup exec`](/docs/cli-reference/exec).
+
+For modern Node versions, another machine-wide option is to make Node use the
+operating system trust store:
+
+```bash
+export NODE_USE_SYSTEM_CA=1
+```
+
+Set either CA variable before starting Node. Adding `NODE_EXTRA_CA_CERTS` to an
+application `.env` loaded by dotenv or a framework is too late because Node
+reads it during process startup.
+
+## General setup
+
+1. Run `routeup setup` and confirm the local checks pass with `routeup doctor`.
+2. Open the app's custom CA or root certificate settings.
+3. Scope the setting to the exact route hostname when the app supports
+   per-domain settings, for example `example-app.localhost`.
+4. Import `~/.routeup/ca.crt` as a CA certificate or trusted root.
+5. Leave hostname and certificate verification enabled, then retry the local
+   HTTPS URL.
+
+## Hoppscotch
+
+Hoppscotch supports custom CA certificates through its native request relay:
+
+- In the [Hoppscotch Desktop App](https://docs.hoppscotch.io/documentation/clients/desktop/overview),
+  use the **Native** interceptor.
+- In the Hoppscotch Web App, install and register the local
+  [Hoppscotch Agent](https://docs.hoppscotch.io/documentation/features/interceptor#hoppscotch-agent),
+  then use the **Agent** interceptor. The browser interceptor cannot apply this
+  custom CA configuration to the relay.
+
+Add the routeup CA:
+
+1. Open **Settings** and find **Interceptors**.
+2. Select **Native** for the Desktop App or **Agent** for the Web App.
+3. Open the domain overrides, add the exact route hostname such as
+   `example-app.localhost`, and select it. Repeat this for other route names;
+   using an exact hostname keeps the added trust narrowly scoped.
+4. Keep **Verify Host** and **Verify Peer** enabled.
+5. Open **CA Certificates**, choose **Add Certificate File**, and select
+   `~/.routeup/ca.crt`.
+6. Make sure the certificate's inclusion toggle is on, select **Done**, and send
+   the request to `https://example-app.localhost` again.
+
+Use **CA Certificates**, not **Client Certificates**. Hoppscotch's client
+certificate screen configures mutual TLS and asks for a private key, which is
+not part of routeup's local HTTPS flow.
+
+## Troubleshooting
+
+- Run `routeup doctor` first. A failed CA, trust, port, or agent check indicates
+  a routeup setup problem rather than an app-specific trust problem.
+- Confirm the app is sending through the Native or Agent interceptor where the
+  CA was configured.
+- Confirm the domain override exactly matches the request hostname and that the
+  CA certificate is enabled.
+- If routeup was fully uninstalled and set up again, it may have created a new
+  local CA. Remove the old certificate from the app and import the current
+  `~/.routeup/ca.crt`.
+- A connection-refused or route-not-found error is not a certificate error.
+  Confirm the route is active with `routeup routes`.

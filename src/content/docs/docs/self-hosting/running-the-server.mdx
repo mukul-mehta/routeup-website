@@ -4,7 +4,7 @@ description: Run your own routeup server on a domain you control.
 ---
 
 The public server is the same `routeup` binary you already have. Self-hosting
-means running it with your own domain, DNS, and TLS, the hosted `routeup.dev` is
+means running it with your own domain, DNS, and TLS. The hosted `routeup.dev` is
 just one deployment of this code.
 
 ## Prerequisites
@@ -48,9 +48,27 @@ Common flags:
 --tls-key <path>            PEM private key for cert mode
 ```
 
+Run `routeup server --help` for listen, ACME, logging, metrics, and rate-limit
+options.
+
+The same settings can live in a server config file:
+
+```json title="routeup-server.json"
+{
+  "domain": "tunnel.example.com",
+  "listen": ":443",
+  "db": "/var/lib/routeup/server.db",
+  "acme_email": "admin@example.com",
+  "acme_storage": "/var/lib/routeup/acme",
+  "reserved": ["edge"],
+  "log_format": "json",
+  "log_level": "info"
+}
+```
+
 ## Deployment shape
 
-A single small VM is enough for v1, the server is one binary with a local SQLite
+A single small VM is enough for v1. The server is one binary with a local SQLite
 database. Put it behind a stable IP, open 443, and run it under a process
 supervisor (systemd, a container restart policy) so it comes back after reboots.
 

@@ -1,0 +1,36 @@
+---
+title: routeup config
+description: Show the discovered project config and its resolved non-secret values.
+---
+
+`routeup config` explains what routeup resolved in the current directory:
+
+```bash
+routeup config
+```
+
+Example output:
+
+```txt frame="terminal" title="terminal"
+source: routeup.json
+path: /Users/me/example-app/routeup.json
+route: example-app
+targets:
+  /        http://localhost:8080
+command: configured
+port env: PORT,WEBHOOK_CONSUMER_PORT
+exposure enabled: true
+expose paths: /api/webhooks/*
+capture: request,response
+redact headers: authorization,cookie
+server: https://edge.routeup.dev
+token: configured
+```
+
+The output combines project config with relevant environment and saved client
+settings. It reports only whether a token is configured; the token value is
+never printed.
+
+Use this command when a bare route name, target, runner command, exposure, or
+capture setting does not resolve as expected. `routeup config --json` emits the
+same resolved view for automation.

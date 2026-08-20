@@ -1,0 +1,79 @@
+---
+title: Observe and debug requests
+description: Follow route traffic, use the live dashboard, and inspect captured exchanges.
+---
+
+Once a route is active, routeup can show every completed local and public request
+that reaches your agent. Metadata logging is automatic; retaining headers or
+bodies is always opt-in.
+
+## Follow requests in the terminal
+
+Use a second terminal while `routeup serve` or bare `routeup` owns the route:
+
+```bash
+routeup logs example-app --follow
+```
+
+```txt frame="terminal" title="terminal"
+TIME      ROUTE             SOURCE  STATUS  ID                    METHOD   DURATION  PATH
+14:02:01  example-app       local   200     req_9f2LmX7qKd3sAw8P  GET      3ms       /
+14:02:04  example-app       public  204     req_Jz6nR2wL8cP4sD9h  POST     18ms      /api/webhooks/stripe
+```
+
+Filter by source, method, status, time, or result count. See
+[`routeup logs`](/docs/cli-reference/logs) for the complete flag reference.
+
+## Open the live dashboard
+
+```bash
+routeup dashboard
+```
+
+The dashboard keeps route health, public exposure state, and live requests in
+one read-only view. Select a captured request and press Enter to inspect it
+without leaving the dashboard.
+
+## Enable capture when you need bodies
+
+Add capture settings before starting or restarting the route owner:
+
+```json title="routeup.json"
+{
+  "name": "example-app",
+  "port": 8080,
+  "capture": {
+    "request": true,
+    "response": true,
+    "redact_headers": [
+      "authorization",
+      "cookie",
+      "x-webhook-signature"
+    ]
+  }
+}
+```
+
+Capture is bounded and stored only in the agent's in-memory request ring. Add
+every sensitive signature or credential header used by your app to
+`redact_headers`.
+
+## Inspect one exchange
+
+Copy a request ID from the log or dashboard:
+
+```bash
+routeup inspect req_Jz6nR2wL8cP4sD9h
+```
+
+The default view safely escapes retained values and pretty-prints valid JSON.
+Use [`routeup inspect`](/docs/cli-reference/inspect) for raw or machine-readable
+output.
+
+## What is not recorded
+
+- Bodies and headers are not retained unless capture is enabled.
+- Requests rejected by the public server before reaching a live tunnel are not
+  present in the local agent log.
+- Captured data disappears when the agent restarts or its bounded ring evicts
+  the request.

@@ -1,6 +1,6 @@
 ---
-title: routeup update / uninstall
-description: Upgrade routeup in place, or remove it and everything setup installed.
+title: routeup update / uninstall / version
+description: Upgrade routeup in place, remove it and everything setup installed, or print the installed version.
 ---
 
 ## routeup update
@@ -17,21 +17,45 @@ routeup was installed and uses the matching path:
 - **Direct binary installs** download the latest GitHub release, verify it
   against `checksums.txt`, and replace the running binary.
 
-The macOS port-443 forwarder points at a stable symlink, so it keeps working
-across upgrades. On Linux, the `setcap` capability lives on the binary inode and
-is dropped by a replace, run `routeup setup` (or follow the `update` prompt) to
-reapply it. [doctor](/docs/cli-reference/doctor) flags this if it happens.
+Check without installing:
+
+```bash
+routeup update --check
+```
+
+routeup never checks for updates automatically. Running `update` or
+`update --check` is what contacts GitHub.
+
+After installing a release, `update` refreshes privileged port setup. On macOS,
+that replaces the root-owned helper copy used by the port-443 LaunchDaemon. On
+Linux, it reapplies `cap_net_bind_service` because the capability is attached
+to the replaced binary inode. This step may ask for your password; if it cannot
+finish, rerun `routeup setup`.
+
+A manual package-manager upgrade cannot refresh the privileged helper itself.
+[`routeup doctor`](/docs/cli-reference/doctor) detects a stale macOS helper or a
+lost Linux capability and asks you to rerun setup.
 
 ## routeup uninstall
 
 ```bash
 routeup uninstall
+routeup uninstall --yes   # skip the confirmation prompt
 ```
 
-`uninstall` reverses everything [setup](/docs/cli-reference/setup) did:
+`uninstall` asks for confirmation unless `-y/--yes` is supplied. Before system
+cleanup, it checks live CLI owners:
 
-- stops the local agent and removes its autostart unit,
-- removes the port-443 forwarder (macOS) or capability (Linux),
+- If a runner or standalone expose owner is active, uninstall aborts. Stop that
+  command in its owning terminal and retry.
+- If all live owners are foreground or detached serve commands, uninstall stops
+  them cooperatively and waits for route/exposure cleanup.
+
+It then reverses what [setup](/docs/cli-reference/setup) installed:
+
+- stops the local agent,
+- removes the root-owned port-443 helper and LaunchDaemon (macOS) or capability
+  (Linux),
 - removes the routeup CA from your OS trust store,
 - deletes generated certificates and the `~/.routeup` state directory.
 
@@ -39,3 +63,19 @@ It is designed to work even mid-upgrade, when the binary is being replaced.
 Removing the package alone (`brew uninstall`, deleting the binary) does **not**
 untrust the CA or remove the forwarder, run `routeup uninstall` first for a
 clean removal.
+
+With an overridden/development state directory, uninstall validates the setup
+marker, removes only recognized routeup files, preserves unrelated files, and
+does not remove the global privileged-port helper.
+
+For the default profile, failures while removing the privileged helper, trust
+entry, or state directory are reported as warnings so the remaining teardown can
+continue. Owner-control or agent-shutdown failures abort before system cleanup.
+
+## routeup version
+
+```bash
+routeup version
+```
+
+Print the installed routeup version. `routeup --version` prints the same output.

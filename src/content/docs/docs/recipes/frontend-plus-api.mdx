@@ -4,7 +4,7 @@ description: Serve a dev frontend at / and an API at /api/* behind a single rout
 ---
 
 Putting your frontend and API under one origin removes CORS and makes cookies
-simple, the browser sees a single host. routeup can route by path so `/` goes to
+simple because the browser sees a single host. routeup can route by path so `/` goes to
 your dev server and `/api/*` goes to your API.
 
 ## The shape
@@ -21,7 +21,7 @@ cross-origin preflight.
 
 Describe the path targets in config so the route is reproducible:
 
-```json
+```json title="routeup.json"
 {
   "name": "example-app",
   "targets": [
@@ -37,16 +37,28 @@ Then serve it:
 routeup serve
 ```
 
+```txt frame="terminal" title="terminal"
+route: example-app
+local: https://example-app.localhost
+targets:
+  /        http://localhost:5173
+  /api     http://localhost:9080
+
+requests: live
+press Ctrl-C to stop
+```
+
 ## Public, same shape
 
 Add `--expose` and the single-origin layout is preserved on the public URL too,
 so a deployed-style `https://example-app.try.routeup.dev/api/...` works without
-reconfiguring the frontend. A token-less hosted address is session-only; a
+reconfiguring the frontend. Configure the hosted server first as described in
+[Exposing publicly](/docs/getting-started/exposing-publicly). A token-less hosted address is session-only; a
 namespace token gives the route a reusable address for later runs.
 
 ```bash
 routeup serve --expose
 ```
 
-This is the same one-URL model your app will use in production, which means
-origin-sensitive behavior shows up in development instead of after you ship.
+This preserves the same single-origin path layout your app can use in
+production, so origin-sensitive behavior shows up before you ship.

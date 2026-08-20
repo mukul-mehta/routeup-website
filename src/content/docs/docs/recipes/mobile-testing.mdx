@@ -8,13 +8,16 @@ dev server through it. Expose the route and the device gets a real HTTPS URL.
 
 ## Expose the dev server
 
+Configure a public server first using
+[Exposing publicly](/docs/getting-started/exposing-publicly).
+
 ```bash
 routeup serve example-app --port 3000 --expose
 ```
 
 This example assumes your saved token allows `*.mukul.routeup.dev`.
 
-```txt
+```txt frame="terminal" title="terminal"
 route: example-app
 local: https://example-app.localhost
 public: https://example-app.mukul.routeup.dev
@@ -22,14 +25,14 @@ expose: all paths
 targets:
   /        http://localhost:3000
 
+requests: live
 press Ctrl-C to stop
 ```
 
 ## Open it on the device
 
-Type the public URL into Safari or Chrome on the phone, no profiles, no
-self-signed certificate warnings, because the public side uses a publicly-trusted
-certificate.
+Open the public URL in Safari or Chrome. No local profile or CA installation is
+needed because the public certificate is publicly trusted.
 
 Because it is a publicly trusted HTTPS origin, it exercises secure-context
 features such as service workers, `getUserMedia`, secure cookies, and the
@@ -39,7 +42,7 @@ from production.
 ## Why not local for this
 
 A `*.localhost` route is the zero-network path, but it resolves to `127.0.0.1` on
-each machine, it is unreachable from a separate device. Mobile testing needs the
+each machine and is unreachable from a separate device. Mobile testing needs the
 public route. (Same-LAN shortcuts like mDNS are a possible future addition, but
 today off-host devices go through the public server.)
 

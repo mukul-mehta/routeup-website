@@ -10,8 +10,23 @@ installing.
 routeup setup
 ```
 
-You may be asked for Touch ID or your password once, that is the only privileged
-step.
+Excerpt of the local setup steps on a fresh machine; optional server and token
+prompts are omitted:
+
+```txt frame="terminal" title="terminal"
+  ✓  certificate authority   created
+  ✓  certificate             trusted
+  →  port 443                setting up (password required)…
+  ✓  port 443                ready
+  ✓  agent                   started
+
+  routeup is ready
+  try: routeup serve example-app --port 3000
+  run routeup --help to see all commands
+```
+
+Setup may request one authorization for system trust and privileged-port
+changes.
 
 ## What it changes
 
@@ -35,6 +50,18 @@ endpoint and your token. Granted public URLs still use the `routeup.dev` suffix:
 routeup setup --server https://edge.routeup.dev --token sk_routeup_xxx
 ```
 
+On an interactive re-run, a saved token is represented by a masked value. Press
+Enter at the token prompt to keep it, type `none` to clear only the token, or
+enter a replacement token. A saved token is reused only when the selected
+server matches the server it was saved for.
+
+The same clearing operations are available through flags:
+
+```bash
+routeup setup --token none   # clear the token, keep the saved server
+routeup setup --server none  # clear both the saved server and token
+```
+
 You can also supply these per command or through `ROUTEUP_SERVER` /
 `ROUTEUP_TOKEN`. See [Using a token](/docs/getting-started/using-a-token).
 
@@ -47,5 +74,6 @@ state. [doctor](/docs/cli-reference/doctor) tells you when a re-run is needed.
 ## Undoing it
 
 [uninstall](/docs/cli-reference/update-uninstall) reverses everything setup did:
-it stops the agent, removes the port-443 forwarder, untrusts the CA, and deletes
-`~/.routeup`.
+it checks live owners, cooperatively stops serve owners, stops the agent, removes
+the port-443 forwarder, untrusts the CA, and deletes `~/.routeup`. Active runners
+and standalone exposures must be stopped in their owning terminal first.

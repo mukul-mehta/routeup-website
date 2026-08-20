@@ -5,15 +5,21 @@ description: The background process that owns local routing, TLS termination, an
 
 The local agent receives HTTPS requests for your `*.localhost` routes and forwards them to local app ports.
 
-You usually do not run it directly. `routeup setup` starts it, and `routeup serve` starts it on demand if it is not already running.
+You usually do not run it directly. `routeup setup` starts it, and bare
+`routeup`, `routeup serve`, and `routeup expose` start it on demand when needed.
 
 ## What it does
 
 - Terminates local HTTPS using certificates signed by the routeup local CA.
 - Keeps the active route registry.
 - Reverse-proxies requests by `Host` header to the configured local port.
-- Owns public tunnel clients started by `routeup serve --public` and standalone
+- Owns public tunnel clients started by `routeup serve --expose` and standalone
   `routeup expose`.
+
+The agent keeps route and tunnel state in memory. Live foreground and detached
+CLI owners reconcile their exact desired state after an agent restart. Request
+logs and captures are not restored because their bounded ring belongs to the
+agent process.
 
 ## Debug commands
 

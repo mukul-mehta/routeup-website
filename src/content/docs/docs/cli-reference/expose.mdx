@@ -6,6 +6,11 @@ description: Make a route public using the explicit exposure command.
 `routeup expose` opens a public tunnel without registering or holding a new
 local route.
 
+Run `routeup setup` before first use so the local agent and machine setup exist.
+
+An explicit route name is literal. When it is omitted, routeup uses
+`ROUTEUP_NAME`, config `name`, then the working-directory basename.
+
 If no `--port`, `--target`, or `ROUTEUP_PORT` override is supplied, it first
 looks for an active local route with the same name and reuses that route's
 targets. If no matching active route exists, it resolves targets from flags,
@@ -21,7 +26,9 @@ route, it also prints that route's local URL.
 
 Example output for an explicit target:
 
-```txt
+This example assumes a root-tier token allowing `*.routeup.dev`.
+
+```txt frame="terminal" title="terminal"
 public: https://example-app.routeup.dev
 targets:
   /        http://localhost:8080
@@ -30,13 +37,41 @@ expose: all paths
 press Ctrl-C to stop
 ```
 
-`routeup serve example-app --port 8080 --public` is different: `serve` first registers
-and holds the local route, then exposes those same targets publicly. `--public`
-is an alias for `serve --expose`.
+`routeup serve example-app --port 8080 --expose` is different: `serve` first registers
+and holds the local route, then exposes those same targets publicly. `--expose`
+can also be written as `--public`.
+
+## Flags
+
+```txt
+--port <n>             root target port
+--target </path=port>  path target; repeat for multiple targets
+--server <url>         public-server control URL
+--token <secret>       server token
+--random               generate a random route name
+--json                 write one ready event as JSON
+--qr                   print a terminal QR code for the public URL
+```
+
+`--json` and `--qr` are mutually exclusive.
+
+## Automation output
+
+Use `--json` for a pure machine-readable ready event:
+
+```json title="ready event"
+{"event":"ready","route":"example-app","public_url":"https://example-app.routeup.dev","targets":[{"path":"/","port":8080}]}
+```
+
+The command continues holding and reconciling the exposure after writing the
+single ready event. It restores the tunnel after an agent restart and remains
+attached until Ctrl-C or termination. `routeup stop` does not control standalone
+exposures.
 
 ## Random public names
 
-Use `--random` to generate a random public route name:
+Use `--random` to generate a random route name. The server places its normalized
+public label under the granted namespace:
 
 ```bash
 routeup expose --random --port 8080

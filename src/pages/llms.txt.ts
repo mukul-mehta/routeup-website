@@ -23,8 +23,8 @@ export const GET: APIRoute = async () => {
   );
   lines.push('');
   lines.push('routeup gives local services stable HTTPS names like');
-  lines.push('https://myapp.localhost and can expose those same routes');
-  lines.push('publicly at a named URL such as https://myapp.mukul.routeup.dev when needed.');
+  lines.push('https://example-app.localhost and can expose those same routes');
+  lines.push('publicly at a named URL such as https://example-app.mukul.routeup.dev when needed.');
   lines.push('');
   lines.push('## Docs');
   lines.push('');

@@ -32,11 +32,15 @@ the routeup CA:
 export NODE_EXTRA_CA_CERTS=~/.routeup/ca.crt
 ```
 
+Apps with a separate trust store may need the CA imported through their own
+settings. See [Custom CA certificates](/docs/configuration/custom-ca-certificates).
+
 ## Off-host or cloud browsers
 
 When the browser runs somewhere else, CI, a cloud browser, or an LLM agent
 driving a remote browser, `localhost` is not reachable. Expose the route and
-hand the agent the public URL. This example assumes your saved token allows
+hand the agent the public URL. First configure a public server as described in
+[Exposing publicly](/docs/getting-started/exposing-publicly). This example assumes your saved token allows
 `*.mukul.routeup.dev`:
 
 ```bash
