@@ -54,6 +54,14 @@ routeup setup
 For a strictly local setup, enter `none` at the optional public-server prompt.
 No server is contacted unless you later expose a route.
 
+If you cannot bind to port 443 (no sudo, restricted environment), run setup with `--no-bind` instead:
+
+```bash
+routeup setup --no-bind --port 8443
+```
+
+This installs and trusts the local CA but skips claiming the privileged port. Routes will be served on port 8443 rather than 443.
+
 Then serve your first local HTTPS route:
 
 ```bash

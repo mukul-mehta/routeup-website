@@ -11,8 +11,8 @@ You need a public-server control URL. For the hosted service, use
 `https://edge.routeup.dev`. You can start immediately with a temporary URL under
 `try.routeup.dev`. For a reusable named URL, [request a hosted token](/docs/getting-started/using-a-token#request-a-hosted-token).
 
-The named examples below assume a token for `*.mukul.routeup.dev`, which grants
-URLs such as `https://example-app.mukul.routeup.dev`. A public address is
+The named examples below assume a token for `*.team.routeup.dev`, which grants
+URLs such as `https://example-app.team.routeup.dev`. A public address is
 reachable only while its tunnel is connected.
 
 Save the hosted server during setup. Add a token when you have one:
@@ -41,7 +41,7 @@ press `Ctrl-C`.
 ```txt frame="terminal" title="terminal"
 route: example-app
 local: https://example-app.localhost
-public: https://example-app.mukul.routeup.dev
+public: https://example-app.team.routeup.dev
 expose: all paths
 targets:
   /        http://localhost:8080
@@ -101,4 +101,4 @@ Then run:
 routeup serve --expose
 ```
 
-Requests to `https://example-app.mukul.routeup.dev/api/webhooks/...` are public; other paths stay local-only.
+Requests to `https://example-app.team.routeup.dev/api/webhooks/...` are public; other paths stay local-only.

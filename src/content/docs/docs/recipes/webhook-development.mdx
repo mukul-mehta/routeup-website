@@ -18,14 +18,14 @@ routeup serve example-app --port 8080 --expose
 ```
 
 The examples below assume your saved token allows
-`*.mukul.routeup.dev`.
+`*.team.routeup.dev`.
 
 routeup prints the local URL, public URL, exposure scope, and targets:
 
 ```txt frame="terminal" title="terminal"
 route: example-app
 local: https://example-app.localhost
-public: https://example-app.mukul.routeup.dev
+public: https://example-app.team.routeup.dev
 expose: all paths
 targets:
   /        http://localhost:8080
@@ -45,7 +45,7 @@ Slack:   Your App → Event Subscriptions → Request URL
 ```
 
 Use the full path your handler listens on, e.g.
-`https://example-app.mukul.routeup.dev/api/webhooks/github`.
+`https://example-app.team.routeup.dev/api/webhooks/github`.
 
 ## 3. Watch deliveries
 
@@ -103,7 +103,7 @@ Status: 200
 Duration: 38ms
 Method: POST
 Path: /api/webhooks/github
-Host: example-app.mukul.routeup.dev
+Host: example-app.team.routeup.dev
 
 Request
 -------
