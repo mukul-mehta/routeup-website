@@ -1,6 +1,7 @@
 allowBuilds:
   esbuild: true
   sharp: true
+  workerd: true
 
 minimumReleaseAgeExclude:
   - astro@7.2.1
@@ -17,6 +18,7 @@ minimumReleaseAgeExclude:
 onlyBuiltDependencies:
   - esbuild
   - sharp
+  - workerd
 
 # Skip the pre-script deps verification because it can fail with cached "ignored
 # builds" state and stop `pnpm dev` from starting even after the builds are

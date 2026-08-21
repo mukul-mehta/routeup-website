@@ -382,6 +382,7 @@ const runModes = [
         });
       })();
     </script>
+    <script is:inline defer src="https://umami.nikamma.in/script.js" data-website-id="4a093510-07eb-446a-8e87-05232276895c"></script>
   </head>
 
   <body>
@@ -635,9 +636,10 @@ const runModes = [
         <section id="urls" class="ru-section">
           <h2>Going public.</h2>
           <p class="ru-intro">
-            Need to reach the app from outside your machine? Without a token, routeup creates a temporary{' '}
-            <code class="code-plain">try.routeup.dev</code> URL for testing. With a token, every app uses a predictable
-            name inside your reusable namespace.
+            Every route gets a public HTTPS URL — no port forwarding, no router rules. By default routeup gives you a
+            temporary <code class="code-plain">try.routeup.dev</code> address that lasts for the session. With a hosted
+            token you get a reusable namespace — <code class="code-plain">your-namespace.routeup.dev</code> — so every app
+            always lives at the same address.
           </p>
           <div class="ru-cards2 ru-2col">
             <div class="ru-urlcard">
@@ -681,8 +683,23 @@ const runModes = [
                 A hosted token assigns a namespace such as <code class="code-plain">team.routeup.dev</code>. Every
                 route follows the same pattern — for example <code class="code-plain">api.team.routeup.dev</code> and{' '}
                 <code class="code-plain">docs.team.routeup.dev</code> — and routeup always claims inside it.
-                <a class="ru-inline-cta" href="mailto:tokens@routeup.dev?subject=Routeup%20hosted%20token%20request&body=Preferred%20namespace%3A%0AWhat%20you%20are%20building%3A%0A">Request one at tokens@routeup.dev →</a>
               </p>
+              <div class="ru-token-form-sect">
+                <p class="ru-token-form__label">Request a hosted token</p>
+                <p class="ru-token-form__note">Tokens are issued manually — I'll reply to your request within a day.</p>
+                <form class="ru-token-form" id="ru-token-form" novalidate>
+                  <div class="ru-token-form__row">
+                    <input class="ru-token-form__input" type="email" name="email" placeholder="you@example.com" required aria-label="Your email address" autocomplete="email" />
+                  </div>
+                  <div class="ru-token-form__row ru-token-form__row--ns">
+                    <input class="ru-token-form__input ru-token-form__input--ns" type="text" name="namespace" placeholder="your-namespace" required aria-label="Preferred namespace" autocomplete="off" autocapitalize="none" spellcheck="false" />
+                    <span class="ru-token-form__ns-suffix">.routeup.dev</span>
+                  </div>
+                  <button type="submit" class="ru-token-form__submit">Send request →</button>
+                  <p class="ru-token-form__msg ru-token-form__msg--ok" hidden>Sent — I'll be in touch soon.</p>
+                  <p class="ru-token-form__msg ru-token-form__msg--err" hidden>Something went wrong — email <a href="mailto:tokens@routeup.dev">tokens@routeup.dev</a>.</p>
+                </form>
+              </div>
             </div>
           </div>
           <div class="ru-slimrow">
@@ -808,6 +825,7 @@ const runModes = [
           <a href="/docs">Docs</a>
           <a href="/docs/self-hosting/running-the-server">Self-host</a>
           <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+          <a href="mailto:help@routeup.dev">help@routeup.dev</a>
           <a href="/llms.txt">llms.txt</a>
         </nav>
       </footer>
@@ -996,6 +1014,37 @@ const runModes = [
         syncRecipeHeightLimit();
         window.addEventListener('resize', syncRecipeHeightLimit);
         window.addEventListener('popstate', activateFromHash);
+
+        /* ── Token request form ───────────────────────────────────────────── */
+        var tokenForm = document.getElementById('ru-token-form');
+        if (tokenForm) {
+          tokenForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var btn = tokenForm.querySelector('.ru-token-form__submit');
+            var ok = tokenForm.querySelector('.ru-token-form__msg--ok');
+            var err = tokenForm.querySelector('.ru-token-form__msg--err');
+            btn.disabled = true;
+            btn.textContent = 'Sending\u2026';
+            err.hidden = true;
+            try {
+              var res = await fetch('/api/token-request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: tokenForm.elements.email.value.trim(),
+                  namespace: tokenForm.elements.namespace.value.trim().toLowerCase(),
+                }),
+              });
+              if (!res.ok) throw new Error();
+              tokenForm.querySelectorAll('input, button, .ru-token-form__row').forEach(function(el) { el.hidden = true; });
+              ok.hidden = false;
+            } catch (_) {
+              btn.disabled = false;
+              btn.textContent = 'Send request \u2192';
+              err.hidden = false;
+            }
+          });
+        }
       })();
     </script>
 
@@ -1482,6 +1531,57 @@ const runModes = [
       .ru-urlcard__term::before { content: 'terminal'; display: block; margin: -16px -22px 14px; padding: 8px 16px 8px 58px; border-bottom: 1px solid var(--terminal-border); background: radial-gradient(circle at 18px 50%, var(--terminal-red) 0 3px, transparent 3.5px), radial-gradient(circle at 29px 50%, var(--terminal-yellow) 0 3px, transparent 3.5px), radial-gradient(circle at 40px 50%, var(--terminal-green) 0 3px, transparent 3.5px), var(--terminal-bar); color: var(--terminal-dim); font-size: 11px; line-height: 1.4; }
       .ru-urlcard__foot { margin: 0; padding: 18px 22px 20px; font-size: 14.5px; line-height: 1.6; color: var(--sec); }
       .ru-inline-cta { display: block; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; }
+
+      .ru-token-form-sect { padding: 16px 22px 20px; border-top: 1px solid var(--hair); }
+      .ru-token-form__note { margin: 6px 0 0; font-size: 12.5px; color: var(--dim); line-height: 1.5; }
+      .ru-token-form { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+      .ru-token-form__label { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--mint); }
+      .ru-token-form__row { display: flex; align-items: stretch; }
+      .ru-token-form__input {
+        width: 100%;
+        padding: 9px 11px;
+        background: var(--bg);
+        border: 1px solid var(--hair-mid);
+        border-radius: 4px;
+        color: var(--txt);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      .ru-token-form__input::placeholder { color: var(--dim); }
+      .ru-token-form__input:focus { outline: 2px solid var(--mint); outline-offset: -1px; }
+      .ru-token-form__input--ns { border-right: 0; border-radius: 4px 0 0 4px; }
+      .ru-token-form__ns-suffix {
+        flex: none;
+        padding: 9px 10px;
+        background: var(--panel);
+        border: 1px solid var(--hair-mid);
+        border-left: 0;
+        border-radius: 0 4px 4px 0;
+        color: var(--dim);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        line-height: 1.4;
+        white-space: nowrap;
+      }
+      .ru-token-form__submit {
+        align-self: flex-start;
+        padding: 9px 16px;
+        background: var(--mint);
+        color: var(--bg);
+        border: 0;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 4px;
+      }
+      .ru-token-form__submit:hover { background: var(--mint-hover); }
+      .ru-token-form__submit:disabled { opacity: .6; cursor: default; }
+      .ru-token-form__msg { margin: 4px 0 0; font-size: 13.5px; line-height: 1.5; }
+      .ru-token-form__msg--ok { color: var(--mint); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+      .ru-token-form__msg--err { color: var(--sec); }
 
       :is(.ru-term, .ru-codecard__body, .ru-dterm, .ru-dcfg, .ru-urlcard__term) { color: var(--terminal-text); font-variant-numeric: tabular-nums; }
       :is(.ru-term, .ru-codecard__body, .ru-dterm, .ru-dcfg, .ru-urlcard__term) .ru-pre span { background-color: var(--terminal-bg, #090C0B); }

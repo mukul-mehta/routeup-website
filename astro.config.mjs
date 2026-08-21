@@ -104,6 +104,14 @@ export default defineConfig({
             })();
           `,
         },
+        {
+          tag: 'script',
+          attrs: {
+            defer: true,
+            src: 'https://umami.nikamma.in/script.js',
+            'data-website-id': '4a093510-07eb-446a-8e87-05232276895c',
+          },
+        },
       ],
       social: [
         {
