@@ -25,7 +25,8 @@ routeup
    variables set.
 5. Waits for the assigned port to accept connections, then prints the ready URL.
 6. Tears down the route, public tunnel, and complete child process group when
-   the process stops or you press `Ctrl-C`.
+   the process stops or you press `Ctrl-C`. Managed cancellation escalates to
+   `SIGKILL` after ten seconds when the child group does not stop.
 
 The runner is a live desired-state owner. If the agent restarts, it restores its
 local claim and any configured public exposure. Stop runner mode from its owning
@@ -67,7 +68,11 @@ ROUTEUP_URL=https://example-app.localhost
 NODE_EXTRA_CA_CERTS=/Users/me/.routeup/ca.crt
 ```
 
-Your app should bind the port from `PORT` instead of a hard-coded one. `ROUTEUP_LOCAL_URL` is always the local HTTPS URL. `ROUTEUP_URL` is the URL your app should advertise: it is local for local-only runs and becomes the public URL when the route is exposed.
+Your app should bind the port from `PORT` instead of a hard-coded one.
+`ROUTEUP_LOCAL_URL` is always the local HTTPS URL. `ROUTEUP_URL` is the URL your
+app should advertise: it is local for local-only runs and becomes the public URL
+when the route is exposed. `ROUTEUP_TOKEN` is used by routeup itself and is not
+inherited by the application process.
 
 With public exposure enabled, the environment changes to:
 

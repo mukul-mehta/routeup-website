@@ -21,7 +21,13 @@ export default defineConfig({
         replacesTitle: false,
       },
       components: {
+        Header: './src/components/StarlightHeader.astro',
         MobileMenuToggle: './src/components/MobileMenuToggle.astro',
+      },
+      expressiveCode: {
+        themes: ['catppuccin-mocha', 'catppuccin-latte'],
+        useStarlightDarkModeSwitch: true,
+        useStarlightUiThemeColors: false,
       },
       // Default social-card image for every docs page. Per-page title and
       // description are set by Starlight; this just guarantees an og:image.
@@ -48,7 +54,7 @@ export default defineConfig({
         },
         {
           tag: 'meta',
-          attrs: { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#101512' },
+          attrs: { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#222422' },
         },
         {
           tag: 'meta',
@@ -65,7 +71,7 @@ export default defineConfig({
                 var resolved = theme === 'auto'
                   ? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
                   : theme;
-                var color = resolved === 'light' ? '#E9E3D2' : '#101512';
+                var color = resolved === 'light' ? '#E9E3D2' : '#222422';
                 document.querySelectorAll('meta[name="theme-color"]').forEach(function (meta) {
                   meta.setAttribute('content', color);
                 });
@@ -98,8 +104,60 @@ export default defineConfig({
                 });
               }
 
-              document.addEventListener('DOMContentLoaded', enhanceDocs);
-              document.addEventListener('astro:page-load', enhanceDocs);
+              function enhanceSearchAnnouncements() {
+                var root = document.getElementById('starlight__search');
+                if (!root || root.dataset.liveStatus) return;
+
+                var status = document.createElement('p');
+                status.className = 'sr-only';
+                status.setAttribute('role', 'status');
+                status.setAttribute('aria-live', 'polite');
+                status.setAttribute('aria-atomic', 'true');
+                root.before(status);
+                root.dataset.liveStatus = 'true';
+
+                new MutationObserver(function () {
+                  var message = root.querySelector('.pagefind-ui__message');
+                  var text = message ? (message.textContent || '').trim() : '';
+                  if (status.textContent !== text) status.textContent = text;
+                }).observe(root, { childList: true, characterData: true, subtree: true });
+              }
+
+              function revealCurrentSidebarItem() {
+                if (!matchMedia('(min-width: 50em)').matches) return;
+
+                requestAnimationFrame(function () {
+                  var sidebar = document.getElementById('starlight__sidebar');
+                  var active = sidebar && sidebar.querySelector('[aria-current="page"]');
+                  if (!sidebar || !active) return;
+
+                  var details = active.closest('details');
+                  while (details && sidebar.contains(details)) {
+                    details.open = true;
+                    details = details.parentElement && details.parentElement.closest('details');
+                  }
+
+                  var sidebarRect = sidebar.getBoundingClientRect();
+                  var activeRect = active.getBoundingClientRect();
+                  var inset = 16;
+                  if (activeRect.top < sidebarRect.top + inset || activeRect.bottom > sidebarRect.bottom - inset) {
+                    sidebar.scrollTop += activeRect.top - sidebarRect.top - (sidebar.clientHeight - activeRect.height) / 2;
+                  }
+                });
+              }
+
+              function enhancePage() {
+                enhanceDocs();
+                enhanceSearchAnnouncements();
+                revealCurrentSidebarItem();
+              }
+
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', enhancePage, { once: true });
+              } else {
+                enhancePage();
+              }
+              document.addEventListener('astro:page-load', enhancePage);
               window.addEventListener('resize', enhanceDocs);
             })();
           `,

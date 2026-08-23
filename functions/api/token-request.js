@@ -55,8 +55,6 @@ export async function onRequestPost({ request, env }) {
         '',
         `Email:     ${email}`,
         `Namespace: ${namespace}.routeup.dev`,
-        `Location:  ${request.cf?.city || '—'}, ${request.cf?.country || '—'}`,
-        `IP:        ${request.headers.get('CF-Connecting-IP') || '—'}`,
       ].join('\n'),
     }),
   });

@@ -1,0 +1,197 @@
+---
+interface Props {
+  docs?: boolean;
+}
+
+const { docs = false } = Astro.props;
+const menuId = docs ? undefined : 'routeup-site-menu';
+---
+
+<routeup-topbar data-docs={docs ? '' : undefined}>
+  <div class="ru-topbar">
+    <a href="/" class="ru-topbar__brand" aria-label="routeup home">
+      <span class="ru-topbar__mark" aria-hidden="true">
+        <span class="ru-topbar__mark-a"></span>
+        <span class="ru-topbar__mark-b"></span>
+        <span class="ru-topbar__mark-stem"></span>
+        <span class="ru-topbar__mark-cross"></span>
+      </span>
+      <span class="ru-topbar__word">routeup</span>
+    </a>
+
+    <div class="ru-topbar__right">
+      <nav class="ru-topbar__links" aria-label="Primary">
+        <a href="/#modes">Basics</a>
+        <a href="/#recipes">Recipes</a>
+        <a href="/#how">How it works</a>
+        <a href="/#urls">Going public</a>
+        <a href="/#install">Install</a>
+        <a href="/docs" class="is-docs">Docs</a>
+        <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+      </nav>
+
+      {Astro.slots.has('tools') && <div class="ru-topbar__tools"><slot name="tools" /></div>}
+
+      {!docs && (
+        <button
+          type="button"
+          class="ru-topbar__burger"
+          aria-label="Menu"
+          aria-expanded="false"
+          aria-controls={menuId}
+        >
+          <span aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+      )}
+
+      <button
+        type="button"
+        class="ru-topbar__theme"
+        aria-label="Light theme"
+        aria-pressed="false"
+        data-theme-toggle
+      >
+        <span class="ru-topbar__knob" aria-hidden="true">
+          <span class="ru-topbar__moon">☾</span>
+          <span class="ru-topbar__sun">☀</span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  {!docs && (
+    <nav class="ru-topbar__menu" id={menuId} aria-label="Primary, mobile">
+      <a href="/#modes">Basics</a>
+      <a href="/#recipes">Recipes</a>
+      <a href="/#how">How it works</a>
+      <a href="/#urls">Going public</a>
+      <a href="/#install">Install</a>
+      <a href="/docs" class="is-docs">Docs</a>
+      <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  )}
+</routeup-topbar>
+
+<script>
+  class RouteupTopbar extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.ready === 'true') return;
+      this.dataset.ready = 'true';
+
+      const root = document.documentElement;
+      const themeToggle = this.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+      const burger = this.querySelector<HTMLButtonElement>('.ru-topbar__burger');
+      const menu = this.querySelector<HTMLElement>('.ru-topbar__menu');
+
+      const syncThemeToggle = () => {
+        if (!themeToggle) return;
+        const isLight = root.dataset.theme === 'light';
+        themeToggle.setAttribute('aria-pressed', String(isLight));
+        themeToggle.setAttribute('aria-label', isLight ? 'Dark theme' : 'Light theme');
+      };
+
+      syncThemeToggle();
+
+      const media = window.matchMedia('(prefers-color-scheme: light)');
+      media.addEventListener('change', () => {
+        let saved = null;
+        try {
+          saved = localStorage.getItem('routeup-theme');
+        } catch (_error) {}
+        if (!saved) {
+          root.dataset.theme = media.matches ? 'light' : 'dark';
+          syncThemeToggle();
+        }
+      });
+
+      themeToggle?.addEventListener('click', () => {
+        root.classList.add('theme-anim');
+        window.setTimeout(() => root.classList.remove('theme-anim'), 350);
+        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        syncThemeToggle();
+        try {
+          localStorage.setItem('routeup-theme', next);
+          localStorage.setItem('starlight-theme', next);
+        } catch (_error) {}
+        const color = next === 'light' ? '#E9E3D2' : '#222422';
+        document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta) => {
+          meta.setAttribute('content', color);
+        });
+      });
+
+      const closeMenu = (restoreFocus: boolean) => {
+        if (!burger || !menu) return;
+        menu.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) burger.focus();
+      };
+
+      burger?.addEventListener('click', () => {
+        if (!menu) return;
+        const open = menu.classList.toggle('is-open');
+        burger.setAttribute('aria-expanded', String(open));
+      });
+      menu?.addEventListener('click', () => closeMenu(false));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && menu?.classList.contains('is-open')) closeMenu(true);
+      });
+    }
+  }
+
+  if (!customElements.get('routeup-topbar')) {
+    customElements.define('routeup-topbar', RouteupTopbar);
+  }
+</script>
+
+<style>
+  routeup-topbar { display: block; width: 100%; }
+  .ru-topbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--hair-soft); }
+  .ru-topbar__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .ru-topbar__brand, .ru-topbar__brand:hover { color: var(--txt); }
+  .ru-topbar__word { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; letter-spacing: -.02em; }
+  .ru-topbar__mark { display: block; width: 22px; height: 22px; position: relative; flex: none; }
+  .ru-topbar__mark-a { position: absolute; left: 0; top: 0; width: 8px; height: 8px; background: var(--txt); }
+  .ru-topbar__mark-b { position: absolute; right: 0; top: 0; width: 8px; height: 8px; background: var(--mint); }
+  .ru-topbar__mark-stem { position: absolute; left: 10px; top: 8px; width: 2px; height: 14px; background: var(--txt); }
+  .ru-topbar__mark-cross { position: absolute; left: 4px; top: 8px; width: 16px; height: 2px; background: var(--logo-cross, var(--hair-strong)); }
+  .ru-topbar__right, .ru-topbar__links, .ru-topbar__tools { display: flex; align-items: center; }
+  .ru-topbar__right { gap: 22px; min-width: 0; }
+  .ru-topbar__links { gap: 26px; color: var(--sec); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; white-space: nowrap; }
+  .ru-topbar__links a { color: var(--sec); text-decoration: none; }
+  .ru-topbar__links a:hover { color: var(--txt); }
+  .ru-topbar__links a.is-docs { color: var(--txt); }
+  .ru-topbar__links a.is-docs:hover { color: var(--mint); }
+  .ru-topbar__tools { width: clamp(9rem, 17vw, 18rem); }
+  .ru-topbar__burger { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--hair-strong); border-radius: 3px; background: transparent; cursor: pointer; }
+  .ru-topbar__burger > span { display: flex; flex-direction: column; gap: 5px; }
+  .ru-topbar__burger > span > span { display: block; width: 18px; height: 2px; background: var(--txt); }
+  .ru-topbar__theme { position: relative; width: 46px; height: 26px; padding: 0; border: 1px solid var(--hair-strong); border-radius: 13px; background: var(--panel); cursor: pointer; flex: none; }
+  .ru-topbar__theme:hover { border-color: var(--mint-bd-strong, var(--mint)); }
+  .ru-topbar__theme::before { content: ''; position: absolute; inset: -10px 0; }
+  .ru-topbar__knob { position: absolute; left: 2px; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: var(--mint); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 13px; line-height: 1; transition: left .25s cubic-bezier(.22,1,.36,1); }
+  .ru-topbar__sun { display: none; }
+  :global(:root[data-theme='light']) .ru-topbar__knob { left: 23px; }
+  :global(:root[data-theme='light']) .ru-topbar__moon { display: none; }
+  :global(:root[data-theme='light']) .ru-topbar__sun { display: block; }
+  .ru-topbar__menu { display: none; flex-direction: column; border-bottom: 1px solid var(--hair-soft); padding: 8px 0 14px; font-family: 'JetBrains Mono', monospace; font-size: 14px; }
+  .ru-topbar__menu a { color: var(--sec); padding: 13px 4px; border-bottom: 1px solid var(--hair-soft); text-decoration: none; }
+  .ru-topbar__menu a.is-docs { color: var(--txt); }
+  .ru-topbar__menu a:last-child { border-bottom: 0; }
+  routeup-topbar[data-docs] { height: 100%; }
+  routeup-topbar[data-docs] .ru-topbar { height: 100%; padding: 0; border-bottom: 0; }
+  :global(.theme-anim), :global(.theme-anim *) { transition: background-color .3s ease, border-color .3s ease, color .3s ease, background .3s ease !important; }
+
+  @media (max-width: 1100px) {
+    routeup-topbar[data-docs] .ru-topbar__links { display: none; }
+  }
+  @media (max-width: 820px) {
+    routeup-topbar:not([data-docs]) .ru-topbar__links { display: none; }
+    routeup-topbar:not([data-docs]) .ru-topbar__burger { display: inline-flex; }
+    .ru-topbar__menu.is-open { display: flex; }
+    .ru-topbar__tools { width: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ru-topbar__knob { transition: none; }
+  }
+</style>

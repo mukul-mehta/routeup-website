@@ -89,7 +89,13 @@ from the log line and inspect it:
 
 ```bash
 routeup inspect req_Ap7kQ3mN8vR2xLzC
+routeup inspect req_Ap7kQ3mN8vR2xLzC --curl
 ```
+
+The curl form produces a command for sending the captured request to the local
+route. It includes every retained header. Signature or authorization headers
+appear only when capture retained them; add them to `redact_headers` above when
+they should not be stored or exported.
 
 ```txt frame="terminal" title="terminal"
 Request req_Ap7kQ3mN8vR2xLzC

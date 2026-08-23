@@ -71,6 +71,36 @@ Body
 }
 ```
 
+## Export as curl
+
+Export a complete captured request as a curl command targeting its corresponding
+local `.localhost` URL:
+
+```bash
+routeup inspect req_Ap7kQ3mN8vR2xLzC --curl
+```
+
+```bash frame="terminal" title="terminal"
+curl \
+  --ipv4 \
+  --path-as-is \
+  --request 'POST' \
+  --header 'Content-Type: application/json' \
+  --header 'X-Github-Event: push' \
+  --data-raw '{"ref":"refs/heads/main"}' \
+  --url 'https://example-app.localhost/api/webhooks/github'
+```
+
+`--path-as-is` is a boolean curl option that prevents curl from normalizing the
+captured path; the complete path and query remain in `--url`. Safe text bodies
+are embedded directly, while binary bodies use a base64 decode pipe.
+
+Every retained header is included. Headers listed in `redact_headers` remain
+absent because routeup never stored them. The generated command can therefore
+contain credentials or other sensitive captured values when they were not
+redacted. Curl export requires a complete request capture, and its local route
+must be active when you execute the command.
+
 ## Enabling capture
 
 Capture is disabled by default. Enable it per-route in `routeup.json`:
@@ -109,4 +139,5 @@ By default, captured bytes and header values are escaped before they reach the
 terminal, so a captured payload cannot emit terminal control sequences. Use
 `--raw` only when you intentionally need the original bytes, usually with
 redirection. `--json` emits the complete structured exchange; captured byte
-slices use JSON's base64 encoding. `--raw` and `--json` are mutually exclusive.
+slices use JSON's base64 encoding. `--raw`, `--json`, and `--curl` are mutually
+exclusive.

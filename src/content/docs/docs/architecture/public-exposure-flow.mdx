@@ -37,6 +37,9 @@ external browser / webhook provider
    networks.
 5. **Local delivery.** The local agent receives the stream and reverse-proxies it
    to the local target, exactly as in the [local flow](/docs/architecture/local-only-flow).
+   Client-supplied forwarding aliases are removed at public ingress. The server
+   sets trusted `X-Forwarded-For`, `X-Forwarded-Host`, and `X-Forwarded-Proto`
+   values, and the agent preserves those values for the application.
 
 ## Why a tunnel
 

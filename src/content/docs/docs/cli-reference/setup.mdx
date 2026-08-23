@@ -37,6 +37,8 @@ changes.
   `cap_net_bind_service` capability on Linux).
 - Starts the background [local agent](/docs/concepts/local-agent). Later commands
   start it on demand when it is not already running.
+- Keeps the local CA private key and saved public-server credentials restricted
+  to the current user (`0600`), correcting older permissive modes when used.
 
 It explains each privileged change before making it. Nothing is sent off your
 machine, and no account is required.

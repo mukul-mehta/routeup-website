@@ -23,7 +23,8 @@ export const GET: APIRoute = async () => {
 
   for (const doc of docs) {
     const title = doc.data.title;
-    const url = `https://routeup.dev/${doc.id}`;
+    const path = doc.id === 'docs' ? 'docs/index.md' : `${doc.id}.md`;
+    const url = `https://routeup.dev/${path}`;
     parts.push('\n---\n');
     parts.push(`## ${title}\n`);
     parts.push(`Source: ${url}\n`);

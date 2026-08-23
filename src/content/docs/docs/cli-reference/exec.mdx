@@ -37,7 +37,8 @@ NODE_EXTRA_CA_CERTS=/Users/me/.routeup/ca.crt
 
 The project-local `node_modules/.bin` directory is also prepended to `PATH`.
 When the route already has an active public exposure, `ROUTEUP_URL` contains
-that public URL instead. `ROUTEUP_LOCAL_URL` always stays local.
+that public URL instead. `ROUTEUP_LOCAL_URL` always stays local. `ROUTEUP_TOKEN`
+is not inherited by the child command.
 
 These values are a snapshot taken when the process starts. A later exposure
 change does not modify the environment of a running process.
@@ -69,7 +70,8 @@ routeup exec
 `exec` owns only the process it starts. It forwards terminal input and signals,
 stops remaining descendants when the command exits, and returns the child's
 exit code. It does not restart the command or coordinate it with other
-processes.
+processes. Managed cancellation escalates to `SIGKILL` after ten seconds when
+the process group does not stop.
 
 The injected URL describes the project route but does not guarantee it is
 active. Run `routeup serve` separately when the command needs to reach that

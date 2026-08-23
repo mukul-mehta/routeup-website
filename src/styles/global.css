@@ -1,7 +1,7 @@
 /*
- * Starlight skin: routeup's paper and forest-ink identity.
+ * Starlight skin: routeup's paper and warm-graphite identity.
  *
- * Warm forest-ink canvas, Space Grotesk for prose/display, JetBrains Mono for
+ * Warm graphite canvas, Space Grotesk for prose/display, JetBrains Mono for
  * everything the machine says (nav, labels, commands, hosts, eyebrows).
  * Color rule: mint = local/trusted, amber = public/exposed. Nothing else gets
  * color. Terminal and editor frames use the same carbon surfaces as the
@@ -24,24 +24,24 @@
 
 :root,
 :root[data-theme='dark'] {
-  --bg: #101512;
-  --panel: #171d19;
-  --panel2: #131a16;
-  --txt: #f5efe1;
-  --sec: #c6c0b2;
-  --gray: #a09a8f;
-  --dim: #938d82;
+  --bg: #222422;
+  --panel: #2c2f2b;
+  --panel2: #272a27;
+  --txt: #f8f2e6;
+  --sec: #d5cec1;
+  --gray: #b7afa2;
+  --dim: #a39b90;
   --mint: #79e2cb;
   --mint-hover: #a4f0de;
   --amb: #ffb76b;
-  --termdot: #4c554f;
+  --termdot: #626961;
 
-  --hair-strong: rgba(245, 239, 225, 0.22);
-  --hair-mid: rgba(245, 239, 225, 0.18);
-  --hair: rgba(245, 239, 225, 0.14);
-  --hair-soft: rgba(245, 239, 225, 0.1);
-  --hair-faint: rgba(245, 239, 225, 0.08);
-  --line-neutral: rgba(245, 239, 225, 0.32);
+  --hair-strong: rgba(245, 239, 225, 0.28);
+  --hair-mid: rgba(245, 239, 225, 0.22);
+  --hair: rgba(245, 239, 225, 0.17);
+  --hair-soft: rgba(245, 239, 225, 0.12);
+  --hair-faint: rgba(245, 239, 225, 0.09);
+  --line-neutral: rgba(245, 239, 225, 0.38);
 
   --mint-bd-strong: rgba(121, 226, 203, 0.58);
   --mint-bd2: rgba(121, 226, 203, 0.42);
@@ -60,24 +60,25 @@
   --amb-bg2: rgba(255, 183, 107, 0.07);
 
   /* Skin-internal derived values */
-  --ru-prose: #d1cbbd;
-  --ru-code: #ded8ca;
-  --ru-header-bg: rgba(16, 21, 18, 0.92);
+  --ru-prose: #ddd6c9;
+  --ru-code: #eee7da;
+  --ru-header-bg: rgba(34, 36, 34, 0.94);
 
-  --terminal-bg: #090c0b;
-  --terminal-bar: #20241f;
-  --terminal-border: #50564c;
-  --terminal-text: #fff8e8;
-  --terminal-muted: #beb5a4;
-  --terminal-dim: #a29a8c;
-  --terminal-local: #82e8d2;
-  --terminal-public: #ffc078;
-  --terminal-red: #ff6b5f;
-  --terminal-yellow: #f0c96c;
-  --terminal-green: #70cf72;
-  --editor-bg: #101713;
-  --editor-bar: #18211c;
-  --editor-border: #42534a;
+  /* Catppuccin Mocha */
+  --terminal-bg: #1e1e2e;
+  --terminal-bar: #181825;
+  --terminal-border: #585b70;
+  --terminal-text: #cdd6f4;
+  --terminal-muted: #cdd6f4;
+  --terminal-dim: #a6adc8;
+  --terminal-local: #94e2d5;
+  --terminal-public: #fab387;
+  --terminal-red: #f38ba8;
+  --terminal-yellow: #f9e2af;
+  --terminal-green: #a6e3a1;
+  --editor-bg: #1e1e2e;
+  --editor-bar: #181825;
+  --editor-border: #585b70;
 }
 
 /* ─────────────────────────────── Tokens: light ────────────────────────── */
@@ -121,6 +122,22 @@
   --ru-prose: #464034;
   --ru-code: #2d2922;
   --ru-header-bg: rgba(233, 227, 210, 0.92);
+
+  /* Catppuccin Latte */
+  --terminal-bg: #eff1f5;
+  --terminal-bar: #e6e9ef;
+  --terminal-border: #acb0be;
+  --terminal-text: #4c4f69;
+  --terminal-muted: #4c4f69;
+  --terminal-dim: #5c5f77;
+  --terminal-local: #179299;
+  --terminal-public: #fe640b;
+  --terminal-red: #d20f39;
+  --terminal-yellow: #df8e1d;
+  --terminal-green: #40a02b;
+  --editor-bg: #eff1f5;
+  --editor-bar: #e6e9ef;
+  --editor-border: #acb0be;
 }
 
 /* ─────────────────────── Starlight variable mapping ───────────────────── */
@@ -154,7 +171,7 @@
   --sl-color-gray-2: var(--sec);
   --sl-color-gray-3: var(--gray);
   --sl-color-gray-4: var(--dim);
-  --sl-color-gray-5: #38413b;
+  --sl-color-gray-5: #484c47;
   --sl-color-gray-6: var(--panel);
   --sl-color-gray-7: var(--panel2);
   --sl-color-black: var(--bg);
@@ -237,27 +254,6 @@ header.header {
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--hair-soft) !important;
   box-shadow: none !important;
-}
-
-.site-title {
-  font-family: var(--ru-mono) !important;
-  font-size: 0.875rem !important; /* 14px */
-  font-weight: 700 !important;
-  color: var(--txt) !important;
-  gap: 0.625rem;
-}
-
-/* "docs" chip after the wordmark */
-.site-title::after {
-  content: 'docs';
-  font-family: var(--ru-mono);
-  font-size: 0.6875rem; /* 11px */
-  font-weight: 400;
-  color: var(--dim);
-  border: 1px solid var(--hair-mid);
-  padding: 2px 6px;
-  border-radius: 2px;
-  line-height: 1;
 }
 
 /* Search button: hairline field with a keycap hint. The keycap is a single

@@ -44,6 +44,8 @@ capture       optional request/response capture settings for routeup inspect
 
 `command` is not valid inside the `package.json` `routeup` block. Define the
 command in `scripts` and reference that script by name with `routeup.script`.
+When set, `port_env_var` receives the same value as `PORT`; it cannot name
+Routeup-managed variables, `HOST`, `PATH`, or `NODE_EXTRA_CA_CERTS`.
 
 The `routeup.name` is independent of the package's `name` field, the package can
 be `example-app-web` while the route is `example-app`. If `routeup.name` is

@@ -102,3 +102,7 @@ routeup serve --expose
 ```
 
 Requests to `https://example-app.team.routeup.dev/api/webhooks/...` are public; other paths stay local-only.
+
+When path limits are active, routeup rejects dot segments, backslashes, and
+encoded separators rather than risk an upstream framework normalizing a request
+outside the allowed prefix.

@@ -78,6 +78,9 @@ port in addition to `PORT`:
 }
 ```
 
+`PORT` remains set. `port_env_var` cannot replace Routeup-managed variables,
+`HOST`, `PATH`, or `NODE_EXTRA_CA_CERTS`.
+
 ## Path routing
 
 Use `targets` when one hostname should proxy different path prefixes to different local ports:
@@ -123,7 +126,11 @@ By default, `--expose` opens every path on the route. Limit public exposure with
 }
 ```
 
-The route still works locally at every path, but only matching paths are reachable through the public URL. Other public requests receive an intentionally ambiguous `404` response: `path does not exist or is not exposed`.
+The route still works locally at every path, but only matching paths are
+reachable through the public URL. Other public requests receive an intentionally
+ambiguous `404` response: `path does not exist or is not exposed`. Restricted
+exposures also reject dot segments, backslashes, and encoded separators rather
+than risk a different normalization in the upstream application.
 
 ## Request and response capture
 
@@ -165,7 +172,12 @@ TIME      ROUTE                         SOURCE  STATUS  ID                    ME
 
 ```bash
 routeup inspect req_Ap7kQ3mN8vR2xLzC
+routeup inspect req_Ap7kQ3mN8vR2xLzC --curl
 ```
+
+The curl form exports every retained header and the complete captured request
+body to the local route. Configured redactions remain absent because they were
+never stored.
 
 ## Discovery
 
