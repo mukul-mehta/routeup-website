@@ -8,7 +8,7 @@
  * persists in localStorage under `routeup-theme`.
  */
 
-// Self-hosted fonts (no third-party requests; the site is zero-telemetry).
+// Self-hosted fonts avoid third-party font requests.
 import '@fontsource/space-grotesk/400.css';
 import '@fontsource/space-grotesk/500.css';
 import '@fontsource/space-grotesk/700.css';
@@ -16,6 +16,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 import '@fontsource/jetbrains-mono/700.css';
 import SiteHeader from '../components/SiteHeader.astro';
+import TelemetryNotice from '../components/TelemetryNotice.astro';
 
 // Terminal-line color classes. Default (unset) renders as --gray.
 const C = {
@@ -408,7 +409,7 @@ const runModes = [
         });
       })();
     </script>
-    <script is:inline defer src="https://umami.nikamma.in/script.js" data-website-id="4a093510-07eb-446a-8e87-05232276895c"></script>
+    <script is:inline defer src="https://umami.nikamma.in/script.js" data-website-id="4a093510-07eb-446a-8e87-05232276895c" data-domains="routeup.dev" data-do-not-track="true"></script>
   </head>
 
   <body>
@@ -417,6 +418,7 @@ const runModes = [
 
     <div class="ru-pad">
       <header><SiteHeader /></header>
+      <TelemetryNotice standalone />
 
       <main id="main-content">
         <section id="top" class="ru-hero ru-2col">
@@ -433,8 +435,8 @@ const runModes = [
             </ul>
 
             <div class="ru-ctas">
-              <a href="#install" class="ru-btn">Install routeup</a>
-              <a href="/docs" class="ru-btn ru-btn--ghost">Read the docs</a>
+              <a href="#install" class="ru-btn" data-umami-event="cta_install">Install routeup</a>
+              <a href="/docs" class="ru-btn ru-btn--ghost" data-umami-event="cta_docs">Read the docs</a>
             </div>
 
             <ul class="ru-proof" aria-label="Product guarantees">
@@ -714,7 +716,7 @@ const runModes = [
               <code class="code-plain">tunnel.example.com</code>, choose its DNS and TLS, then issue tokens scoped to
               namespaces such as{' '}<code class="code-plain">*.team.tunnel.example.com</code>.
             </p>
-            <a class="ru-box-link" href="/docs/self-hosting/running-the-server">Self-hosting guide →</a>
+            <a class="ru-box-link" href="/docs/self-hosting/running-the-server" data-umami-event="self_host_docs_open" data-umami-event-location="public-section">Self-hosting guide →</a>
           </div>
         </section>
 
@@ -729,7 +731,7 @@ const runModes = [
                 <p class="ru-install-card__tag">Homebrew</p>
                 <h3>macOS or Linux</h3>
               </div>
-              <button type="button" class="ru-install-command" data-copy="brew install mukul-mehta/tap/routeup" aria-label="Copy Homebrew install command">
+              <button type="button" class="ru-install-command" data-copy="brew install mukul-mehta/tap/routeup" data-install-method="homebrew" aria-label="Copy Homebrew install command">
                 <span aria-hidden="true">$</span>
                 <code>brew install mukul-mehta/tap/routeup</code>
                 <span class="ru-install-command__action">Copy</span>
@@ -740,7 +742,7 @@ const runModes = [
                 <p class="ru-install-card__tag">Direct installer</p>
                 <h3>Verified release binary</h3>
               </div>
-              <button type="button" class="ru-install-command" data-copy="curl -fsSL https://get.routeup.dev | sh" aria-label="Copy shell install command">
+              <button type="button" class="ru-install-command" data-copy="curl -fsSL https://get.routeup.dev | sh" data-install-method="shell" aria-label="Copy shell install command">
                 <span aria-hidden="true">$</span>
                 <code>curl -fsSL https://get.routeup.dev | sh</code>
                 <span class="ru-install-command__action">Copy</span>
@@ -749,7 +751,7 @@ const runModes = [
             <article class="ru-install-card ru-install-card--agent">
               <p class="ru-install-card__tag">LLM Usage</p>
               <p class="ru-install-card__agent-desc">Use the routeup skill inside your favourite coding agent to set it up.</p>
-              <button type="button" class="ru-install-command" data-copy="npx skills add mukul-mehta/routeup --skill routeup -g" aria-label="Copy Agent Skill install command">
+              <button type="button" class="ru-install-command" data-copy="npx skills add mukul-mehta/routeup --skill routeup -g" data-install-method="agent-skill" aria-label="Copy Agent Skill install command">
                 <span aria-hidden="true">$</span>
                 <code>npx skills add mukul-mehta/routeup --skill routeup -g</code>
                 <span class="ru-install-command__action">Copy</span>
@@ -772,7 +774,7 @@ const runModes = [
           </div>
           <div class="ru-slimrow">
             <p><strong>Run setup once after installing.</strong> It creates and trusts the local CA, prepares port 443, and starts the agent.</p>
-            <a class="ru-box-link" href="/docs/getting-started/install">Installation details →</a>
+            <a class="ru-box-link" href="/docs/getting-started/install" data-umami-event="install_details_open">Installation details →</a>
           </div>
         </section>
 
@@ -810,7 +812,7 @@ const runModes = [
                 Found a bug, a missing workflow, or need help getting a route working?
               </p>
               <ul class="ru-contact-list">
-                <li><strong>Bugs and feature requests:</strong> <a href="https://github.com/mukul-mehta/routeup/issues" target="_blank" rel="noopener">Open a GitHub issue →</a></li>
+                <li><strong>Bugs and feature requests:</strong> <a href="https://github.com/mukul-mehta/routeup/issues/new/choose" target="_blank" rel="noopener" data-umami-event="github_open" data-umami-event-location="support">Open a GitHub issue →</a></li>
                 <li><strong>Questions and setup help:</strong> <a href="mailto:help@routeup.dev">help@routeup.dev →</a></li>
               </ul>
             </div>
@@ -827,8 +829,8 @@ const runModes = [
       <footer class="ru-footer">
         <nav aria-label="Footer">
           <a href="/docs">Docs</a>
-          <a href="/docs/self-hosting/running-the-server">Self-host</a>
-          <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+          <a href="/docs/self-hosting/running-the-server" data-umami-event="self_host_docs_open" data-umami-event-location="footer">Self-host</a>
+          <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener" data-umami-event="github_open" data-umami-event-location="footer">GitHub&nbsp;↗</a>
           <a href="mailto:help@routeup.dev">help@routeup.dev</a>
           <a href="/privacy/">Privacy</a>
           <a href="/llms.txt">llms.txt</a>
@@ -840,6 +842,10 @@ const runModes = [
       (function () {
         var live = document.querySelector('.ru-sr-live');
 
+        function track(eventName, data) {
+          if (window.umami) window.umami.track(eventName, data);
+        }
+
         /* ── Copy install commands ─────────────────────────────────────── */
         document.querySelectorAll('[data-copy]').forEach(function (button) {
           var timer;
@@ -850,6 +856,7 @@ const runModes = [
               button.classList.add('is-copied');
               if (action) action.textContent = 'Copied';
               if (live) live.textContent = 'Command copied to clipboard';
+              track('install_copy', { method: button.getAttribute('data-install-method') || 'unknown' });
             } catch (_error) {
               if (action) action.textContent = 'Try again';
               if (live) live.textContent = 'Could not copy command';
@@ -926,7 +933,7 @@ const runModes = [
           recipeList.scrollTo({ left: left, behavior: reduceMotion ? 'auto' : 'smooth' });
         }
 
-        function activate(tab, moveFocus, updateURL) {
+        function activate(tab, moveFocus, updateURL, recordSelection) {
           var target = tab.getAttribute('aria-controls');
           tabs.forEach(function (item) {
             var active = item === tab;
@@ -947,10 +954,13 @@ const runModes = [
           syncRecipeControls(tab);
           if (moveFocus || updateURL) centerRecipeTab(tab);
           if (moveFocus) tab.focus();
+          if (recordSelection) {
+            track('recipe_select', { recipe: tab.getAttribute('data-recipe-hash') || 'unknown' });
+          }
         }
 
         tabs.forEach(function (tab) {
-          tab.addEventListener('click', function () { activate(tab, false, true); });
+          tab.addEventListener('click', function () { activate(tab, false, true, true); });
           tab.addEventListener('keydown', function (event) {
             var index = tabs.indexOf(tab);
             var next = index;
@@ -960,27 +970,27 @@ const runModes = [
             else if (event.key === 'End') next = tabs.length - 1;
             else return;
             event.preventDefault();
-            activate(tabs[next], true, true);
+            activate(tabs[next], true, true, true);
           });
         });
 
         if (recipePrev) {
           recipePrev.addEventListener('click', function () {
             var index = tabs.findIndex(function (tab) { return tab.getAttribute('aria-selected') === 'true'; });
-            if (index > 0) activate(tabs[index - 1], false, true);
+            if (index > 0) activate(tabs[index - 1], false, true, true);
           });
         }
         if (recipeNext) {
           recipeNext.addEventListener('click', function () {
             var index = tabs.findIndex(function (tab) { return tab.getAttribute('aria-selected') === 'true'; });
-            if (index < tabs.length - 1) activate(tabs[index + 1], false, true);
+            if (index < tabs.length - 1) activate(tabs[index + 1], false, true, true);
           });
         }
 
         function activateFromHash() {
           var hash = window.location.hash.slice(1);
           var tab = tabs.find(function (item) { return item.getAttribute('data-recipe-hash') === hash; }) || tabs[0];
-          activate(tab, false, false);
+          activate(tab, false, false, false);
         }
 
         activateFromHash();
@@ -1011,10 +1021,12 @@ const runModes = [
               if (!res.ok) throw new Error();
               tokenForm.querySelectorAll('input, button, .ru-token-form__row').forEach(function(el) { el.hidden = true; });
               ok.hidden = false;
+              track('token_request_success');
             } catch (_) {
               btn.disabled = false;
               btn.textContent = 'Send request \u2192';
               err.hidden = false;
+              track('token_request_error');
             }
           });
         }

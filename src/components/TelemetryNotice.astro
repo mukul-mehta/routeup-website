@@ -1,0 +1,59 @@
+---
+interface Props {
+  standalone?: boolean;
+}
+
+const { standalone = false } = Astro.props;
+---
+
+<aside class:list={['ru-telemetry-notice', { 'ru-telemetry-notice--standalone': standalone }]} aria-label="Analytics notice" data-pagefind-ignore>
+  <span><strong>The Routeup CLI has no telemetry.</strong> This website uses cookie-free, self-hosted analytics.</span>
+  <a href="/privacy/">Privacy details</a>
+</aside>
+
+<style>
+  .ru-telemetry-notice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid var(--mint-bd, var(--mint-bd-strong));
+    background: var(--mint-bg4, transparent);
+    color: var(--sec);
+    padding: 0.65rem 0.85rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.72rem;
+    line-height: 1.55;
+  }
+
+  .ru-telemetry-notice--standalone {
+    margin-top: 0.75rem;
+  }
+
+  strong,
+  a {
+    color: var(--mint);
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  a {
+    flex: none;
+    text-underline-offset: 0.18em;
+  }
+
+  a:hover {
+    color: var(--mint-hover);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .ru-telemetry-notice {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+  }
+</style>

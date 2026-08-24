@@ -5,6 +5,7 @@ import '@fontsource/space-grotesk/700.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
 import SiteHeader from '../components/SiteHeader.astro';
+import TelemetryNotice from '../components/TelemetryNotice.astro';
 ---
 
 <!doctype html>
@@ -42,10 +43,11 @@ import SiteHeader from '../components/SiteHeader.astro';
     <header class="ru-page-header">
       <div class="ru-page-header__inner"><SiteHeader /></div>
     </header>
+    <div class="ru-privacy-notice"><TelemetryNotice /></div>
 
     <main>
       <h1>Privacy</h1>
-      <p class="ru-privacy__updated">Last updated August 22, 2026</p>
+      <p class="ru-privacy__updated">Last updated August 24, 2026</p>
       <p class="ru-privacy__intro">
         This page explains what routeup.dev collects. It covers this website and the hosted-token
         request form, not applications exposed with Routeup or independently operated servers.
@@ -67,6 +69,11 @@ import SiteHeader from '../components/SiteHeader.astro';
           <a href="https://umami.is/docs/faq">Umami</a>. Its tracker does not use cookies or store
           personally identifiable information. It may record page views, referrers, browser and
           operating-system information, device type, and approximate country in anonymized form.
+        </p>
+        <p>
+          The site also records anonymous interactions with install, documentation, GitHub, recipe,
+          and hosted-token-request controls. Token-request events contain only whether the request
+          succeeded or failed; email addresses and namespaces are not sent to analytics.
         </p>
         <p>
           Self-hosted Umami data is retained until it is manually deleted. Your theme preference is
@@ -118,12 +125,12 @@ import SiteHeader from '../components/SiteHeader.astro';
     </footer>
 
     <style is:global>
-      :root{--logo-cross:rgba(245,239,225,.68);--bg:#222422;--panel:#2c2f2b;--txt:#f8f2e6;--sec:#d5cec1;--dim:#a39b90;--mint:#79e2cb;--mint-hover:#a4f0de;--mint-bd-strong:rgba(121,226,203,.58);--hair-strong:rgba(245,239,225,.28);--hair:rgba(245,239,225,.17);--hair-soft:rgba(245,239,225,.12)}
-      :root[data-theme="light"]{--logo-cross:rgba(27,24,18,.56);--bg:#e9e3d2;--panel:#fffaf0;--txt:#1b1812;--sec:#464034;--dim:#665e51;--mint:#075d59;--mint-hover:#044946;--mint-bd-strong:rgba(7,93,89,.62);--hair-strong:rgba(27,24,18,.3);--hair:rgba(27,24,18,.18);--hair-soft:rgba(27,24,18,.12)}
-      @media(prefers-color-scheme:light){:root:not([data-theme]){--logo-cross:rgba(27,24,18,.56);--bg:#e9e3d2;--panel:#fffaf0;--txt:#1b1812;--sec:#464034;--dim:#665e51;--mint:#075d59;--mint-hover:#044946;--mint-bd-strong:rgba(7,93,89,.62);--hair-strong:rgba(27,24,18,.3);--hair:rgba(27,24,18,.18);--hair-soft:rgba(27,24,18,.12)}}
+      :root{--logo-cross:rgba(245,239,225,.68);--bg:#222422;--panel:#2c2f2b;--txt:#f8f2e6;--sec:#d5cec1;--dim:#a39b90;--mint:#79e2cb;--mint-hover:#a4f0de;--mint-bd-strong:rgba(121,226,203,.58);--mint-bd:rgba(121,226,203,.34);--mint-bg4:rgba(121,226,203,.06);--hair-strong:rgba(245,239,225,.28);--hair:rgba(245,239,225,.17);--hair-soft:rgba(245,239,225,.12)}
+      :root[data-theme="light"]{--logo-cross:rgba(27,24,18,.56);--bg:#e9e3d2;--panel:#fffaf0;--txt:#1b1812;--sec:#464034;--dim:#665e51;--mint:#075d59;--mint-hover:#044946;--mint-bd-strong:rgba(7,93,89,.62);--mint-bd:rgba(7,93,89,.4);--mint-bg4:rgba(7,93,89,.07);--hair-strong:rgba(27,24,18,.3);--hair:rgba(27,24,18,.18);--hair-soft:rgba(27,24,18,.12)}
+      @media(prefers-color-scheme:light){:root:not([data-theme]){--logo-cross:rgba(27,24,18,.56);--bg:#e9e3d2;--panel:#fffaf0;--txt:#1b1812;--sec:#464034;--dim:#665e51;--mint:#075d59;--mint-hover:#044946;--mint-bd-strong:rgba(7,93,89,.62);--mint-bd:rgba(7,93,89,.4);--mint-bg4:rgba(7,93,89,.07);--hair-strong:rgba(27,24,18,.3);--hair:rgba(27,24,18,.18);--hair-soft:rgba(27,24,18,.12)}}
       html,body{margin:0;padding:0}body{background:var(--bg);color:var(--txt);font-family:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}*,:before,:after{box-sizing:border-box}a{color:var(--mint);text-underline-offset:3px}a:hover{color:var(--mint-hover)}:focus-visible{outline:2px solid var(--mint);outline-offset:3px}::selection{background:var(--mint);color:var(--bg)}
       .ru-page-header{position:sticky;top:0;z-index:10;background:var(--bg)}.ru-page-header__inner{max-width:1240px;margin:0 auto;padding:0 40px}
-      main{width:min(680px,calc(100% - 48px));margin:0 auto;padding:84px 0 96px}h1{margin:0;font-size:clamp(42px,7vw,64px);line-height:1;letter-spacing:-.045em}.ru-privacy__updated{margin:16px 0 0;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:11px}.ru-privacy__intro{margin:36px 0 58px;color:var(--sec);font-size:19px;line-height:1.65}section{padding:30px 0;border-top:1px solid var(--hair)}h2{margin:0 0 12px;font-size:22px;letter-spacing:-.02em}section p{margin:0 0 14px;color:var(--sec);font-size:16px;line-height:1.75}section p:last-child{margin-bottom:0}footer{min-height:64px;border-top:1px solid var(--hair-soft);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px 28px;font-family:'JetBrains Mono',monospace;font-size:11px}footer a{color:var(--sec)}
+      .ru-privacy-notice,main{width:min(680px,calc(100% - 48px));margin-left:auto;margin-right:auto}.ru-privacy-notice{margin-top:18px}main{padding:62px 0 96px}h1{margin:0;font-size:clamp(42px,7vw,64px);line-height:1;letter-spacing:-.045em}.ru-privacy__updated{margin:16px 0 0;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:11px}.ru-privacy__intro{margin:36px 0 58px;color:var(--sec);font-size:19px;line-height:1.65}section{padding:30px 0;border-top:1px solid var(--hair)}h2{margin:0 0 12px;font-size:22px;letter-spacing:-.02em}section p{margin:0 0 14px;color:var(--sec);font-size:16px;line-height:1.75}section p:last-child{margin-bottom:0}footer{min-height:64px;border-top:1px solid var(--hair-soft);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px 28px;font-family:'JetBrains Mono',monospace;font-size:11px}footer a{color:var(--sec)}
       @media(max-width:820px){.ru-page-header__inner{padding:0 22px}}
       @media(max-width:600px){main{width:calc(100% - 36px);padding:58px 0 72px}.ru-privacy__intro{margin:28px 0 44px;font-size:17px}section{padding:26px 0}footer{align-items:flex-start;flex-direction:column}}
     </style>

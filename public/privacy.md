@@ -1,6 +1,6 @@
 # Privacy
 
-Last updated August 22, 2026.
+Last updated August 24, 2026.
 
 This notice covers the routeup.dev website and its hosted-token request form. It does not cover applications that Routeup users run or expose, or independently operated self-hosted Routeup servers.
 
@@ -11,6 +11,8 @@ The Routeup CLI has no product analytics or telemetry. Local routing works witho
 ## Website analytics
 
 routeup.dev uses a self-hosted instance of [Umami](https://umami.is/docs/faq). Its tracker does not use cookies or store personally identifiable information. It may record page views, referrers, browser and operating-system information, device type, and approximate country in anonymized form.
+
+The site also records anonymous interactions with install, documentation, GitHub, recipe, and hosted-token-request controls. Token-request events contain only whether the request succeeded or failed; email addresses and namespaces are not sent to analytics.
 
 Self-hosted Umami analytics remain in the analytics database until they are manually deleted. The theme selected on routeup.dev is saved in the visitor's browser using local storage and is not sent to Routeup.
 

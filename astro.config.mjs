@@ -21,6 +21,7 @@ export default defineConfig({
         replacesTitle: false,
       },
       components: {
+        Banner: './src/components/TelemetryNotice.astro',
         Header: './src/components/StarlightHeader.astro',
         MobileMenuToggle: './src/components/MobileMenuToggle.astro',
       },
@@ -168,6 +169,8 @@ export default defineConfig({
             defer: true,
             src: 'https://umami.nikamma.in/script.js',
             'data-website-id': '4a093510-07eb-446a-8e87-05232276895c',
+            'data-domains': 'routeup.dev',
+            'data-do-not-track': 'true',
           },
         },
       ],

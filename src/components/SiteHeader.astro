@@ -27,7 +27,7 @@ const menuId = docs ? undefined : 'routeup-site-menu';
         <a href="/#urls">Going public</a>
         <a href="/#install">Install</a>
         <a href="/docs" class="is-docs">Docs</a>
-        <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+        <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener" data-umami-event="github_open" data-umami-event-location="header">GitHub&nbsp;↗</a>
       </nav>
 
       {Astro.slots.has('tools') && <div class="ru-topbar__tools"><slot name="tools" /></div>}
@@ -67,7 +67,7 @@ const menuId = docs ? undefined : 'routeup-site-menu';
       <a href="/#urls">Going public</a>
       <a href="/#install">Install</a>
       <a href="/docs" class="is-docs">Docs</a>
-      <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://github.com/mukul-mehta/routeup" target="_blank" rel="noopener" data-umami-event="github_open" data-umami-event-location="mobile-menu">GitHub ↗</a>
     </nav>
   )}
 </routeup-topbar>

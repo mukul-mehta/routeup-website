@@ -146,7 +146,7 @@ Milestones tracked in `../routeup/docs/MILESTONES.md`.
 Not built yet, deliberately deferred:
 
 - Hosted account signup or token self-service.
-- Analytics: none planned; routeup is zero-telemetry by design and the site should match.
+- Product telemetry remains out of scope. The website uses cookie-free, self-hosted analytics as disclosed in its privacy notice.
 
 ## License
 

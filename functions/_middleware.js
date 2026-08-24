@@ -1,5 +1,31 @@
 const PRODUCES = ['text/html', 'text/markdown'];
 
+const SECURITY_HEADERS = {
+  'Content-Security-Policy': [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://umami.nikamma.in",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data:",
+    "font-src 'self' data:",
+    "connect-src 'self' https://umami.nikamma.in",
+    "worker-src 'self' blob:",
+    "child-src 'self' blob:",
+    "frame-src 'none'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+  ].join('; '),
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Permissions-Policy':
+    'camera=(), microphone=(), geolocation=(), payment=(), usb=(), local-network-access=()',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-Permitted-Cross-Domain-Policies': 'none',
+};
+
 const MARKDOWN_NOT_FOUND = `# 404: Page not found
 
 No Routeup page exists at this URL.
@@ -97,11 +123,17 @@ function isNegotiable(request) {
 }
 
 function mutableResponse(response) {
-  return new Response(response.body, {
+  const result = new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
     headers: response.headers,
   });
+
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    result.headers.set(name, value);
+  }
+
+  return result;
 }
 
 function appendVaryAccept(headers) {
